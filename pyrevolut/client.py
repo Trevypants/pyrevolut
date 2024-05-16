@@ -10,6 +10,7 @@ from httpx import HTTPStatusError, Response
 
 from .api import EndpointAccounts
 from .api import EndpointCards
+from .api import EndpointCounterparties
 
 
 D = TypeVar("D", dict, list)  # TypeVar for dictionary or list
@@ -28,6 +29,8 @@ class Client:
     async_client: AsyncClient | None = None
     sync_client: SyncClient | None = None
     Accounts: EndpointAccounts | None = None
+    Cards: EndpointCards | None = None
+    Counterparties: EndpointCounterparties | None = None
 
     def __init__(
         self,
@@ -576,6 +579,7 @@ class Client:
         """Loads all the resources from the resources directory"""
         self.Accounts = EndpointAccounts(client=self)
         self.Cards = EndpointCards(client=self)
+        self.Counterparties = EndpointCounterparties(client=self)
 
     def __enter__(self):
         """Open the client connection"""

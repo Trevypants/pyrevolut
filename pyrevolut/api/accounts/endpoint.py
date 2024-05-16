@@ -1,5 +1,4 @@
 from uuid import UUID
-from httpx import Response
 
 from pyrevolut.api.common import BaseEndpoint
 
@@ -61,7 +60,7 @@ class EndpointAccounts(BaseEndpoint):
         path = endpoint.ROUTE.format(account_id=account_id)
         params = endpoint.Params()
 
-        response: Response = self.client.get(
+        response = self.client.get(
             path=path,
             params=params,
             **kwargs,
@@ -91,7 +90,7 @@ class EndpointAccounts(BaseEndpoint):
         path = endpoint.ROUTE.format(account_id=account_id)
         params = endpoint.Params()
 
-        response: Response = self.client.get(
+        response = self.client.get(
             path=path,
             params=params,
             **kwargs,
@@ -149,7 +148,7 @@ class EndpointAccounts(BaseEndpoint):
         path = endpoint.ROUTE.format(account_id=account_id)
         params = endpoint.Params()
 
-        response: Response = await self.client.aget(
+        response = await self.client.aget(
             path=path,
             params=params,
             **kwargs,
@@ -179,7 +178,7 @@ class EndpointAccounts(BaseEndpoint):
         path = endpoint.ROUTE.format(account_id=account_id)
         params = endpoint.Params()
 
-        response: Response = await self.client.aget(
+        response = await self.client.aget(
             path=path,
             params=params,
             **kwargs,

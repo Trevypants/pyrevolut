@@ -1,7 +1,6 @@
 from typing import Literal, Type
 from uuid import UUID
 from decimal import Decimal
-from httpx import Response
 
 from pydantic import BaseModel
 
@@ -89,7 +88,7 @@ class EndpointCards(BaseEndpoint):
         path = endpoint.ROUTE.format(card_id=card_id)
         params = endpoint.Params()
 
-        response: Response = self.client.get(
+        response = self.client.get(
             path=path,
             params=params,
             **kwargs,
@@ -120,7 +119,7 @@ class EndpointCards(BaseEndpoint):
         path = endpoint.ROUTE.format(card_id=card_id)
         params = endpoint.Params()
 
-        response: Response = self.client.get(
+        response = self.client.get(
             path=path,
             params=params,
             **kwargs,
@@ -649,7 +648,7 @@ class EndpointCards(BaseEndpoint):
         path = endpoint.ROUTE.format(card_id=card_id)
         params = endpoint.Params()
 
-        response: Response = await self.client.aget(
+        response = await self.client.aget(
             path=path,
             params=params,
             **kwargs,
