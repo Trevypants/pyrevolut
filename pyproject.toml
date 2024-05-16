@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyrevolut"
-version = "0.2.0"
+version = "0.3.0"
 description = ""
 authors = ["Trevor Visser <trevor.visser@gmail.com>"]
 readme = "README.md"
@@ -71,7 +71,7 @@ docstring-code-format = true
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.2.0"
+version = "0.3.0"
 tag_format = "v$major.$minor.$patch$prerelease"
 version_scheme = "pep440"
 version_provider = "poetry"
