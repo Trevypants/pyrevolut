@@ -27,15 +27,15 @@ client = Client(
 # Initialize the client
 client.open()
 
-# List all profiles for the authenticated user
-profiles = client.Profile.list_()
+# List all accounts for the authenticated user
+accounts = client.Accounts.get_all_accounts()
 
 # Close the client
 client.close()
 
 # You can also use the client as a context manager
-with Client(api_key=API_KEY, environment=Environment.SANDBOX) as client:
-    profiles = client.Profile.list_()
+with Client(access_token=ACCESS_TOKEN, refresh_token=REFRESH_TOKEN, environment=Environment.SANDBOX) as client:
+    accounts = client.Accounts.get_all_accounts()
 ```
 
 ### Advanced Usage
@@ -59,19 +59,19 @@ client = Client(
 # Run without context manager
 async def run():
     await client.aopen() # <-- Note the `a` prefix
-    profiles = await client.Profile.alist_() # <-- Note the `a` prefix
+    accounts = await client.Accounts.aget_all_accounts() # <-- Note the `a` prefix
     await client.aclose() # <-- Note the `a` prefix
-    return profiles
+    return accounts
 
 # Run with context manager
 async def run_context_manager():
     async with client:
-        profiles = await client.Profile.alist_() # <-- Note the `a` prefix
-    return profiles
+        accounts = await client.Accounts.aget_all_accounts() # <-- Note the `a` prefix
+    return accounts
 
-# List all profiles for the authenticated user
-profiles = asyncio.run(run())
-profiles_context_manager = asyncio.run(run_context_manager())
+# List all accounts for the authenticated user
+accounts = asyncio.run(run())
+accounts_context_manager = asyncio.run(run_context_manager())
 
 ```
 
