@@ -1,0 +1,505 @@
+from enum import StrEnum
+from typing import Type
+import logging
+
+from pydantic import BaseModel
+
+from httpx import AsyncClient
+from httpx import Client as SyncClient
+from httpx import HTTPStatusError, Response
+
+from .api import EndpointAccounts
+
+
+class Environment(StrEnum):
+    SANDBOX = "sandbox"
+    LIVE = "live"
+
+
+class Client:
+    access_token: str
+    refresh_token: str
+    environment: Environment
+    domain: str
+    async_client: AsyncClient | None = None
+    sync_client: SyncClient | None = None
+    Accounts: EndpointAccounts | None = None
+
+    def __init__(
+        self,
+        access_token: str,
+        refresh_token: str,
+        environment: Environment = Environment.SANDBOX,
+    ):
+        """Create a new Revolut client
+
+        Parameters
+        ----------
+        access_token : str
+            The access token to use
+        refresh_token : str
+            The refresh token to use
+        environment : Environment
+            The environment to use, either Environment.SANDBOX or Environment.LIVE
+        """
+        self.access_token = access_token
+        self.refresh_token = refresh_token
+        self.environment = environment
+
+        # Set domain based on environment
+        if self.environment == Environment.SANDBOX:
+            self.domain = "https://sandbox-b2b.revolut.com/api/1.0/"
+        else:
+            self.domain = "https://b2b.revolut.com/api/1.0/"
+
+    def open(self):
+        """Opens the client connection"""
+        if self.sync_client is not None:
+            return
+
+        self.sync_client = SyncClient()
+        self.__load_resources()
+
+    def close(self):
+        """Closes the client connection"""
+        if self.sync_client is None:
+            return
+
+        self.sync_client.close()
+        self.sync_client = None
+
+    async def aopen(self):
+        """Opens the async client connection"""
+        if self.async_client is not None:
+            return
+
+        self.async_client = AsyncClient()
+        self.__load_resources()
+
+    async def aclose(self):
+        """Closes the async client connection"""
+        if self.async_client is None:
+            return
+
+        await self.async_client.aclose()
+        self.async_client = None
+
+    def get(self, path: str, params: Type[BaseModel] | None = None, **kwargs):
+        """Send a GET request to the Revolut API
+
+        Parameters
+        ----------
+        path : str
+            The path to send the request to
+        params : Type[BaseModel] | None
+            The parameters to add to the request route
+
+        Returns
+        -------
+        Response
+            The response from the request
+        """
+        self.__check_sync_client()
+        path = self.__process_path(path)
+        headers = self.__create_headers(kwargs.pop("headers", {}))
+        resp = self.sync_client.get(
+            url=f"{self.domain}/{path}",
+            params=params.model_dump(mode="json", exclude_none=True, by_alias=True)
+            if params is not None
+            else None,
+            headers=headers,
+            **kwargs,
+        )
+        self.log_response(response=resp)
+        return resp
+
+    def post(self, path: str, data: Type[BaseModel] | None = None, **kwargs):
+        """Send a POST request to the Revolut API
+
+        Parameters
+        ----------
+        path : str
+            The path to send the request to
+        data : Type[BaseModel] | None
+            The data to send in the request
+
+        Returns
+        -------
+        Response
+            The response from the request
+        """
+        self.__check_sync_client()
+        path = self.__process_path(path)
+        headers = self.__create_headers(kwargs.pop("headers", {}))
+        resp = self.sync_client.post(
+            url=f"{self.domain}/{path}",
+            json=data.model_dump(mode="json", exclude_none=True, by_alias=True),
+            headers=headers,
+            **kwargs,
+        )
+        self.log_response(response=resp)
+        return resp
+
+    def patch(self, path: str, data: Type[BaseModel] | None = None, **kwargs):
+        """Send a PATCH request to the Revolut API
+
+        Parameters
+        ----------
+        path : str
+            The path to send the request to
+        data : Type[BaseModel]
+            The data to send in the request
+
+        Returns
+        -------
+        Response
+            The response from the request
+        """
+        self.__check_sync_client()
+        path = self.__process_path(path)
+        headers = self.__create_headers(kwargs.pop("headers", {}))
+        resp = self.sync_client.patch(
+            url=f"{self.domain}/{path}",
+            json=data.model_dump(mode="json", exclude_none=True, by_alias=True),
+            headers=headers,
+            **kwargs,
+        )
+        self.log_response(response=resp)
+        return resp
+
+    def delete(
+        self,
+        path: str,
+        params: Type[BaseModel] | None = None,
+        **kwargs,
+    ):
+        """Send a DELETE request to the Revolut API
+
+        Parameters
+        ----------
+        path : str
+            The path to send the request to
+        params : Type[BaseModel] | None
+            The parameters to add to the request route
+
+        Returns
+        -------
+        Response
+            The response from the request
+        """
+        self.__check_sync_client()
+        path = self.__process_path(path)
+        headers = self.__create_headers(kwargs.pop("headers", {}))
+        resp = self.sync_client.delete(
+            url=f"{self.domain}/{path}",
+            params=params.model_dump(mode="json", exclude_none=True, by_alias=True)
+            if params is not None
+            else None,
+            headers=headers,
+            **kwargs,
+        )
+        self.log_response(response=resp)
+        return resp
+
+    def put(self, path: str, data: Type[BaseModel] | None = None, **kwargs):
+        """Send a PUT request to the Revolut API
+
+        Parameters
+        ----------
+        path : str
+            The path to send the request to
+        data : Type[BaseModel] | None
+            The data to send in the request
+
+        Returns
+        -------
+        Response
+            The response from the request
+        """
+        self.__check_sync_client()
+        path = self.__process_path(path)
+        headers = self.__create_headers(kwargs.pop("headers", {}))
+        resp = self.sync_client.put(
+            url=f"{self.domain}/{path}",
+            json=data.model_dump(mode="json", exclude_none=True, by_alias=True),
+            headers=headers,
+            **kwargs,
+        )
+        self.log_response(response=resp)
+        return resp
+
+    async def aget(self, path: str, params: Type[BaseModel] | None = None, **kwargs):
+        """Send an async GET request to the Revolut API
+
+        Parameters
+        ----------
+        path : str
+            The path to send the request to
+        params : Type[BaseModel] | None
+            The parameters to send in the request
+
+        """
+        self.__check_async_client()
+        path = self.__process_path(path)
+        headers = self.__create_headers(kwargs.pop("headers", {}))
+        resp = await self.async_client.get(
+            url=f"{self.domain}/{path}",
+            params=params.model_dump(mode="json", exclude_none=True, by_alias=True)
+            if params is not None
+            else None,
+            headers=headers,
+            **kwargs,
+        )
+        self.log_response(response=resp)
+        return resp
+
+    async def apost(self, path: str, data: Type[BaseModel] | None = None, **kwargs):
+        """Send an async POST request to the Revolut API
+
+        Parameters
+        ----------
+        path : str
+            The path to send the request to
+        data : Type[BaseModel] | None
+            The data to send in the request
+
+        Returns
+        -------
+        Response
+            The response from the request
+        """
+        self.__check_async_client()
+        path = self.__process_path(path)
+        headers = self.__create_headers(kwargs.pop("headers", {}))
+        resp = await self.async_client.post(
+            url=f"{self.domain}/{path}",
+            json=data.model_dump(mode="json", exclude_none=True, by_alias=True),
+            headers=headers,
+            **kwargs,
+        )
+        self.log_response(response=resp)
+        return resp
+
+    async def apatch(self, path: str, data: Type[BaseModel] | None = None, **kwargs):
+        """Send an async PATCH request to the Revolut API
+
+        Parameters
+        ----------
+        path : str
+            The path to send the request to
+        data : Type[BaseModel] | None
+            The data to send in the request
+
+        Returns
+        -------
+        Response
+            The response from the request
+        """
+        self.__check_async_client()
+        path = self.__process_path(path)
+        headers = self.__create_headers(kwargs.pop("headers", {}))
+        resp = await self.async_client.patch(
+            url=f"{self.domain}/{path}",
+            json=data.model_dump(mode="json", exclude_none=True, by_alias=True),
+            headers=headers,
+            **kwargs,
+        )
+        self.log_response(response=resp)
+        return resp
+
+    async def adelete(
+        self,
+        path: str,
+        params: Type[BaseModel] | None = None,
+        **kwargs,
+    ):
+        """Send an async DELETE request to the Revolut API
+
+        Parameters
+        ----------
+        path : str
+            The path to send the request to
+        params : Type[BaseModel] | None
+            The parameters to add to the request route
+
+        Returns
+        -------
+        Response
+            The response from the request
+        """
+        self.__check_async_client()
+        path = self.__process_path(path)
+        headers = self.__create_headers(kwargs.pop("headers", {}))
+        resp = await self.async_client.delete(
+            url=f"{self.domain}/{path}",
+            params=params.model_dump(mode="json", exclude_none=True, by_alias=True)
+            if params is not None
+            else None,
+            headers=headers,
+            **kwargs,
+        )
+        self.log_response(response=resp)
+        return resp
+
+    async def aput(self, path: str, data: Type[BaseModel] | None = None, **kwargs):
+        """Send an async PUT request to the Revolut API
+
+        Parameters
+        ----------
+        path : str
+            The path to send the request to
+        data : Type[BaseModel] | None
+            The data to send in the request
+
+        Returns
+        -------
+        Response
+            The response from the request
+        """
+        self.__check_async_client()
+        path = self.__process_path(path)
+        headers = self.__create_headers(kwargs.pop("headers", {}))
+        resp = await self.async_client.put(
+            url=f"{self.domain}/{path}",
+            json=data.model_dump(mode="json", exclude_none=True, by_alias=True),
+            headers=headers,
+            **kwargs,
+        )
+        self.log_response(response=resp)
+        return resp
+
+    @property
+    def required_headers(self) -> dict[str, str]:
+        """The headers to be attached to each request
+
+        Returns
+        -------
+        dict[str, str]
+            The headers to be attached to each request
+        """
+        if self.access_token is None:
+            raise {}
+        return {
+            "Accept": "application/json",
+            "Authorization": f"Bearer {self.access_token}",
+        }
+
+    def __create_headers(self, headers: dict[str, str] = {}) -> dict[str, str]:
+        """Create the headers for the request by adding the required headers
+
+        Parameters
+        ----------
+        headers : dict[str, str]
+            The headers for the request
+
+        Returns
+        -------
+        dict[str, str]
+            The headers for the request
+        """
+        headers.update(self.required_headers)
+        return headers
+
+    def __check_sync_client(self):
+        """Check if the sync client is open
+
+        Raises
+        ------
+        ValueError
+            If the client is not open
+        """
+        if self.sync_client is None:
+            raise ValueError("Sync client is not open")
+
+    def __check_async_client(self):
+        """Check if the async client is open
+
+        Raises
+        ------
+        ValueError
+            If the client is not open
+        """
+        if self.async_client is None:
+            raise ValueError("Async client is not open")
+
+    def __process_path(self, path: str) -> str:
+        """Process the path.
+
+        If 'http' not in the path:
+            Removing the leading slash if it exists
+        Else:
+            Return the path as is
+
+        Parameters
+        ----------
+        path : str
+            The path to process
+
+        Returns
+        -------
+        str
+            The processed path
+        """
+        if "http" in path:
+            return path
+
+        return self.__remove_leading_slash(path)
+
+    def __remove_leading_slash(self, path: str) -> str:
+        """Remove the leading slash from a path if it exists and
+        return it without the leading slash
+
+        Parameters
+        ----------
+        path : str
+            The path to remove the leading slash from
+
+        Returns
+        -------
+        str
+            The path without the leading slash
+        """
+        if path.startswith("/"):
+            return path[1:]
+        return path
+
+    def __load_resources(self):
+        """Loads all the resources from the resources directory"""
+        self.Accounts = EndpointAccounts(client=self)
+
+    def __enter__(self):
+        """Open the client connection"""
+        self.open()
+        return self
+
+    def __exit__(self, *args, **kwargs):
+        """Close the client connection"""
+        self.close()
+
+    async def __aenter__(self):
+        """Open the async client connection"""
+        await self.aopen()
+        return self
+
+    async def __aexit__(self, *args, **kwargs):
+        """Close the async client connection"""
+        await self.aclose()
+
+    def log_response(self, response: Response):
+        """Log the response from the API.
+        If the response is an error, raise an error
+
+        Parameters
+        ----------
+        response : Response
+            The response from the API
+        """
+        if not response.is_error:
+            logging.info(f"Response: {response.status_code} - {response.text}")
+        else:
+            logging.error(f"Response: {response.status_code} - {response.text}")
+
+            try:
+                response.raise_for_status()
+            except HTTPStatusError as exc:
+                raise ValueError(f"Error {response.status_code}: {response.text}") from exc
