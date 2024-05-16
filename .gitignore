@@ -1,0 +1,7 @@
+.venv
+__pycache__
+.DS_Store
+*/keys/*.json
+.env
+test_init.py
+.vscode
