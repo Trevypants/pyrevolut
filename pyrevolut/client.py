@@ -1,5 +1,5 @@
+from typing import Type, TypeVar
 from enum import StrEnum
-from typing import Type
 import logging
 
 from pydantic import BaseModel
@@ -9,6 +9,10 @@ from httpx import Client as SyncClient
 from httpx import HTTPStatusError, Response
 
 from .api import EndpointAccounts
+from .api import EndpointCards
+
+
+D = TypeVar("D", dict, list)  # TypeVar for dictionary or list
 
 
 class Environment(StrEnum):
@@ -100,28 +104,33 @@ class Client:
             The response from the request
         """
         self.__check_sync_client()
-        path = self.__process_path(path)
+        url = f"{self.domain}/{path}"
         headers = self.__create_headers(kwargs.pop("headers", {}))
-        resp = self.sync_client.get(
-            url=f"{self.domain}/{path}",
-            params=params.model_dump(mode="json", exclude_none=True, by_alias=True)
+        params = (
+            self.__replace_null_with_none(
+                data=params.model_dump(mode="json", exclude_none=True, by_alias=True)
+            )
             if params is not None
-            else None,
+            else None
+        )
+        resp = self.sync_client.get(
+            url=url,
+            params=params,
             headers=headers,
             **kwargs,
         )
         self.log_response(response=resp)
         return resp
 
-    def post(self, path: str, data: Type[BaseModel] | None = None, **kwargs):
+    def post(self, path: str, body: Type[BaseModel] | None = None, **kwargs):
         """Send a POST request to the Revolut API
 
         Parameters
         ----------
         path : str
             The path to send the request to
-        data : Type[BaseModel] | None
-            The data to send in the request
+        body : Type[BaseModel] | None
+            The body to send in the request
 
         Returns
         -------
@@ -129,26 +138,33 @@ class Client:
             The response from the request
         """
         self.__check_sync_client()
-        path = self.__process_path(path)
+        url = f"{self.domain}/{path}"
         headers = self.__create_headers(kwargs.pop("headers", {}))
+        json = (
+            self.__replace_null_with_none(
+                data=body.model_dump(mode="json", exclude_none=True, by_alias=True)
+            )
+            if body is not None
+            else None
+        )
         resp = self.sync_client.post(
-            url=f"{self.domain}/{path}",
-            json=data.model_dump(mode="json", exclude_none=True, by_alias=True),
+            url=url,
+            json=json,
             headers=headers,
             **kwargs,
         )
         self.log_response(response=resp)
         return resp
 
-    def patch(self, path: str, data: Type[BaseModel] | None = None, **kwargs):
+    def patch(self, path: str, body: Type[BaseModel] | None = None, **kwargs):
         """Send a PATCH request to the Revolut API
 
         Parameters
         ----------
         path : str
             The path to send the request to
-        data : Type[BaseModel]
-            The data to send in the request
+        body : Type[BaseModel]
+            The body to send in the request
 
         Returns
         -------
@@ -157,10 +173,18 @@ class Client:
         """
         self.__check_sync_client()
         path = self.__process_path(path)
+        url = f"{self.domain}/{path}"
         headers = self.__create_headers(kwargs.pop("headers", {}))
+        json = (
+            self.__replace_null_with_none(
+                data=body.model_dump(mode="json", exclude_none=True, by_alias=True)
+            )
+            if body is not None
+            else None
+        )
         resp = self.sync_client.patch(
-            url=f"{self.domain}/{path}",
-            json=data.model_dump(mode="json", exclude_none=True, by_alias=True),
+            url=url,
+            json=json,
             headers=headers,
             **kwargs,
         )
@@ -189,27 +213,33 @@ class Client:
         """
         self.__check_sync_client()
         path = self.__process_path(path)
+        url = f"{self.domain}/{path}"
         headers = self.__create_headers(kwargs.pop("headers", {}))
-        resp = self.sync_client.delete(
-            url=f"{self.domain}/{path}",
-            params=params.model_dump(mode="json", exclude_none=True, by_alias=True)
+        params = (
+            self.__replace_null_with_none(
+                data=params.model_dump(mode="json", exclude_none=True, by_alias=True)
+            )
             if params is not None
-            else None,
+            else None
+        )
+        resp = self.sync_client.delete(
+            url=url,
+            params=params,
             headers=headers,
             **kwargs,
         )
         self.log_response(response=resp)
         return resp
 
-    def put(self, path: str, data: Type[BaseModel] | None = None, **kwargs):
+    def put(self, path: str, body: Type[BaseModel] | None = None, **kwargs):
         """Send a PUT request to the Revolut API
 
         Parameters
         ----------
         path : str
             The path to send the request to
-        data : Type[BaseModel] | None
-            The data to send in the request
+        body : Type[BaseModel] | None
+            The body to send in the request
 
         Returns
         -------
@@ -218,10 +248,18 @@ class Client:
         """
         self.__check_sync_client()
         path = self.__process_path(path)
+        url = f"{self.domain}/{path}"
         headers = self.__create_headers(kwargs.pop("headers", {}))
+        json = (
+            self.__replace_null_with_none(
+                data=body.model_dump(mode="json", exclude_none=True, by_alias=True)
+            )
+            if body is not None
+            else None
+        )
         resp = self.sync_client.put(
-            url=f"{self.domain}/{path}",
-            json=data.model_dump(mode="json", exclude_none=True, by_alias=True),
+            url=url,
+            json=json,
             headers=headers,
             **kwargs,
         )
@@ -240,28 +278,33 @@ class Client:
 
         """
         self.__check_async_client()
-        path = self.__process_path(path)
+        url = f"{self.domain}/{path}"
         headers = self.__create_headers(kwargs.pop("headers", {}))
-        resp = await self.async_client.get(
-            url=f"{self.domain}/{path}",
-            params=params.model_dump(mode="json", exclude_none=True, by_alias=True)
+        params = (
+            self.__replace_null_with_none(
+                data=params.model_dump(mode="json", exclude_none=True, by_alias=True)
+            )
             if params is not None
-            else None,
+            else None
+        )
+        resp = await self.async_client.get(
+            url=url,
+            params=params,
             headers=headers,
             **kwargs,
         )
         self.log_response(response=resp)
         return resp
 
-    async def apost(self, path: str, data: Type[BaseModel] | None = None, **kwargs):
+    async def apost(self, path: str, body: Type[BaseModel] | None = None, **kwargs):
         """Send an async POST request to the Revolut API
 
         Parameters
         ----------
         path : str
             The path to send the request to
-        data : Type[BaseModel] | None
-            The data to send in the request
+        body : Type[BaseModel] | None
+            The body to send in the request
 
         Returns
         -------
@@ -269,26 +312,33 @@ class Client:
             The response from the request
         """
         self.__check_async_client()
-        path = self.__process_path(path)
+        url = f"{self.domain}/{path}"
         headers = self.__create_headers(kwargs.pop("headers", {}))
+        json = (
+            self.__replace_null_with_none(
+                data=body.model_dump(mode="json", exclude_none=True, by_alias=True)
+            )
+            if body is not None
+            else None
+        )
         resp = await self.async_client.post(
-            url=f"{self.domain}/{path}",
-            json=data.model_dump(mode="json", exclude_none=True, by_alias=True),
+            url=url,
+            json=json,
             headers=headers,
             **kwargs,
         )
         self.log_response(response=resp)
         return resp
 
-    async def apatch(self, path: str, data: Type[BaseModel] | None = None, **kwargs):
+    async def apatch(self, path: str, body: Type[BaseModel] | None = None, **kwargs):
         """Send an async PATCH request to the Revolut API
 
         Parameters
         ----------
         path : str
             The path to send the request to
-        data : Type[BaseModel] | None
-            The data to send in the request
+        body : Type[BaseModel] | None
+            The body to send in the request
 
         Returns
         -------
@@ -297,10 +347,18 @@ class Client:
         """
         self.__check_async_client()
         path = self.__process_path(path)
+        url = f"{self.domain}/{path}"
         headers = self.__create_headers(kwargs.pop("headers", {}))
+        json = (
+            self.__replace_null_with_none(
+                data=body.model_dump(mode="json", exclude_none=True, by_alias=True)
+            )
+            if body is not None
+            else None
+        )
         resp = await self.async_client.patch(
-            url=f"{self.domain}/{path}",
-            json=data.model_dump(mode="json", exclude_none=True, by_alias=True),
+            url=url,
+            json=json,
             headers=headers,
             **kwargs,
         )
@@ -329,27 +387,33 @@ class Client:
         """
         self.__check_async_client()
         path = self.__process_path(path)
+        url = f"{self.domain}/{path}"
         headers = self.__create_headers(kwargs.pop("headers", {}))
-        resp = await self.async_client.delete(
-            url=f"{self.domain}/{path}",
-            params=params.model_dump(mode="json", exclude_none=True, by_alias=True)
+        params = (
+            self.__replace_null_with_none(
+                data=params.model_dump(mode="json", exclude_none=True, by_alias=True)
+            )
             if params is not None
-            else None,
+            else None
+        )
+        resp = await self.async_client.delete(
+            url=url,
+            params=params,
             headers=headers,
             **kwargs,
         )
         self.log_response(response=resp)
         return resp
 
-    async def aput(self, path: str, data: Type[BaseModel] | None = None, **kwargs):
+    async def aput(self, path: str, body: Type[BaseModel] | None = None, **kwargs):
         """Send an async PUT request to the Revolut API
 
         Parameters
         ----------
         path : str
             The path to send the request to
-        data : Type[BaseModel] | None
-            The data to send in the request
+        body : Type[BaseModel] | None
+            The body to send in the request
 
         Returns
         -------
@@ -358,10 +422,18 @@ class Client:
         """
         self.__check_async_client()
         path = self.__process_path(path)
+        url = f"{self.domain}/{path}"
         headers = self.__create_headers(kwargs.pop("headers", {}))
+        json = (
+            self.__replace_null_with_none(
+                data=body.model_dump(mode="json", exclude_none=True, by_alias=True)
+            )
+            if body is not None
+            else None
+        )
         resp = await self.async_client.put(
-            url=f"{self.domain}/{path}",
-            json=data.model_dump(mode="json", exclude_none=True, by_alias=True),
+            url=url,
+            json=json,
             headers=headers,
             **kwargs,
         )
@@ -463,9 +535,47 @@ class Client:
             return path[1:]
         return path
 
+    def __replace_null_with_none(self, data: D) -> D:
+        """
+        Method that replaces all 'null' strings with None in a provided dictionary or list.
+
+        Must be called with either a dictionary or a list, not both.
+
+        Parameters
+        ----------
+        data : dict | list
+            The dictionary or list to replace 'null' strings with None
+
+        Returns
+        -------
+        dict | list
+            The dictionary or list with 'null' strings replaced with None
+        """
+        if isinstance(data, dict):
+            for k, v in data.items():
+                if isinstance(v, dict):
+                    self.__replace_null_with_none(data_dict=v, data_list=None)
+                elif isinstance(v, list):
+                    self.__replace_null_with_none(data_dict=None, data_list=v)
+                elif v == "null":
+                    data[k] = None
+        elif isinstance(data, list):
+            for i in range(len(data)):
+                if isinstance(data[i], dict):
+                    self.__replace_null_with_none(data_dict=data[i], data_list=None)
+                elif isinstance(data[i], list):
+                    self.__replace_null_with_none(data_dict=None, data_list=data[i])
+                elif data[i] == "null":
+                    data[i] = None
+        else:
+            raise ValueError("Data must be either a dictionary or a list")
+
+        return data
+
     def __load_resources(self):
         """Loads all the resources from the resources directory"""
         self.Accounts = EndpointAccounts(client=self)
+        self.Cards = EndpointCards(client=self)
 
     def __enter__(self):
         """Open the client connection"""

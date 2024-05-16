@@ -3,7 +3,6 @@ import datetime
 
 import pendulum
 from pendulum import Date as _Date  # type: ignore
-from pendulum.exceptions import PendulumException
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import PydanticCustomError, core_schema
@@ -90,9 +89,24 @@ def string_to_date(string: str) -> Date:
     Date
         The pendulum Date object.
     """
-    try:
-        return pendulum.from_format(
-            string=string, fmt="YYYY-MM-DD", tz="UTC"
-        )  # # Assuming ISO format
-    except PendulumException as exc:
-        raise PydanticCustomError(f"Error converting string to pendulum Date: {string}") from exc
+    formats = [
+        "YYYY-MM-DD",
+        "YYYY/MM/DD",
+        "YYYY.MM.DD",
+        "YYYYMMDD",
+        "YYYY-MM",
+        "YYYY/MM",
+        "YYYY.MM",
+        "YYYYMM",
+        "YYYY",
+        "MM-YYYY",
+        "MM/YYYY",
+        "MM.YYYY",
+        "MMYYYY",
+    ]
+    for format in formats:
+        try:
+            return pendulum.from_format(string=string, fmt=format, tz="UTC")
+        except Exception:
+            pass
+    raise PydanticCustomError(f"Error converting string to pendulum Date: {string}")

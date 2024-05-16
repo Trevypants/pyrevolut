@@ -3,9 +3,7 @@ from httpx import Response
 
 from pyrevolut.api.common import BaseEndpoint
 
-from .retrieve_all_accounts import RetrieveAllAccounts
-from .retrieve_an_account import RetrieveAnAccount
-from .retrieve_full_bank_details import RetrieveFullBankDetails
+from .get import RetrieveAllAccounts, RetrieveAnAccount, RetrieveFullBankDetails
 
 
 class EndpointAccounts(BaseEndpoint):

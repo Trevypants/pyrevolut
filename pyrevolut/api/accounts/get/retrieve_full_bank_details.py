@@ -3,7 +3,7 @@ from typing import Annotated
 from pydantic import BaseModel, Field
 from pydantic_extra_types.country import CountryAlpha2
 
-from .enums import EnumPaymentScheme, EnumTimeUnit
+from pyrevolut.api.common import EnumPaymentScheme, EnumTimeUnit
 
 
 class RetrieveFullBankDetails:
