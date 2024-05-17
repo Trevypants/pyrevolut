@@ -1,13 +1,6 @@
 from enum import StrEnum
 
 
-class EnumAccountState(StrEnum):
-    """Account state enum"""
-
-    ACTIVE = "active"
-    INACTIVE = "inactive"
-
-
 class EnumPaymentScheme(StrEnum):
     """Payment scheme enum"""
 
@@ -22,10 +15,3 @@ class EnumPaymentScheme(StrEnum):
     NICS = "nics"
     RIX = "rix"
     SUMCLEARING = "sumclearing"
-
-
-class EnumTimeUnit(StrEnum):
-    """Time unit enum"""
-
-    DAYS = "days"
-    HOURS = "hours"

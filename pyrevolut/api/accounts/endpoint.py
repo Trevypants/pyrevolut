@@ -1,11 +1,8 @@
 from uuid import UUID
-from httpx import Response
 
 from pyrevolut.api.common import BaseEndpoint
 
-from .retrieve_all_accounts import RetrieveAllAccounts
-from .retrieve_an_account import RetrieveAnAccount
-from .retrieve_full_bank_details import RetrieveFullBankDetails
+from .get import RetrieveAllAccounts, RetrieveAnAccount, RetrieveFullBankDetails
 
 
 class EndpointAccounts(BaseEndpoint):
@@ -39,7 +36,7 @@ class EndpointAccounts(BaseEndpoint):
             **kwargs,
         )
 
-        return [endpoint.Response(**resp) for resp in response.json()]
+        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     def get_account(
         self,
@@ -63,7 +60,7 @@ class EndpointAccounts(BaseEndpoint):
         path = endpoint.ROUTE.format(account_id=account_id)
         params = endpoint.Params()
 
-        response: Response = self.client.get(
+        response = self.client.get(
             path=path,
             params=params,
             **kwargs,
@@ -93,7 +90,7 @@ class EndpointAccounts(BaseEndpoint):
         path = endpoint.ROUTE.format(account_id=account_id)
         params = endpoint.Params()
 
-        response: Response = self.client.get(
+        response = self.client.get(
             path=path,
             params=params,
             **kwargs,
@@ -127,7 +124,7 @@ class EndpointAccounts(BaseEndpoint):
             **kwargs,
         )
 
-        return [endpoint.Response(**resp) for resp in response.json()]
+        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     async def aget_account(
         self,
@@ -151,7 +148,7 @@ class EndpointAccounts(BaseEndpoint):
         path = endpoint.ROUTE.format(account_id=account_id)
         params = endpoint.Params()
 
-        response: Response = await self.client.aget(
+        response = await self.client.aget(
             path=path,
             params=params,
             **kwargs,
@@ -181,7 +178,7 @@ class EndpointAccounts(BaseEndpoint):
         path = endpoint.ROUTE.format(account_id=account_id)
         params = endpoint.Params()
 
-        response: Response = await self.client.aget(
+        response = await self.client.aget(
             path=path,
             params=params,
             **kwargs,
