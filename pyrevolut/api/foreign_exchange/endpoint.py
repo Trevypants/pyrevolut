@@ -56,7 +56,7 @@ class EndpointForeignExchange(BaseEndpoint):
 
     def exchange_money(
         self,
-        request_id: UUID,
+        request_id: str,
         from_account_id: UUID,
         from_currency: str,
         to_account_id: UUID,
@@ -81,7 +81,7 @@ class EndpointForeignExchange(BaseEndpoint):
 
         Parameters
         ----------
-        request_id : UUID
+        request_id : str
             The ID of the request, provided by you.
             It helps you identify the transaction in your system.
 
@@ -177,7 +177,7 @@ class EndpointForeignExchange(BaseEndpoint):
 
     async def aexchange_money(
         self,
-        request_id: UUID,
+        request_id: str,
         from_account_id: UUID,
         from_currency: str,
         to_account_id: UUID,
@@ -202,7 +202,7 @@ class EndpointForeignExchange(BaseEndpoint):
 
         Parameters
         ----------
-        request_id : UUID
+        request_id : str
             The ID of the request, provided by you.
             It helps you identify the transaction in your system.
 

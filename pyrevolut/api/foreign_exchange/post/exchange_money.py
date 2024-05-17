@@ -83,7 +83,7 @@ class ExchangeMoney:
             ),
         ] = None
         request_id: Annotated[
-            UUID,
+            str,
             Field(
                 description="""
                 The ID of the request, provided by you. 

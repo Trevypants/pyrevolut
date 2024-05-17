@@ -1,4 +1,5 @@
 from uuid import UUID
+from datetime import datetime
 
 from pyrevolut.api.common import BaseEndpoint, EnumProfileType
 from pyrevolut.utils import DateTime
@@ -35,7 +36,7 @@ class EndpointCounterparties(BaseEndpoint):
         sort_code: str | None = None,
         iban: str | None = None,
         bic: str | None = None,
-        created_before: DateTime | str | int | float | None = None,
+        created_before: datetime | DateTime | str | int | float | None = None,
         limit: int | None = None,
         **kwargs,
     ):
@@ -62,7 +63,7 @@ class EndpointCounterparties(BaseEndpoint):
             The exact IBAN of the counterparty to retrieve.
         bic : str | None
             The exact BIC of the counterparty to retrieve. Only allowed in combination with the iban parameter.
-        created_before : DateTime | str | int | float | None
+        created_before : datetime | DateTime | str | int | float | None
             Retrieves counterparties with created_at < created_before.
             The default value is the current date and time at which you are calling the endpoint.
             Provided in ISO 8601 format.
@@ -95,7 +96,7 @@ class EndpointCounterparties(BaseEndpoint):
             **kwargs,
         )
 
-        return [endpoint.Response(**resp) for resp in response.json()]
+        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     def get_counterparty(
         self,
@@ -356,7 +357,7 @@ class EndpointCounterparties(BaseEndpoint):
         sort_code: str | None = None,
         iban: str | None = None,
         bic: str | None = None,
-        created_before: DateTime | str | int | float | None = None,
+        created_before: datetime | DateTime | str | int | float | None = None,
         limit: int | None = None,
         **kwargs,
     ):
@@ -383,7 +384,7 @@ class EndpointCounterparties(BaseEndpoint):
             The exact IBAN of the counterparty to retrieve.
         bic : str | None
             The exact BIC of the counterparty to retrieve. Only allowed in combination with the iban parameter.
-        created_before : DateTime | str | int | float | None
+        created_before : datetime | DateTime | str | int | float | None
             Retrieves counterparties with created_at < created_before.
             The default value is the current date and time at which you are calling the endpoint.
             Provided in ISO 8601 format.
@@ -416,7 +417,7 @@ class EndpointCounterparties(BaseEndpoint):
             **kwargs,
         )
 
-        return [endpoint.Response(**resp) for resp in response.json()]
+        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     async def aget_counterparty(
         self,

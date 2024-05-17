@@ -1,6 +1,7 @@
 from typing import Literal, Type
 from uuid import UUID
 from decimal import Decimal
+from datetime import datetime
 
 from pydantic import BaseModel
 
@@ -24,7 +25,7 @@ class EndpointCards(BaseEndpoint):
 
     def get_all_cards(
         self,
-        created_before: DateTime | str | int | float | None = None,
+        created_before: datetime | DateTime | str | int | float | None = None,
         limit: int | None = None,
         **kwargs,
     ):
@@ -34,7 +35,7 @@ class EndpointCards(BaseEndpoint):
 
         Parameters
         ----------
-        created_before : DateTime | str | int | float | None
+        created_before : datetime | DateTime | str | int | float | None
             Retrieves cards with created_at < created_before.
             The default value is the current date and time at which you are calling the endpoint.
             Provided in ISO 8601 format.
@@ -64,7 +65,7 @@ class EndpointCards(BaseEndpoint):
             **kwargs,
         )
 
-        return [endpoint.Response(**resp) for resp in response.json()]
+        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     def get_card(
         self,
@@ -129,7 +130,7 @@ class EndpointCards(BaseEndpoint):
 
     def create_card(
         self,
-        request_id: UUID,
+        request_id: str,
         holder_id: UUID,
         label: str | None = None,
         accounts: list[UUID] | None = None,
@@ -158,7 +159,7 @@ class EndpointCards(BaseEndpoint):
 
         Parameters
         ----------
-        request_id : UUID
+        request_id : str
             A unique ID of the request that you provide.
             This ID is used to prevent duplicate card creation requests in case
             of a lost connection or client error, so make sure you use the same
@@ -553,7 +554,7 @@ class EndpointCards(BaseEndpoint):
 
     async def aget_all_cards(
         self,
-        created_before: DateTime | str | int | float | None = None,
+        created_before: datetime | DateTime | str | int | float | None = None,
         limit: int | None = None,
         **kwargs,
     ):
@@ -563,7 +564,7 @@ class EndpointCards(BaseEndpoint):
 
         Parameters
         ----------
-        created_before : DateTime | str | int | float | None
+        created_before : datetime | DateTime | str | int | float | None
             Retrieves cards with created_at < created_before.
             The default value is the current date and time at which you are calling the endpoint.
             Provided in ISO 8601 format.
@@ -593,7 +594,7 @@ class EndpointCards(BaseEndpoint):
             **kwargs,
         )
 
-        return [endpoint.Response(**resp) for resp in response.json()]
+        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     async def aget_card(
         self,
@@ -658,7 +659,7 @@ class EndpointCards(BaseEndpoint):
 
     async def acreate_card(
         self,
-        request_id: UUID,
+        request_id: str,
         holder_id: UUID,
         label: str | None = None,
         accounts: list[UUID] | None = None,
@@ -687,7 +688,7 @@ class EndpointCards(BaseEndpoint):
 
         Parameters
         ----------
-        request_id : UUID
+        request_id : str
             A unique ID of the request that you provide.
             This ID is used to prevent duplicate card creation requests in case
             of a lost connection or client error, so make sure you use the same

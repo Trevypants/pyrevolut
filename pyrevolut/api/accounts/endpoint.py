@@ -36,7 +36,7 @@ class EndpointAccounts(BaseEndpoint):
             **kwargs,
         )
 
-        return [endpoint.Response(**resp) for resp in response.json()]
+        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     def get_account(
         self,
@@ -124,7 +124,7 @@ class EndpointAccounts(BaseEndpoint):
             **kwargs,
         )
 
-        return [endpoint.Response(**resp) for resp in response.json()]
+        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     async def aget_account(
         self,

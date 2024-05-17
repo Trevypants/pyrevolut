@@ -90,7 +90,7 @@ class CreateCard:
             ]
 
         request_id: Annotated[
-            UUID,
+            str,
             Field(
                 description="""
                 A unique ID of the request that you provide.
