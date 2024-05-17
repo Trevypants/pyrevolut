@@ -13,6 +13,7 @@ from .api import (
     EndpointCards,
     EndpointCounterparties,
     EndpointForeignExchange,
+    EndpointPaymentDrafts,
 )
 
 
@@ -35,6 +36,7 @@ class Client:
     Cards: EndpointCards | None = None
     Counterparties: EndpointCounterparties | None = None
     ForeignExchange: EndpointForeignExchange | None = None
+    PaymentDrafts: EndpointPaymentDrafts | None = None
 
     def __init__(
         self,
@@ -585,6 +587,7 @@ class Client:
         self.Cards = EndpointCards(client=self)
         self.Counterparties = EndpointCounterparties(client=self)
         self.ForeignExchange = EndpointForeignExchange(client=self)
+        self.PaymentDrafts = EndpointPaymentDrafts(client=self)
 
     def __enter__(self):
         """Open the client connection"""
