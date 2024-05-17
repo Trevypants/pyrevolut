@@ -1,4 +1,4 @@
-# (Transfer)Wise Python SDK
+# Revolut Python SDK
 
 This is an un-official Python SDK for the [Revolut Business API](https://developer.revolut.com/docs/business/business-api).
 
