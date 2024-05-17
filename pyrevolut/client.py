@@ -16,6 +16,7 @@ from .api import (
     EndpointPaymentDrafts,
     EndpointPayoutLinks,
     EndpointSimulations,
+    EndpointTeamMembers,
 )
 
 
@@ -41,6 +42,7 @@ class Client:
     PaymentDrafts: EndpointPaymentDrafts | None = None
     PayoutLinks: EndpointPayoutLinks | None = None
     Simulations: EndpointSimulations | None = None
+    TeamMembers: EndpointTeamMembers | None = None
 
     def __init__(
         self,
@@ -594,6 +596,7 @@ class Client:
         self.PaymentDrafts = EndpointPaymentDrafts(client=self)
         self.PayoutLinks = EndpointPayoutLinks(client=self)
         self.Simulations = EndpointSimulations(client=self)
+        self.TeamMembers = EndpointTeamMembers(client=self)
 
     def __enter__(self):
         """Open the client connection"""

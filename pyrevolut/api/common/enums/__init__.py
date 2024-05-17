@@ -18,6 +18,7 @@ from .profile_state import EnumProfileState
 from .profile_type import EnumProfileType
 from .recipient_charges import EnumRecipientCharges
 from .simulate_transfer_state_action import EnumSimulateTransferStateAction
+from .team_member_state import EnumTeamMemberState
 from .time_unit import EnumTimeUnit
 from .transaction_type import EnumTransactionType
 from .transaction_state import EnumTransactionState
