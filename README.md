@@ -34,7 +34,11 @@ accounts = client.Accounts.get_all_accounts()
 client.close()
 
 # You can also use the client as a context manager
-with Client(access_token=ACCESS_TOKEN, refresh_token=REFRESH_TOKEN, environment=Environment.SANDBOX) as client:
+with Client(
+    access_token=ACCESS_TOKEN, 
+    refresh_token=REFRESH_TOKEN, 
+    environment=Environment.SANDBOX
+) as client:
     accounts = client.Accounts.get_all_accounts()
 ```
 
