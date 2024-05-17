@@ -24,3 +24,4 @@ from .time_unit import EnumTimeUnit
 from .transaction_type import EnumTransactionType
 from .transaction_state import EnumTransactionState
 from .transfer_reason_code import EnumTransferReasonCode
+from .webhook_event import EnumWebhookEvent

@@ -19,6 +19,7 @@ from .api import (
     EndpointTeamMembers,
     EndpointTransactions,
     EndpointTransfers,
+    EndpointWebhooks,
 )
 
 
@@ -47,6 +48,7 @@ class Client:
     TeamMembers: EndpointTeamMembers | None = None
     Transactions: EndpointTransactions | None = None
     Transfers: EndpointTransfers | None = None
+    Webhooks: EndpointWebhooks | None = None
 
     def __init__(
         self,
@@ -603,6 +605,7 @@ class Client:
         self.TeamMembers = EndpointTeamMembers(client=self)
         self.Transactions = EndpointTransactions(client=self)
         self.Transfers = EndpointTransfers(client=self)
+        self.Webhooks = EndpointWebhooks(client=self)
 
     def __enter__(self):
         """Open the client connection"""
