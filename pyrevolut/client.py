@@ -8,9 +8,12 @@ from httpx import AsyncClient
 from httpx import Client as SyncClient
 from httpx import HTTPStatusError, Response
 
-from .api import EndpointAccounts
-from .api import EndpointCards
-from .api import EndpointCounterparties
+from .api import (
+    EndpointAccounts,
+    EndpointCards,
+    EndpointCounterparties,
+    EndpointForeignExchange,
+)
 
 
 D = TypeVar("D", dict, list)  # TypeVar for dictionary or list
@@ -31,6 +34,7 @@ class Client:
     Accounts: EndpointAccounts | None = None
     Cards: EndpointCards | None = None
     Counterparties: EndpointCounterparties | None = None
+    ForeignExchange: EndpointForeignExchange | None = None
 
     def __init__(
         self,
@@ -580,6 +584,7 @@ class Client:
         self.Accounts = EndpointAccounts(client=self)
         self.Cards = EndpointCards(client=self)
         self.Counterparties = EndpointCounterparties(client=self)
+        self.ForeignExchange = EndpointForeignExchange(client=self)
 
     def __enter__(self):
         """Open the client connection"""

@@ -4,3 +4,4 @@
 from .accounts import *
 from .cards import *
 from .counterparties import *
+from .foreign_exchange import *
