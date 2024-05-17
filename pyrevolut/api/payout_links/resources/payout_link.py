@@ -85,7 +85,7 @@ class ResourcePayoutLink(BaseModel):
     ]
     request_id: Annotated[
         str,
-        Field(description="The ID of the request, provided by the sender."),
+        Field(description="The ID of the request, provided by the sender.", max_length=40),
     ]
     expiry_date: Annotated[
         Date,

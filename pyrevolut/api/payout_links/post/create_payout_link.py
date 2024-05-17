@@ -63,6 +63,7 @@ class CreatePayoutLink:
                 are network or system errors, the same request_id should be used for 
                 requests related to the same link.
                 """,
+                max_length=40,
             ),
         ]
         account_id: Annotated[

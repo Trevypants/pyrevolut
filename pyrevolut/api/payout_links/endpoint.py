@@ -11,7 +11,7 @@ from pyrevolut.api.common import (
     EnumTransferReasonCode,
 )
 
-from .get import RetrieveListOfPayoutLinks, RetrievePayoutLink, GetTransferReasons
+from .get import RetrieveListOfPayoutLinks, RetrievePayoutLink
 from .post import CreatePayoutLink, CancelPayoutLink
 
 
@@ -131,40 +131,6 @@ class EndpointPayoutLinks(BaseEndpoint):
         )
 
         return endpoint.Response(**response.json()).model_dump()
-
-    def get_transfer_reasons(
-        self,
-        **kwargs,
-    ):
-        """
-        In order to initiate a transfer in certain currencies and countries,
-        you must provide a transfer reason.
-        With this endpoint you can retrieve all transfer reasons available to your business account
-        per country and currency.
-
-        After you retrieve the results, use the appropriate reason code in the transfer_reason_code
-        field when making a transfer to a counterparty or creating a payout link.
-
-        Parameters
-        ----------
-        None
-
-        Returns
-        -------
-        list[dict]
-            A list of transfer reasons.
-        """
-        endpoint = GetTransferReasons
-        path = endpoint.ROUTE
-        params = endpoint.Params()
-
-        response = self.client.get(
-            path=path,
-            params=params,
-            **kwargs,
-        )
-
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     def create_payout_link(
         self,
@@ -410,40 +376,6 @@ class EndpointPayoutLinks(BaseEndpoint):
         )
 
         return endpoint.Response(**response.json()).model_dump()
-
-    async def aget_transfer_reasons(
-        self,
-        **kwargs,
-    ):
-        """
-        In order to initiate a transfer in certain currencies and countries,
-        you must provide a transfer reason.
-        With this endpoint you can retrieve all transfer reasons available to your business account
-        per country and currency.
-
-        After you retrieve the results, use the appropriate reason code in the transfer_reason_code
-        field when making a transfer to a counterparty or creating a payout link.
-
-        Parameters
-        ----------
-        None
-
-        Returns
-        -------
-        list[dict]
-            A list of transfer reasons.
-        """
-        endpoint = GetTransferReasons
-        path = endpoint.ROUTE
-        params = endpoint.Params()
-
-        response = await self.client.aget(
-            path=path,
-            params=params,
-            **kwargs,
-        )
-
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     async def acreate_payout_link(
         self,

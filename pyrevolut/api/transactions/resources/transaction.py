@@ -118,7 +118,7 @@ class ResourceTransaction(BaseModel):
     type: Annotated[EnumTransactionType, Field(description="Indicates the transaction type.")]
     request_id: Annotated[
         str | None,
-        Field(description="The request ID that you provided previously."),
+        Field(description="The request ID that you provided previously.", max_length=40),
     ] = None
     state: Annotated[EnumTransactionState, Field(description="Indicates the transaction state.")]
     reason_code: Annotated[

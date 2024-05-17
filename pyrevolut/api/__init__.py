@@ -10,3 +10,4 @@ from .payout_links import *
 from .simulations import *
 from .team_members import *
 from .transactions import *
+from .transfers import *

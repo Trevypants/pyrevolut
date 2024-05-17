@@ -8,6 +8,7 @@ from .account_state import EnumAccountState
 from .account_type import EnumAccountType
 from .card_scheme import EnumCardScheme
 from .card_state import EnumCardState
+from .charge_bearer import EnumChargeBearer
 from .merchant_category import EnumMerchantCategory
 from .payment_draft_state import EnumPaymentDraftState
 from .payment_scheme import EnumPaymentScheme
