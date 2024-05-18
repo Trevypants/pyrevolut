@@ -1,4 +1,16 @@
+from typing import Annotated
+
 from httpx import Client, AsyncClient
+from pydantic import BaseModel, Field, SecretStr
+
+
+class ModelGetAuthTokensResponse(BaseModel):
+    """The model that represents the response from the get auth tokens endpoint."""
+
+    access_token: Annotated[SecretStr, Field(description="The access token")]
+    refresh_token: Annotated[SecretStr, Field(description="The refresh token")]
+    token_type: Annotated[str, Field(description="The token type")]
+    expires_in: Annotated[int, Field(description="The expiration time in seconds")]
 
 
 def get_auth_tokens(
@@ -34,7 +46,7 @@ def get_auth_tokens(
             sandbox=sandbox,
         ),
     )
-    return response.json()
+    return ModelGetAuthTokensResponse(**response.json())
 
 
 async def aget_auth_tokens(
@@ -70,7 +82,7 @@ async def aget_auth_tokens(
             sandbox=sandbox,
         ),
     )
-    return response.json()
+    return ModelGetAuthTokensResponse(**response.json())
 
 
 def prep_get_auth_tokens(

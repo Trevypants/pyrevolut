@@ -1,55 +1,55 @@
 from typing import Type, TypeVar
-from enum import StrEnum
 import logging
 
 from pydantic import BaseModel
+import pendulum
 
 from httpx import AsyncClient
 from httpx import Client as SyncClient
 from httpx import HTTPStatusError, Response
 
+from pyrevolut.utils.auth import (
+    ModelCreds,
+    refresh_access_token,
+    save_creds,
+    load_creds,
+)
+
 
 D = TypeVar("D", dict, list)  # TypeVar for dictionary or list
 
 
-class EnumEnvironment(StrEnum):
-    SANDBOX = "sandbox"
-    LIVE = "live"
-
-
 class BaseClient:
-    access_token: str
-    refresh_token: str
-    environment: EnumEnvironment
+    creds_loc: str
+    credentials: ModelCreds
     domain: str
+    sandbox: bool
     client: SyncClient | AsyncClient | None = None
 
     def __init__(
         self,
-        access_token: str,
-        refresh_token: str,
-        environment: EnumEnvironment = EnumEnvironment.SANDBOX,
+        creds_loc: str = "credentials/creds.json",
+        sandbox: bool = True,
     ):
         """Create a new Revolut client
 
         Parameters
         ----------
-        access_token : str
-            The access token to use
-        refresh_token : str
-            The refresh token to use
-        environment : EnumEnvironment
-            The environment to use, either Environment.SANDBOX or Environment.LIVE
+        creds_loc : str, optional
+        sandbox : bool, optional
+            Whether to use the sandbox environment, by default True
         """
-        self.access_token = access_token
-        self.refresh_token = refresh_token
-        self.environment = environment
+        self.creds_loc = creds_loc
+        self.sandbox = sandbox
 
         # Set domain based on environment
-        if self.environment == EnumEnvironment.SANDBOX:
+        if self.sandbox:
             self.domain = "https://sandbox-b2b.revolut.com/api/1.0/"
         else:
             self.domain = "https://b2b.revolut.com/api/1.0/"
+
+        # Load the credentials
+        self.__load_credentials()
 
     def log_response(self, response: Response):
         """Log the response from the API.
@@ -70,7 +70,7 @@ class BaseClient:
             except HTTPStatusError as exc:
                 raise ValueError(f"Error {response.status_code}: {response.text}") from exc
 
-    def __prep_get(
+    def _prep_get(
         self,
         path: str,
         params: Type[BaseModel] | None = None,
@@ -111,7 +111,7 @@ class BaseClient:
             **kwargs,
         }
 
-    def __prep_post(
+    def _prep_post(
         self,
         path: str,
         body: Type[BaseModel] | None = None,
@@ -152,7 +152,7 @@ class BaseClient:
             **kwargs,
         }
 
-    def __prep_patch(
+    def _prep_patch(
         self,
         path: str,
         body: Type[BaseModel] | None = None,
@@ -193,7 +193,7 @@ class BaseClient:
             **kwargs,
         }
 
-    def __prep_delete(
+    def _prep_delete(
         self,
         path: str,
         params: Type[BaseModel] | None = None,
@@ -234,7 +234,7 @@ class BaseClient:
             **kwargs,
         }
 
-    def __prep_put(
+    def _prep_put(
         self,
         path: str,
         body: Type[BaseModel] | None = None,
@@ -284,11 +284,9 @@ class BaseClient:
         dict[str, str]
             The headers to be attached to each request
         """
-        if self.access_token is None:
-            raise {}
         return {
             "Accept": "application/json",
-            "Authorization": f"Bearer {self.access_token}",
+            "Authorization": f"Bearer {self.credentials.tokens.access_token.get_secret_value()}",
         }
 
     def __create_headers(self, headers: dict[str, str] = {}) -> dict[str, str]:
@@ -308,15 +306,24 @@ class BaseClient:
         return headers
 
     def __check_client(self):
-        """Check if the client is open
+        """Check if the client is open and that the credentials are still valid.
 
         Raises
         ------
         ValueError
-            If the client is not open
+            If the client is not open or if the long-term credentials have expired
         """
         if self.client is None:
             raise ValueError("Client is not open")
+
+        if self.credentials.credentials_expired:
+            raise ValueError(
+                "Long-term credentials have expired. "
+                "\n\nPlease reauthenticate using the `pyrevolut auth-manual` command."
+            )
+
+        if self.credentials.access_token_expired:
+            self.__refresh_access_token()
 
     def __process_path(self, path: str) -> str:
         """Process the path.
@@ -395,3 +402,63 @@ class BaseClient:
             raise ValueError("Data must be either a dictionary or a list")
 
         return data
+
+    def __load_credentials(self):
+        """Load the credentials from the credentials file.
+
+        - If the credentials file does not exist, raise an error.
+        - If the credentials file is invalid, raise an error.
+        - If the credentials are expired, raise an error.
+        - If the access token is expired, refresh it.
+
+        """
+        solution_msg = "\n\nPlease reauthenticate using the `pyrevolut auth-manual` command."
+
+        try:
+            self.credentials = load_creds(location=self.creds_loc)
+        except FileNotFoundError as exc:
+            raise ValueError(f"Credentials file not found: {exc}. {solution_msg}") from exc
+        except Exception as exc:
+            raise ValueError(f"Error loading credentials: {exc}.") from exc
+
+        # Check if the credentials are still valid
+        if self.credentials.credentials_expired:
+            raise ValueError(f"Credentials are expired. {solution_msg}")
+
+        # Check if the access token is expired
+        if self.credentials.access_token_expired:
+            self.__refresh_access_token()
+
+    def __refresh_access_token(self):
+        """Refresh the access token using the refresh token.
+        Will call the endpoint to refresh the access token.
+        Then it will save the new access token to the credentials file.
+
+        Parameters
+        ----------
+        None
+
+        Raises
+        ------
+        ValueError
+            If there is an error refreshing the access token.
+
+        Returns
+        -------
+        None
+        """
+        try:
+            resp = refresh_access_token(
+                client=SyncClient(),
+                refresh_token=self.credentials.tokens.refresh_token.get_secret_value(),
+                client_assert_jwt=self.credentials.client_assert_jwt.jwt.get_secret_value(),
+                sandbox=self.sandbox,
+            )
+            self.credentials.tokens.access_token = resp.access_token.get_secret_value()
+            self.credentials.tokens.token_type = resp.token_type
+            self.credentials.tokens.access_token_expiration_dt = pendulum.now(tz="UTC").add(
+                seconds=resp.expires_in
+            )
+            save_creds(creds=self.credentials, location=self.creds_loc, indent=4)
+        except Exception as exc:
+            raise ValueError(f"Error refreshing access token: {exc}.") from exc

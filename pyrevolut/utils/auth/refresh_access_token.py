@@ -1,4 +1,15 @@
+from typing import Annotated
+
 from httpx import Client, AsyncClient
+from pydantic import BaseModel, Field, SecretStr
+
+
+class ModelRefreshAccessTokenResponse(BaseModel):
+    """The model that represents the response from the refresh access token endpoint."""
+
+    access_token: Annotated[SecretStr, Field(description="The access token")]
+    token_type: Annotated[str, Field(description="The token type")]
+    expires_in: Annotated[int, Field(description="The expiration time in seconds")]
 
 
 def refresh_access_token(
@@ -34,7 +45,7 @@ def refresh_access_token(
             sandbox=sandbox,
         )
     )
-    return response.json()
+    return ModelRefreshAccessTokenResponse(**response.json())
 
 
 async def arefresh_access_token(
@@ -70,7 +81,7 @@ async def arefresh_access_token(
             sandbox=sandbox,
         )
     )
-    return response.json()
+    return ModelRefreshAccessTokenResponse(**response.json())
 
 
 def prep_refresh_access_token(

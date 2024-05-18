@@ -19,9 +19,9 @@ class ResourceAccount(BaseModel):
         Field(description="The account ID."),
     ]
     name: Annotated[
-        str,
+        str | None,
         Field(description="The account name."),
-    ]
+    ] = None
     balance: Annotated[
         Decimal,
         Field(description="The current balance on the account."),

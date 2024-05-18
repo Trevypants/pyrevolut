@@ -4,11 +4,12 @@ import json
 import pendulum
 from httpx import Client
 import typer
-from rich import print
+from rich import print as console
 
 from pyrevolut.utils.datetime import to_datetime
 
 from .enum_auth_scope import EnumAuthScope
+from .creds import ModelCreds, save_creds
 from .gen_public_private_cert import gen_public_private_cert
 from .create_client_assert_jwt import create_client_assert_jwt
 from .get_auth_tokens import get_auth_tokens
@@ -60,25 +61,40 @@ def auth_manual_flow(
     # Final credentials dictionary to be saved to a JSON file
     creds = {}
 
-    print("======================================================================")
-    print("=                    Revolut Client from Manual Flow                 =")
-    print("======================================================================")
+    console("======================================================================")
+    console("=                    Revolut Client from Manual Flow                 =")
+    console("======================================================================")
 
     # Check if the credentials file already exists
     try:
         with open(credentials_json, "r") as f:
             creds = json.load(f)
-            print("Credentials file found. Loading credentials...")
-            print("Credentials loaded successfully.")
-            print("To re-authenticate, please delete the credentials file.")
+            console("Credentials file found. Loading credentials...")
+
+        # Check if the credentials file is valid
+        try:
+            creds_model = ModelCreds(**creds)
+
+            # Check for any expired fields
+            if not creds_model.credentials_expired:
+                console("Credentials loaded successfully.")
+                console("To re-authenticate, please delete the credentials file.")
+                return
+            else:
+                console("Credentials have expired. Re-authenticating...")
+        except Exception as exc:
+            console(f"An error occurred: {exc}")
+            console(
+                "Credentials file is invalid. Please delete the credentials file and re-authenticate."
+            )
             return
     except FileNotFoundError:
         pass
 
     # Generate the Public and Private Certificates
-    print("\n-----------------------------------------------------------")
-    print("--- Step (1/4) Generate Public and Private Certificates ---")
-    print("-----------------------------------------------------------")
+    console("\n-----------------------------------------------------------")
+    console("--- Step (1/4) Generate Public and Private Certificates ---")
+    console("-----------------------------------------------------------")
     while True:
         expiration_dt = to_datetime(typer.prompt("Expiration datetime of the certificates (UTC)"))
         country = typer.prompt("Country (2-letter code)")
@@ -117,18 +133,18 @@ def auth_manual_flow(
             }
             break
         except Exception as exc:
-            print(f"An error occurred: {exc}")
+            console(f"An error occurred: {exc}")
 
-    print("\n-------------------------------------------------------")
-    print("--- Step (2/4) Upload Public Certificate to Revolut ---")
-    print("-------------------------------------------------------")
+    console("\n-------------------------------------------------------")
+    console("--- Step (2/4) Upload Public Certificate to Revolut ---")
+    console("-------------------------------------------------------")
     upload_url = (
         "https://sandbox-business.revolut.com/settings/api"
         if sandbox
         else "https://business.revolut.com/settings/api"
     )
     public_key_string = public_key.decode("utf-8").replace("\\n", "")
-    print(
+    console(
         "Please specify your OAuth redirect URI. "
         "This is the URL where you are redirected after you consent for "
         "the application to access your Revolut Business account."
@@ -144,38 +160,38 @@ def auth_manual_flow(
         except ValueError:
             pass
 
-    print("\nPlease follow the instructions exactly:")
-    print(f"Step (2.1) Navigate to the following URL: {upload_url}")
-    print(
+    console("\nPlease follow the instructions exactly:")
+    console(f"Step (2.1) Navigate to the following URL: {upload_url}")
+    console(
         "Step (2.2) In the [bold red]API Certificates[/bold red] section, "
         "click [bold red]Add API certificate[/bold red]. "
         "If you already have other certificates added, click [bold red]Add new[/bold red]."
     )
-    print(
+    console(
         "Step (2.3) Give your certificate a meaningful title. It will help you later to distinguish "
         "it from other certificates."
     )
-    print(
+    console(
         "Step (2.4) Copy and paste the following url to the OAuth redirect URI field: "
         f"\n\n[bold]{redirect_url}[/bold]\n"
     )
-    print(
+    console(
         "Step (2.5) Copy and paste the following public key to the X509 public key field "
         "(including the -----BEGIN CERTIFICATE----- and -----END CERTIFICATE----- lines): "
         f"\n\n[bold]{public_key_string}[/bold]\n",
         end="",
     )
-    print(
+    console(
         "Step (2.6) Click [bold red]Continue[/bold red]. "
         "This takes you to the [bold red]API Certificate[/bold red] page with the parameters "
         "of your application."
     )
-    print("Step (2.7) Copy the [bold red]Client ID[/bold red] provided by Revolut.")
+    console("Step (2.7) Copy the [bold red]Client ID[/bold red] provided by Revolut.")
     client_id = typer.prompt(text="Client ID")
 
-    print("\n------------------------------------------------------")
-    print("--- Step (3/4) Generate Client Assertion JWT Token ---")
-    print("------------------------------------------------------")
+    console("\n------------------------------------------------------")
+    console("--- Step (3/4) Generate Client Assertion JWT Token ---")
+    console("------------------------------------------------------")
     client_assert_jwt = create_client_assert_jwt(
         client_id=client_id,
         expiration_dt=expiration_dt,
@@ -188,9 +204,9 @@ def auth_manual_flow(
         "expiration_dt": expiration_dt.to_iso8601_string(),
     }
 
-    print("\n---------------------------------------------")
-    print("--- Step (4/4) Consent to the application ---")
-    print("---------------------------------------------")
+    console("\n---------------------------------------------")
+    console("--- Step (4/4) Consent to the application ---")
+    console("---------------------------------------------")
     suffix = f"app-confirm?client_id={client_id}&redirect_uri={redirect_url}&response_type=code"
     if scopes is not None:
         suffix += f"&scope={','.join([scope for scope in scopes])}"
@@ -199,19 +215,19 @@ def auth_manual_flow(
         "https://sandbox-business.revolut.com/" if sandbox else "https://business.revolut.com/"
     ) + suffix
 
-    print("\nPlease follow the instructions exactly:")
-    print(f"Step (4.1) Navigate to the following URL: {consent_url}")
-    print(
+    console("\nPlease follow the instructions exactly:")
+    console(f"Step (4.1) Navigate to the following URL: {consent_url}")
+    console(
         "Step (4.2) Click on [bold red]Authorize[/bold red] and upon success, "
         "you will be redirected to your OAuth redirect URI."
     )
-    print("Step (4.3) Copy the entire redirect URI and paste it below.")
+    console("Step (4.3) Copy the entire redirect URI and paste it below.")
     auth_url: str = typer.prompt("OAuth redirect URI")
     auth_code = auth_url.split("code=")[1]
 
-    print("\n-----------------------------------------------")
-    print("--- Step (5/5) Get Access and Refresh Token ---")
-    print("-----------------------------------------------")
+    console("\n-----------------------------------------------")
+    console("--- Step (5/5) Get Access and Refresh Token ---")
+    console("-----------------------------------------------")
     resp = get_auth_tokens(
         client=Client(),
         auth_code=auth_code,
@@ -220,18 +236,20 @@ def auth_manual_flow(
     )
     dt_now = pendulum.now(tz="UTC")
     creds["tokens"] = {
-        "access_token": resp["access_token"],
-        "refresh_token": resp["refresh_token"],
-        "token_type": resp["token_type"],
-        "access_token_expiration_dt": dt_now.add(seconds=resp["expires_in"]).to_iso8601_string(),
+        "access_token": resp.access_token.get_secret_value(),
+        "refresh_token": resp.refresh_token.get_secret_value(),
+        "token_type": resp.token_type,
+        "access_token_expiration_dt": dt_now.add(seconds=resp.expires_in).to_iso8601_string(),
         # To comply with PSD2 SCA regulations, refresh tokens expire after 90 days
         "refresh_token_expiration_dt": dt_now.add(days=90).to_iso8601_string(),
     }
 
     # Store the credentials to a JSON file
-    with open(credentials_json, "w") as f:
-        json.dump(obj=creds, fp=f, indent=4)
+    creds_model = ModelCreds(**creds)
+    save_creds(creds=creds_model, location=credentials_json, indent=4)
 
-    print("\n=====================================================================================")
-    print(f"=                      Credentials Saved to {credentials_json}                  =")
-    print("=====================================================================================")
+    console(
+        "\n====================================================================================="
+    )
+    console(f"=                      Credentials Saved to {credentials_json}                  =")
+    console("=====================================================================================")

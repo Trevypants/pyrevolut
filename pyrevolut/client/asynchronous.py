@@ -69,7 +69,7 @@ class AsyncClient(BaseClient):
             The response from the request
         """
         resp = await self.client.get(
-            **self.__prep_get(
+            **self._prep_get(
                 path=path,
                 params=params,
                 **kwargs,
@@ -94,7 +94,7 @@ class AsyncClient(BaseClient):
             The response from the request
         """
         resp = await self.client.post(
-            **self.__prep_post(
+            **self._prep_post(
                 path=path,
                 body=body,
                 **kwargs,
@@ -119,7 +119,7 @@ class AsyncClient(BaseClient):
             The response from the request
         """
         resp = await self.client.patch(
-            **self.__prep_patch(
+            **self._prep_patch(
                 path=path,
                 body=body,
                 **kwargs,
@@ -149,7 +149,7 @@ class AsyncClient(BaseClient):
             The response from the request
         """
         resp = await self.client.delete(
-            **self.__prep_delete(
+            **self._prep_delete(
                 path=path,
                 params=params,
                 **kwargs,
@@ -174,7 +174,7 @@ class AsyncClient(BaseClient):
             The response from the request
         """
         resp = await self.client.put(
-            **self.__prep_put(
+            **self._prep_put(
                 path=path,
                 body=body,
                 **kwargs,

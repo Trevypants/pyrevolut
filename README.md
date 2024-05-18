@@ -13,15 +13,13 @@ pip install TO-BE-DEFINED
 ### Basic Usage
 
 ```python
-from pyrevolut.client import Client, EnumEnvironment
+from pyrevolut.client import Client
 
-ACCESS_TOKEN = "YOUR-ACCESS-TOKEN"
-REFRESH_TOKEN = "YOUR-REFRESH-TOKEN"
+CREDS_JSON_LOC = "path/to/creds.json"
 
 client = Client(
-    access_token=ACCESS_TOKEN,
-    refresh_token=REFRESH_TOKEN,
-    environment=EnumEnvironment.SANDBOX, # or EnumEnvironment.LIVE
+    creds_loc=CREDS_JSON_LOC,
+    sandbox=True,
 )
 
 # Initialize the client
@@ -35,9 +33,8 @@ client.close()
 
 # You can also use the client as a context manager
 with Client(
-    access_token=ACCESS_TOKEN, 
-    refresh_token=REFRESH_TOKEN, 
-    environment=EnumEnvironment.SANDBOX
+    creds_loc=CREDS_JSON_LOC,
+    sandbox=True
 ) as client:
     accounts = client.Accounts.get_all_accounts()
 ```
@@ -48,15 +45,13 @@ It is possible to use the client library asynchronously by using the `AsyncClien
 
 ```python
 import asyncio
-from pyrevolut.client import AsyncClient, EnumEnvironment
+from pyrevolut.client import AsyncClient
 
-ACCESS_TOKEN = "YOUR-ACCESS-TOKEN"
-REFRESH_TOKEN = "YOUR-REFRESH-TOKEN"
+CREDS_JSON_LOC = "path/to/creds.json"
 
 client = AsyncClient(
-    access_token=ACCESS_TOKEN,
-    refresh_token=REFRESH_TOKEN,
-    environment=EnumEnvironment.SANDBOX, # or EnumEnvironment.LIVE
+    creds_loc=CREDS_JSON_LOC,
+    sandbox=True,
 )
 
 # Run without context manager
@@ -77,6 +72,26 @@ accounts = asyncio.run(run())
 accounts_context_manager = asyncio.run(run_context_manager())
 
 ```
+
+## Authentication
+
+In order to make use of the Revolut Business API, you will need to go through several steps to authenticate your application. The basic guide can be found [here](https://developer.revolut.com/docs/guides/manage-accounts/get-started/make-your-first-api-request). We have provided a simple CLI tool to help you generate the necessary credentials. This tool follows the steps outlined in the guide.
+
+```bash
+
+pyrevolut auth-manual
+
+```
+
+Alternatively, you can use call the CLI via Python.
+
+```bash
+
+python -m pyrevolut auth-manual
+
+```
+
+Upon completion, you will have a `creds.json` file that you can use to authenticate your application.
 
 ## API Support Status
 
