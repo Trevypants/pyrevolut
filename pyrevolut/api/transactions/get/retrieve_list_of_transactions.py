@@ -1,7 +1,7 @@
 from typing import Annotated
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 from pyrevolut.utils import DateTime, Date
 from pyrevolut.api.common import EnumTransactionType
@@ -33,6 +33,11 @@ class RetrieveListOfTransactions:
         """
         The query parameters for the request.
         """
+
+        model_config = ConfigDict(
+            populate_by_name=True,
+            from_attributes=True,
+        )
 
         from_: Annotated[
             DateTime | Date | None,

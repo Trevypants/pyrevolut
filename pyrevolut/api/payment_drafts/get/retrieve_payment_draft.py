@@ -2,7 +2,7 @@ from typing import Annotated
 from uuid import UUID
 from decimal import Decimal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from pydantic_extra_types.currency_code import Currency
 
 from pyrevolut.api.common import ModelBaseAmount, EnumPaymentDraftState
@@ -74,6 +74,11 @@ class RetrievePaymentDraft:
 
             class ModelCurrentChargeOptions(BaseModel):
                 """The explanation of conversion process"""
+
+                model_config = ConfigDict(
+                    populate_by_name=True,
+                    from_attributes=True,
+                )
 
                 class ModelFrom(ModelBaseAmount):
                     """The source of the conversion"""
