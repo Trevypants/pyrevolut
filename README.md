@@ -140,10 +140,10 @@ The SDK currently supports the following APIs:
 - [x] Transactions
   - [x] Retrieve a list of transactions
   - [x] Retrieve a transaction
-- [ ] Transfers
-  - [ ] Move money between your accounts
-  - [ ] Create a transfer to another account
-  - [ ] Get transfer reasons
+- [x] Transfers
+  - [x] Move money between your accounts
+  - [x] Create a transfer to another account
+  - [x] Get transfer reasons
 - [ ] Webhooks (v2)
   - [ ] Create a new webhook
   - [ ] Retrieve a list of webhooks

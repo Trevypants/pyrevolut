@@ -46,4 +46,4 @@ class ResourceTransfer(BaseModel):
     completed_at: Annotated[
         DateTime | None,
         Field(description="The date and time the transaction was completed in ISO 8601 format."),
-    ]
+    ] = None

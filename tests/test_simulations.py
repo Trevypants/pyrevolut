@@ -24,7 +24,14 @@ def test_sync_simulate_account_topup(sync_client: Client):
         if account["currency"] == "GBP" and account["state"] == EnumAccountState.ACTIVE
     )
 
-    # Simulate a top-up of the account
+    # Get EUR account
+    eur_account = next(
+        account
+        for account in accounts
+        if account["currency"] == "EUR" and account["state"] == EnumAccountState.ACTIVE
+    )
+
+    # Simulate a top-up of the GBP account
     response = sync_client.Simulations.simulate_account_topup(
         account_id=gbp_account["id"],
         amount=Decimal("1.00"),
@@ -35,10 +42,25 @@ def test_sync_simulate_account_topup(sync_client: Client):
     time.sleep(1)
     assert response["state"] == EnumTransactionState.COMPLETED
 
-    # Get the account by ID
+    # Get the GBP account by ID
     account = sync_client.Accounts.get_account(account_id=gbp_account["id"])
     time.sleep(1)
     assert account["balance"] == gbp_account["balance"] + Decimal("1.00")
+
+    # Simulate a top-up of the EUR account
+    response = sync_client.Simulations.simulate_account_topup(
+        account_id=eur_account["id"],
+        amount=Decimal("1.00"),
+        currency="EUR",
+        reference="Sugar Daddy <3",
+        state=EnumTransactionState.COMPLETED,
+    )
+    time.sleep(1)
+
+    # Get the EUR account by ID
+    account = sync_client.Accounts.get_account(account_id=eur_account["id"])
+    time.sleep(1)
+    assert account["balance"] == eur_account["balance"] + Decimal("1.00")
 
 
 def test_sync_simulate_transfer_state_update(sync_client: Client):
@@ -62,7 +84,14 @@ async def test_async_simulate_account_topup(async_client: Client):
         if account["currency"] == "GBP" and account["state"] == EnumAccountState.ACTIVE
     )
 
-    # Simulate a top-up of the account
+    # Get EUR account
+    eur_account = next(
+        account
+        for account in accounts
+        if account["currency"] == "EUR" and account["state"] == EnumAccountState.ACTIVE
+    )
+
+    # Simulate a top-up of the GBP account
     response = await async_client.Simulations.simulate_account_topup(
         account_id=gbp_account["id"],
         amount=Decimal("1.00"),
@@ -73,10 +102,24 @@ async def test_async_simulate_account_topup(async_client: Client):
     await asyncio.sleep(1)
     assert response["state"] == EnumTransactionState.COMPLETED
 
-    # Get the account by ID
+    # Get the GBP account by ID
     account = await async_client.Accounts.get_account(account_id=gbp_account["id"])
     await asyncio.sleep(1)
     assert account["balance"] == gbp_account["balance"] + Decimal("1.00")
+
+    # Simulate a top-up of the EUR account
+    response = await async_client.Simulations.simulate_account_topup(
+        account_id=eur_account["id"],
+        amount=Decimal("1.00"),
+        currency="EUR",
+        reference="Sugar Daddy <3",
+        state=EnumTransactionState.COMPLETED,
+    )
+
+    # Get the EUR account by ID
+    account = await async_client.Accounts.get_account(account_id=eur_account["id"])
+    await asyncio.sleep(1)
+    assert account["balance"] == eur_account["balance"] + Decimal("1.00")
 
 
 @pytest.mark.asyncio
