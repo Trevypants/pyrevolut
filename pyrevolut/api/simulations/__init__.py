@@ -6,4 +6,4 @@ Reference link: https://developer.revolut.com/docs/business/simulations
 """
 
 # flake8: noqa: F401
-from .endpoint import EndpointSimulations
+from .endpoint import EndpointSimulationsSync, EndpointSimulationsAsync

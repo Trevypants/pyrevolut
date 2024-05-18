@@ -77,6 +77,9 @@ jobs:
       #-----------------------------------------------
       - name: 🧪 Run tests
         if: always()
+        env:
+          CREDENTIALS_JSON: ${{ secrets.PYTEST_CREDENTIALS }}
         run: |
           source $VENV
+          echo $CREDENTIALS_JSON | base64 -d > ./tests/test_creds.json
           poetry run pytest

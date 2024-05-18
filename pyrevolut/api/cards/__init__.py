@@ -8,4 +8,4 @@ Reference link: https://developer.revolut.com/docs/business/cards
 """
 
 # flake8: noqa: F401
-from .endpoint import EndpointCards
+from .endpoint import EndpointCardsSync, EndpointCardsAsync

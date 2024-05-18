@@ -3,7 +3,7 @@ import asyncio
 import pytest
 import pytest_asyncio
 
-from pyrevolut.client import Client, Environment
+from pyrevolut.client import Client, AsyncClient
 
 """ Pytest Fixture Scopes
 
@@ -14,8 +14,7 @@ from pyrevolut.client import Client, Environment
 5. session: the fixture is destroyed at the end of the test session.
 """
 
-ACCESS_TOKEN = "TO BE FILLED"
-REFRESH_TOKEN = "TO BE FILLED"
+CREDENTIALS_LOC = "tests/test_creds.json"
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -29,8 +28,8 @@ def event_loop():
 
 
 @pytest.fixture(scope="session")
-def base_client():
-    """Context manager that initializes the client
+def base_sync_client():
+    """Context manager that initializes the sync client
 
     Yields
     ------
@@ -38,9 +37,8 @@ def base_client():
     """
     # Initialize the client
     client = Client(
-        access_token=ACCESS_TOKEN,
-        refresh_token=REFRESH_TOKEN,
-        environment=Environment.SANDBOX,
+        creds_loc=CREDENTIALS_LOC,
+        sandbox=True,
     )
 
     # Yield for test
@@ -48,7 +46,25 @@ def base_client():
 
 
 @pytest.fixture(scope="session")
-def sync_client(base_client: Client):
+def base_async_client():
+    """Context manager that initializes the async client
+
+    Yields
+    ------
+    None
+    """
+    # Initialize the client
+    client = AsyncClient(
+        creds_loc=CREDENTIALS_LOC,
+        sandbox=True,
+    )
+
+    # Yield for test
+    yield client
+
+
+@pytest.fixture(scope="session")
+def sync_client(base_sync_client: Client):
     """Context manager that initializes the sync client
 
     Parameters
@@ -62,34 +78,34 @@ def sync_client(base_client: Client):
         The client to use for the endpoint
     """
     # Initialize the sync client
-    base_client.open()
+    base_sync_client.open()
 
     # Yield for test
-    yield base_client
+    yield base_sync_client
 
     # Close the sync client
-    base_client.close()
+    base_sync_client.close()
 
 
 @pytest_asyncio.fixture(scope="session")
-async def async_client(base_client: Client):
+async def async_client(base_async_client: AsyncClient):
     """Context manager that initializes the async client
 
     Parameters
     ----------
-    base_client : Client
-        The client to use for the endpoint
+    base_async_client : AsyncClient
+        The async client to use for the endpoint
 
     Yields
     ------
-    Client
-        The client to use for the endpoint
+    AsyncClient
+        The async client to use for the endpoint
     """
     # Initialize the async client
-    await base_client.aopen()
+    await base_async_client.open()
 
     # Yield for test
-    yield base_client
+    yield base_async_client
 
     # Close the async client
-    await base_client.aclose()
+    await base_async_client.close()

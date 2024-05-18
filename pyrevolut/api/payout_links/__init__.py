@@ -5,4 +5,4 @@ Reference link: https://developer.revolut.com/docs/business/payout-links
 """
 
 # flake8: noqa: F401
-from .endpoint import EndpointPayoutLinks
+from .endpoint import EndpointPayoutLinksSync, EndpointPayoutLinksAsync

@@ -5,4 +5,4 @@ Reference link: https://developer.revolut.com/docs/business/transfers
 """
 
 # flake8: noqa: F401
-from .endpoint import EndpointTransfers
+from .endpoint import EndpointTransfersSync, EndpointTransfersAsync

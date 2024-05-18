@@ -4,4 +4,4 @@ Reference link: https://developer.revolut.com/docs/business/foreign-exchange
 """
 
 # flake8: noqa: F401
-from .endpoint import EndpointForeignExchange
+from .endpoint import EndpointForeignExchangeSync, EndpointForeignExchangeAsync

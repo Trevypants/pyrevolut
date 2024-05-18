@@ -5,3 +5,6 @@ __pycache__
 .env
 test_init.py
 .vscode
+credentials/**
+test_init.py
+**.json

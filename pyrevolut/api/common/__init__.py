@@ -4,4 +4,4 @@
 from .enums import *
 from .models import *
 
-from .endpoint import BaseEndpoint
+from .endpoint import BaseEndpointSync, BaseEndpointAsync

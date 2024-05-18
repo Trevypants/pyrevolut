@@ -8,4 +8,4 @@ Reference link: https://developer.revolut.com/docs/business/team-members
 """
 
 # flake8: noqa: F401
-from .endpoint import EndpointTransactions
+from .endpoint import EndpointTransactionsSync, EndpointTransactionsAsync

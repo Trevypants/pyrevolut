@@ -20,6 +20,9 @@ setup:
 	$(MAKE) setup-dev
 
 ### Commands to run the tests ###
+test-gen-creds:
+	@poetry run pyrevolut auth-manual --credentials-json tests/test_creds.json
+
 test-lint:
 	@echo "Running lint tests..."
 	@poetry run ruff check
