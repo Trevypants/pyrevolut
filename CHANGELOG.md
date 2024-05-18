@@ -1,3 +1,14 @@
+## v0.5.0 (2024-05-18)
+
+### Feat
+
+- added auth features with CLI
+- added auth cli commands
+
+### Refactor
+
+- split sync and async into their own clients
+
 ## v0.4.0 (2024-05-17)
 
 ### Feat
