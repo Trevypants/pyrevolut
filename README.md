@@ -144,14 +144,14 @@ The SDK currently supports the following APIs:
   - [x] Move money between your accounts
   - [x] Create a transfer to another account
   - [x] Get transfer reasons
-- [ ] Webhooks (v2)
-  - [ ] Create a new webhook
-  - [ ] Retrieve a list of webhooks
-  - [ ] Retrieve a webhook
-  - [ ] Update a webhook
-  - [ ] Delete a webhook
-  - [ ] Rotate a webhook signing secret
-  - [ ] Retrieve a list of failed webhook events
+- [x] Webhooks (v2)
+  - [x] Create a new webhook
+  - [x] Retrieve a list of webhooks
+  - [x] Retrieve a webhook
+  - [x] Update a webhook
+  - [x] Delete a webhook
+  - [x] Rotate a webhook signing secret
+  - [x] Retrieve a list of failed webhook events
 
 ## **Contributing**
 
