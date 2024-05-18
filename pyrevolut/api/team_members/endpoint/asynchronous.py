@@ -54,6 +54,7 @@ class EndpointTeamMembersAsync(BaseEndpointAsync):
         list
             The list of all team members in your organisation.
         """
+        self.__check_sandbox()
         endpoint = RetrieveListOfTeamMembers
         path = endpoint.ROUTE
         params = endpoint.Params(
@@ -103,6 +104,7 @@ class EndpointTeamMembersAsync(BaseEndpointAsync):
         list
             The list of all team roles in your organisation.
         """
+        self.__check_sandbox()
         endpoint = RetrieveTeamRoles
         path = endpoint.ROUTE
         params = endpoint.Params(
@@ -149,6 +151,7 @@ class EndpointTeamMembersAsync(BaseEndpointAsync):
         dict
             The response model.
         """
+        self.__check_sandbox()
         endpoint = InviteTeamMember
         path = endpoint.ROUTE
         body = endpoint.Body(
@@ -163,3 +166,15 @@ class EndpointTeamMembersAsync(BaseEndpointAsync):
         )
 
         return endpoint.Response(**response.json()).model_dump()
+
+    def __check_sandbox(self):
+        """
+        Check if the sandbox is enabled.
+
+        Raises
+        ------
+        ValueError
+            If the sandbox is enabled.
+        """
+        if self.client.sandbox:
+            raise ValueError("This feature is not available in Sandbox.")

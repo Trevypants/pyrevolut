@@ -101,7 +101,7 @@ The SDK currently supports the following APIs:
   - [x] Retrieve all accounts
   - [x] Retrieve an account
   - [x] Retrieve account's full bank details
-- [ ] Cards
+- [ ] Cards (Live only)
   - [ ] Retrieve a list of cards
   - [ ] Create a card
   - [ ] Retrieve card details
@@ -130,10 +130,10 @@ The SDK currently supports the following APIs:
   - [x] Retrieve a payout link
   - [x] Create a payout link
   - [x] Cancel a payout link
-- [ ] Simulations
-  - [ ] Simulate a transfer state update (Sandbox only)
-  - [x] Simulate an account top-up (Sandbox only)
-- [ ] Team members
+- [ ] Simulations (Sandbox only)
+  - [ ] Simulate a transfer state update
+  - [x] Simulate an account top-up
+- [ ] Team members (Live only)
   - [ ] Retrieve a list of team members
   - [ ] Invite a new memebr to your business
   - [ ] Retrieve team roles
