@@ -91,7 +91,7 @@ python -m pyrevolut auth-manual
 
 ```
 
-Upon completion, you will have a `creds.json` file that you can use to authenticate your application.
+Upon completion, you will have a `.json` file that you can use to authenticate your application.
 
 ## API Support Status
 

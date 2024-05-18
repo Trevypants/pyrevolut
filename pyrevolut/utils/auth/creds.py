@@ -2,7 +2,7 @@ from typing import Annotated
 import json
 
 import pendulum
-from pydantic import BaseModel, Field, SecretStr
+from pydantic import BaseModel, Field, SecretStr, field_serializer
 
 from pyrevolut.utils.datetime import DateTime
 
@@ -23,11 +23,21 @@ class ModelCreds(BaseModel):
             DateTime, Field(description="The expiration datetime of the certificates")
         ]
 
+        @field_serializer("public", "private", when_used="json")
+        def dump_secret(self, value: SecretStr) -> str:
+            """Serialize the secret value to a string"""
+            return value.get_secret_value()
+
     class ModelClientAssertJWT(BaseModel):
         """The model that represents the client assertion JWT information"""
 
         jwt: Annotated[SecretStr, Field(description="The JWT assertion string")]
         expiration_dt: Annotated[DateTime, Field(description="The expiration datetime of the JWT")]
+
+        @field_serializer("jwt", when_used="json")
+        def dump_secret(self, value: SecretStr) -> str:
+            """Serialize the secret value to a string"""
+            return value.get_secret_value()
 
     class ModelTokens(BaseModel):
         """The model that represents the tokens information"""
@@ -41,6 +51,11 @@ class ModelCreds(BaseModel):
         refresh_token_expiration_dt: Annotated[
             DateTime, Field(description="The expiration datetime of the refresh token")
         ]
+
+        @field_serializer("access_token", "refresh_token", when_used="json")
+        def dump_secret(self, value: SecretStr) -> str:
+            """Serialize the secret value to a string"""
+            return value.get_secret_value()
 
     certificate: Annotated[ModelCertificate, Field(description="The certificate information")]
     client_assert_jwt: Annotated[

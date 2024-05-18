@@ -7,3 +7,4 @@ test_init.py
 .vscode
 credentials/**
 test_init.py
+**.json

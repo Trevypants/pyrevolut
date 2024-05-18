@@ -3,7 +3,7 @@ import asyncio
 import pytest
 import pytest_asyncio
 
-from pyrevolut.client import Client, AsyncClient, EnumEnvironment
+from pyrevolut.client import Client, AsyncClient
 
 """ Pytest Fixture Scopes
 
@@ -14,8 +14,7 @@ from pyrevolut.client import Client, AsyncClient, EnumEnvironment
 5. session: the fixture is destroyed at the end of the test session.
 """
 
-ACCESS_TOKEN = "TO BE FILLED"
-REFRESH_TOKEN = "TO BE FILLED"
+CREDENTIALS_LOC = "tests/test_creds.json"
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -38,9 +37,8 @@ def base_sync_client():
     """
     # Initialize the client
     client = Client(
-        access_token=ACCESS_TOKEN,
-        refresh_token=REFRESH_TOKEN,
-        environment=EnumEnvironment.SANDBOX,
+        creds_loc=CREDENTIALS_LOC,
+        sandbox=True,
     )
 
     # Yield for test
@@ -57,9 +55,8 @@ def base_async_client():
     """
     # Initialize the client
     client = AsyncClient(
-        access_token=ACCESS_TOKEN,
-        refresh_token=REFRESH_TOKEN,
-        environment=EnumEnvironment.SANDBOX,
+        creds_loc=CREDENTIALS_LOC,
+        sandbox=True,
     )
 
     # Yield for test
