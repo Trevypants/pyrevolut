@@ -56,6 +56,7 @@ class EndpointCardsSync(BaseEndpointSync):
         list
             The list of all cards in your organisation.
         """
+        self.__check_sandbox()
         endpoint = RetrieveListOfCards
         path = endpoint.ROUTE
         params = endpoint.Params(
@@ -89,6 +90,7 @@ class EndpointCardsSync(BaseEndpointSync):
         dict
             The details of the card.
         """
+        self.__check_sandbox()
         endpoint = RetrieveCardDetails
         path = endpoint.ROUTE.format(card_id=card_id)
         params = endpoint.Params()
@@ -120,6 +122,7 @@ class EndpointCardsSync(BaseEndpointSync):
         dict
             The sensitive details of the card.
         """
+        self.__check_sandbox()
         endpoint = RetrieveSensitiveCardDetails
         path = endpoint.ROUTE.format(card_id=card_id)
         params = endpoint.Params()
@@ -213,6 +216,7 @@ class EndpointCardsSync(BaseEndpointSync):
         dict
             The details of the created card.
         """
+        self.__check_sandbox()
         endpoint = CreateCard
         path = endpoint.ROUTE
 
@@ -314,6 +318,7 @@ class EndpointCardsSync(BaseEndpointSync):
         dict
             An empty dictionary.
         """
+        self.__check_sandbox()
         endpoint = FreezeCard
         path = endpoint.ROUTE.format(card_id=card_id)
         body = endpoint.Body()
@@ -348,6 +353,7 @@ class EndpointCardsSync(BaseEndpointSync):
         dict
             An empty dictionary.
         """
+        self.__check_sandbox()
         endpoint = UnfreezeCard
         path = endpoint.ROUTE.format(card_id=card_id)
         body = endpoint.Body()
@@ -442,6 +448,7 @@ class EndpointCardsSync(BaseEndpointSync):
         dict
             The updated details of the card.
         """
+        self.__check_sandbox()
         endpoint = UpdateCardDetails
         path = endpoint.ROUTE.format(card_id=card_id)
 
@@ -544,6 +551,7 @@ class EndpointCardsSync(BaseEndpointSync):
         dict
             An empty dictionary.
         """
+        self.__check_sandbox()
         endpoint = TerminateCard
         path = endpoint.ROUTE.format(card_id=card_id)
         params = endpoint.Params()
@@ -573,3 +581,15 @@ class EndpointCardsSync(BaseEndpointSync):
         elif amount == "null" and currency == "null":
             return "null"
         return None
+
+    def __check_sandbox(self):
+        """
+        Check if the sandbox is enabled.
+
+        Raises
+        ------
+        ValueError
+            If the sandbox is enabled.
+        """
+        if self.client.sandbox:
+            raise ValueError("This feature is not available in Sandbox.")

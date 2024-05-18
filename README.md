@@ -97,10 +97,10 @@ Upon completion, you will have a `.json` file that you can use to authenticate y
 
 The SDK currently supports the following APIs:
 
-- [ ] Accounts
-  - [ ] Retrieve all accounts
-  - [ ] Retrieve an account
-  - [ ] Retrieve account's full bank details
+- [x] Accounts
+  - [x] Retrieve all accounts
+  - [x] Retrieve an account
+  - [x] Retrieve account's full bank details
 - [ ] Cards
   - [ ] Retrieve a list of cards
   - [ ] Create a card

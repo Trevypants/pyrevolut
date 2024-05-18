@@ -20,6 +20,7 @@ setup:
 	$(MAKE) setup-dev
 
 ### Commands to run the tests ###
+# base64 encode the credentials: base64 -i tests/test_creds.json
 test-gen-creds:
 	@poetry run pyrevolut auth-manual --credentials-json tests/test_creds.json
 

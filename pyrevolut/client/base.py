@@ -36,6 +36,7 @@ class BaseClient:
         Parameters
         ----------
         creds_loc : str, optional
+            The location of the credentials file, by default "credentials/creds.json"
         sandbox : bool, optional
             Whether to use the sandbox environment, by default True
         """
@@ -44,9 +45,9 @@ class BaseClient:
 
         # Set domain based on environment
         if self.sandbox:
-            self.domain = "https://sandbox-b2b.revolut.com/api/1.0/"
+            self.domain = "https://sandbox-b2b.revolut.com/api/1.0"
         else:
-            self.domain = "https://b2b.revolut.com/api/1.0/"
+            self.domain = "https://b2b.revolut.com/api/1.0"
 
         # Load the credentials
         self.__load_credentials()
@@ -346,7 +347,7 @@ class BaseClient:
         if "http" in path:
             return path
 
-        return self.__remove_leading_slash(path)
+        return self.__remove_leading_slash(path=path)
 
     def __remove_leading_slash(self, path: str) -> str:
         """Remove the leading slash from a path if it exists and
