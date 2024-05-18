@@ -79,4 +79,5 @@ jobs:
         if: always()
         run: |
           source $VENV
+          echo ${{ secrets.PYTEST_CREDENTIALS }} > tests/test_creds.json
           poetry run pytest
