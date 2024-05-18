@@ -100,4 +100,4 @@ class EndpointAccountsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return endpoint.Response(**response.json()[0]).model_dump()
