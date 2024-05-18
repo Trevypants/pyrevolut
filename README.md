@@ -137,9 +137,9 @@ The SDK currently supports the following APIs:
   - [ ] Retrieve a list of team members
   - [ ] Invite a new memebr to your business
   - [ ] Retrieve team roles
-- [ ] Transactions
-  - [ ] Retrieve a list of transactions
-  - [ ] Retrieve a transaction
+- [x] Transactions
+  - [x] Retrieve a list of transactions
+  - [x] Retrieve a transaction
 - [ ] Transfers
   - [ ] Move money between your accounts
   - [ ] Create a transfer to another account

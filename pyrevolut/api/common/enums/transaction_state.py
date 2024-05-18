@@ -23,6 +23,8 @@ class EnumTransactionState(StrEnum):
     reverted:
         The transaction was reverted. This can happen for a variety of reasons,
         for example, the receiver being inaccessible.
+    cancelled:
+        The transaction was cancelled.
     """
 
     CREATED = "created"
@@ -31,3 +33,4 @@ class EnumTransactionState(StrEnum):
     DECLINED = "declined"
     FAILED = "failed"
     REVERTED = "reverted"
+    CANCELLED = "cancelled"
