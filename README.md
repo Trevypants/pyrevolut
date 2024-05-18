@@ -132,7 +132,7 @@ The SDK currently supports the following APIs:
   - [x] Cancel a payout link
 - [ ] Simulations
   - [ ] Simulate a transfer state update (Sandbox only)
-  - [ ] Simulate an account top-up (Sandbox only)
+  - [x] Simulate an account top-up (Sandbox only)
 - [ ] Team members
   - [ ] Retrieve a list of team members
   - [ ] Invite a new memebr to your business
