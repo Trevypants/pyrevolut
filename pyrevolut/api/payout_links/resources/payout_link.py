@@ -5,7 +5,7 @@ from decimal import Decimal
 from pydantic import BaseModel, Field, HttpUrl
 from pydantic_extra_types.currency_code import Currency
 
-from pyrevolut.utils import DateTime, Date
+from pyrevolut.utils import DateTime
 from pyrevolut.api.common import (
     EnumPayoutLinkState,
     EnumPayoutLinkPaymentMethod,
@@ -88,8 +88,8 @@ class ResourcePayoutLink(BaseModel):
         Field(description="The ID of the request, provided by the sender.", max_length=40),
     ]
     expiry_date: Annotated[
-        Date,
-        Field(description="The date the payout link expires in ISO 8601 format."),
+        DateTime,
+        Field(description="The datetime the payout link expires in ISO 8601 format."),
     ]
     payout_methods: Annotated[
         list[EnumPayoutLinkPaymentMethod],

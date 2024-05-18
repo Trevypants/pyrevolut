@@ -125,12 +125,11 @@ The SDK currently supports the following APIs:
   - [ ] Create a payment draft
   - [x] Retrieve a payment draft
   - [ ] Delete a payment draft
-- [ ] Payout links
-  - [ ] Retrieve a list of payout links
-  - [ ] Retrieve a payout link
-  - [ ] Create a payout link
-  - [ ] Cancel a payout link
-  - [ ] Get transfer reasons
+- [x] Payout links
+  - [x] Retrieve a list of payout links
+  - [x] Retrieve a payout link
+  - [x] Create a payout link
+  - [x] Cancel a payout link
 - [ ] Simulations
   - [ ] Simulate a transfer state update (Sandbox only)
   - [ ] Simulate an account top-up (Sandbox only)
