@@ -81,5 +81,5 @@ jobs:
           CREDENTIALS_JSON: ${{ secrets.PYTEST_CREDENTIALS }}
         run: |
           source $VENV
-          echo $CREDENTIALS_JSON | base64 -di > ./tests/test_creds.json
+          echo $CREDENTIALS_JSON | base64 -d > ./tests/test_creds.json
           poetry run pytest
