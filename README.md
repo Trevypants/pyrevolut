@@ -121,9 +121,9 @@ The SDK currently supports the following APIs:
   - [x] Get an exchange rate
   - [ ] Exchange money
 - [ ] Payment drafts
-  - [ ] Retrieve all payments drafts
+  - [x] Retrieve all payments drafts
   - [ ] Create a payment draft
-  - [ ] Retrieve a payment draft
+  - [x] Retrieve a payment draft
   - [ ] Delete a payment draft
 - [ ] Payout links
   - [ ] Retrieve a list of payout links

@@ -217,8 +217,8 @@ async def test_async_create_delete_counterparty(async_client: AsyncClient):
     # Create Personal Revolut Counterparty
     counterparty = await async_client.Counterparties.create_counterparty(
         profile_type=EnumProfileType.PERSONAL,
-        name="Test User 2",
-        revtag="john2pvki",
+        name="Test User 1",
+        revtag="john1pvki",
     )
     await asyncio.sleep(1)
     counterparty_ids.append(counterparty["id"])
