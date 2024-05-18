@@ -110,12 +110,13 @@ The SDK currently supports the following APIs:
   - [ ] Freeze a card
   - [ ] Unfreeze a card
   - [ ] Retrieve sensitive card details
-- [ ] Counterparties
-  - [ ] Retrieve a list of counterparties
-  - [ ] Retrieve a counterparty
-  - [ ] Delete a counterparty
-  - [ ] Create a counterparty
-  - [ ] Validate an account name (CoP)
+- [x] Counterparties
+  - [x] Retrieve a list of counterparties
+  - [x] Retrieve a counterparty
+  - [x] Delete a counterparty
+  - [x] Create a counterparty (Personal)
+  - [x] Create a counterparty (Business)
+  - [x] Validate an account name (CoP)
 - [ ] Foreign exchange
   - [ ] Get an exchange rate
   - [ ] Exchange money

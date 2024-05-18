@@ -217,10 +217,10 @@ class CreateCounterparty:
                 ), "revtag is not required when profile_type is not specified."
 
             # Individual name check
-            if self.company_name is None:
-                assert (
-                    self.individual_name is not None
-                ), "individual_name is required when company_name is not specified."
+            # if self.company_name is None:
+            #     assert (
+            #         self.individual_name is not None
+            #     ), "individual_name is required when company_name is not specified."
 
             # Sort code check
             if self.currency == "GBP":

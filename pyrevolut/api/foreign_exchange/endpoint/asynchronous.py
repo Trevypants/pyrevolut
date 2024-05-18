@@ -52,7 +52,7 @@ class EndpointForeignExchangeAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json())
+        return endpoint.Response(**response.json()).model_dump()
 
     async def exchange_money(
         self,
@@ -132,4 +132,4 @@ class EndpointForeignExchangeAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json())
+        return endpoint.Response(**response.json()).model_dump()

@@ -114,7 +114,7 @@ class EndpointCounterpartiesSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json())
+        return endpoint.Response(**response.json()).model_dump()
 
     def create_counterparty(
         self,
@@ -221,7 +221,9 @@ class EndpointCounterpartiesSync(BaseEndpointSync):
             individual_name=endpoint.Body.ModelIndividualName(
                 first_name=individual_first_name,
                 last_name=individual_last_name,
-            ),
+            )
+            if individual_first_name is not None or individual_last_name is not None
+            else None,
             bank_country=bank_country,
             currency=currency,
             revtag=revtag,
@@ -240,7 +242,9 @@ class EndpointCounterpartiesSync(BaseEndpointSync):
                 city=address_city,
                 country=address_country,
                 postcode=address_postcode,
-            ),
+            )
+            if address_country is not None and address_postcode is not None
+            else None,
         )
 
         response = self.client.post(
@@ -249,7 +253,7 @@ class EndpointCounterpartiesSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json())
+        return endpoint.Response(**response.json()).model_dump()
 
     def validate_account_name(
         self,
@@ -309,7 +313,9 @@ class EndpointCounterpartiesSync(BaseEndpointSync):
             individual_name=endpoint.Body.ModelIndividualName(
                 first_name=individual_first_name,
                 last_name=individual_last_name,
-            ),
+            )
+            if individual_first_name is not None or individual_last_name is not None
+            else None,
         )
 
         response = self.client.post(
@@ -318,7 +324,7 @@ class EndpointCounterpartiesSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json())
+        return endpoint.Response(**response.json()).model_dump()
 
     def delete_counterparty(
         self,

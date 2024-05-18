@@ -1,3 +1,5 @@
+import time
+import asyncio
 import pytest
 
 from pyrevolut.client import Client, AsyncClient
@@ -8,6 +10,7 @@ def test_sync_get_all_cards(sync_client: Client):
     # Get Cards (no params)
     with pytest.raises(ValueError, match="This feature is not available in Sandbox."):
         cards_all = sync_client.Cards.get_all_cards()
+        time.sleep(1)
         assert isinstance(cards_all, list)
         for card in cards_all:
             assert isinstance(card, dict)
@@ -18,6 +21,7 @@ def test_sync_get_all_cards(sync_client: Client):
             created_before="2020-01-01",
             limit=10,
         )
+        time.sleep(1)
         assert isinstance(cards_all, list)
         assert len(cards_all) == 0
 
@@ -27,6 +31,7 @@ def test_sync_get_card(sync_client: Client):
     with pytest.raises(ValueError, match="This feature is not available in Sandbox."):
         # Get all cards
         cards_all = sync_client.Cards.get_all_cards()
+        time.sleep(1)
         assert isinstance(cards_all, list)
         assert len(cards_all) > 0
 
@@ -34,6 +39,7 @@ def test_sync_get_card(sync_client: Client):
         for card in cards_all:
             card_id = card["id"]
             card = sync_client.Cards.get_card(card_id=card_id)
+            time.sleep(1)
             assert isinstance(card, dict)
 
 
@@ -42,6 +48,7 @@ def test_get_card_sensitive_details(sync_client: Client):
     with pytest.raises(ValueError, match="This feature is not available in Sandbox."):
         # Get all cards
         cards_all = sync_client.Cards.get_all_cards()
+        time.sleep(1)
         assert isinstance(cards_all, list)
         assert len(cards_all) > 0
 
@@ -49,6 +56,7 @@ def test_get_card_sensitive_details(sync_client: Client):
         for card in cards_all:
             card_id = card["id"]
             card = sync_client.Cards.get_card_sensitive_details(card_id=card_id)
+            time.sleep(1)
             assert isinstance(card, dict)
 
 
@@ -83,6 +91,7 @@ async def test_async_get_all_cards(async_client: AsyncClient):
     # Get Cards (no params)
     with pytest.raises(ValueError, match="This feature is not available in Sandbox."):
         cards_all = await async_client.Cards.get_all_cards()
+        await asyncio.sleep(1)
         assert isinstance(cards_all, list)
         for card in cards_all:
             assert isinstance(card, dict)
@@ -93,6 +102,7 @@ async def test_async_get_all_cards(async_client: AsyncClient):
             created_before="2020-01-01",
             limit=10,
         )
+        await asyncio.sleep(1)
         assert isinstance(cards_all, list)
         assert len(cards_all) == 0
 
@@ -103,6 +113,7 @@ async def test_async_get_card(async_client: AsyncClient):
     with pytest.raises(ValueError, match="This feature is not available in Sandbox."):
         # Get all cards
         cards_all = await async_client.Cards.get_all_cards()
+        await asyncio.sleep(1)
         assert isinstance(cards_all, list)
         assert len(cards_all) > 0
 
@@ -110,6 +121,7 @@ async def test_async_get_card(async_client: AsyncClient):
         for card in cards_all:
             card_id = card["id"]
             card = await async_client.Cards.get_card(card_id=card_id)
+            await asyncio.sleep(1)
             assert isinstance(card, dict)
 
 
@@ -119,6 +131,7 @@ async def test_async_get_card_sensitive_details(async_client: AsyncClient):
     with pytest.raises(ValueError, match="This feature is not available in Sandbox."):
         # Get all cards
         cards_all = await async_client.Cards.get_all_cards()
+        await asyncio.sleep(1)
         assert isinstance(cards_all, list)
         assert len(cards_all) > 0
 
@@ -126,6 +139,7 @@ async def test_async_get_card_sensitive_details(async_client: AsyncClient):
         for card in cards_all:
             card_id = card["id"]
             card = await async_client.Cards.get_card_sensitive_details(card_id=card_id)
+            await asyncio.sleep(1)
             assert isinstance(card, dict)
 
 
