@@ -13,7 +13,7 @@ pip install TO-BE-DEFINED
 ### Basic Usage
 
 ```python
-from pyrevolut.client import Client, Environment
+from pyrevolut.client import Client, EnumEnvironment
 
 ACCESS_TOKEN = "YOUR-ACCESS-TOKEN"
 REFRESH_TOKEN = "YOUR-REFRESH-TOKEN"
@@ -21,7 +21,7 @@ REFRESH_TOKEN = "YOUR-REFRESH-TOKEN"
 client = Client(
     access_token=ACCESS_TOKEN,
     refresh_token=REFRESH_TOKEN,
-    environment=Environment.SANDBOX,
+    environment=EnumEnvironment.SANDBOX, # or EnumEnvironment.LIVE
 )
 
 # Initialize the client
@@ -37,40 +37,39 @@ client.close()
 with Client(
     access_token=ACCESS_TOKEN, 
     refresh_token=REFRESH_TOKEN, 
-    environment=Environment.SANDBOX
+    environment=EnumEnvironment.SANDBOX
 ) as client:
     accounts = client.Accounts.get_all_accounts()
 ```
 
 ### Advanced Usage
 
-It is possible to use the client asynchronously by using the `async` keyword.
-All synchronous methods have an asynchronous counterpart with the `a` prefix.
+It is possible to use the client library asynchronously by using the `AsyncClient` object.
 
 ```python
 import asyncio
-from pyrevolut.client import Client, Environment
+from pyrevolut.client import AsyncClient, EnumEnvironment
 
 ACCESS_TOKEN = "YOUR-ACCESS-TOKEN"
 REFRESH_TOKEN = "YOUR-REFRESH-TOKEN"
 
-client = Client(
+client = AsyncClient(
     access_token=ACCESS_TOKEN,
     refresh_token=REFRESH_TOKEN,
-    environment=Environment.SANDBOX,
+    environment=EnumEnvironment.SANDBOX, # or EnumEnvironment.LIVE
 )
 
 # Run without context manager
 async def run():
-    await client.aopen() # <-- Note the `a` prefix
-    accounts = await client.Accounts.aget_all_accounts() # <-- Note the `a` prefix
-    await client.aclose() # <-- Note the `a` prefix
+    await client.open() 
+    accounts = await client.Accounts.get_all_accounts()
+    await client.close() 
     return accounts
 
 # Run with context manager
 async def run_context_manager():
     async with client:
-        accounts = await client.Accounts.aget_all_accounts() # <-- Note the `a` prefix
+        accounts = await client.Accounts.get_all_accounts() 
     return accounts
 
 # List all accounts for the authenticated user

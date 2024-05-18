@@ -18,4 +18,4 @@ Reference link: https://developer.revolut.com/docs/business/counterparties
 """
 
 # flake8: noqa: F401
-from .endpoint import EndpointCounterparties
+from .endpoint import EndpointCounterpartiesSync, EndpointCounterpartiesAsync

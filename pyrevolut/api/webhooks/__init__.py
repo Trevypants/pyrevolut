@@ -17,4 +17,4 @@ Reference link: https://developer.revolut.com/docs/business/webhooks-v-2
 """
 
 # flake8: noqa: F401
-from .endpoint import EndpointWebhooks
+from .endpoint import EndpointWebhooksSync, EndpointWebhooksAsync

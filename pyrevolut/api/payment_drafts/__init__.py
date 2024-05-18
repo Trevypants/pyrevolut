@@ -9,4 +9,4 @@ Reference link: https://developer.revolut.com/docs/business/payment-drafts
 """
 
 # flake8: noqa: F401
-from .endpoint import EndpointPaymentDrafts
+from .endpoint import EndpointPaymentDraftsSync, EndpointPaymentDraftsAsync

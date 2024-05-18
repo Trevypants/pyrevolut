@@ -3,4 +3,4 @@ Reference link: https://developer.revolut.com/docs/business/accounts
 """
 
 # flake8: noqa: F401
-from .endpoint import EndpointAccounts
+from .endpoint import EndpointAccountsSync, EndpointAccountsAsync
