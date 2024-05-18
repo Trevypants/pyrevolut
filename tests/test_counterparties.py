@@ -1,6 +1,7 @@
 import time
 import asyncio
 import pytest
+import random
 
 from pyrevolut.client import Client, AsyncClient
 from pyrevolut.api import EnumProfileType
@@ -10,7 +11,7 @@ def test_sync_get_all_counterparties(sync_client: Client):
     """Test the sync `get_all_counterparties` counterparties method"""
     # Get Counterparties (no params)
     counterparties_all = sync_client.Counterparties.get_all_counterparties()
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     assert isinstance(counterparties_all, list)
     for counterparty in counterparties_all:
         assert isinstance(counterparty, dict)
@@ -22,7 +23,7 @@ def test_sync_get_all_counterparties(sync_client: Client):
         created_before="2020-01-01",
         limit=10,
     )
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     assert isinstance(counterparties_all, list)
     assert len(counterparties_all) == 0
 
@@ -31,7 +32,7 @@ def test_sync_get_counterparty(sync_client: Client):
     """Test the sync `get_counterparty` counterparties method"""
     # Get all counterparties
     counterparties_all = sync_client.Counterparties.get_all_counterparties()
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     assert isinstance(counterparties_all, list)
     assert len(counterparties_all) > 0
 
@@ -39,7 +40,7 @@ def test_sync_get_counterparty(sync_client: Client):
     for counterparty in counterparties_all:
         counterparty_id = counterparty["id"]
         counterparty = sync_client.Counterparties.get_counterparty(counterparty_id=counterparty_id)
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
         assert isinstance(counterparty, dict)
 
 
@@ -52,7 +53,7 @@ def test_sync_validate_account_name(sync_client: Client):
         individual_first_name="John",
         individual_last_name="Doe",
     )
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     assert response["result_code"] == "cannot_be_checked"
 
     # Validate UK company counterparty (business account)
@@ -61,7 +62,7 @@ def test_sync_validate_account_name(sync_client: Client):
         account_no="12345678",
         company_name="John Smith Co.",
     )
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     assert response["result_code"] == "cannot_be_checked"
 
 
@@ -76,7 +77,7 @@ def test_create_delete_counterparty(sync_client: Client):
         name="Test User 2",
         revtag="john2pvki",
     )
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     counterparty_ids.append(counterparty["id"])
 
     # Create UK Individual Counterparty
@@ -88,7 +89,7 @@ def test_create_delete_counterparty(sync_client: Client):
         sort_code="54-01-05",
         account_no="12345678",
     )
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     counterparty_ids.append(counterparty["id"])
 
     # Create UK Company Counterparty
@@ -99,7 +100,7 @@ def test_create_delete_counterparty(sync_client: Client):
         sort_code="54-01-05",
         account_no="12345678",
     )
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     counterparty_ids.append(counterparty["id"])
 
     # Create International Business Counterparty (eurozone with EUR)
@@ -109,7 +110,7 @@ def test_create_delete_counterparty(sync_client: Client):
         currency="EUR",
         iban="FR1420041010050500013M02606",
     )
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     counterparty_ids.append(counterparty["id"])
 
     # Create International Business Counterparty (outside eurozone)
@@ -123,23 +124,23 @@ def test_create_delete_counterparty(sync_client: Client):
         address_country="CH",
         address_postcode="8001",
     )
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     counterparty_ids.append(counterparty["id"])
 
     # Fetch all counterparties
     counterparties_all = sync_client.Counterparties.get_all_counterparties()
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     for counterparty_id in counterparty_ids:
         assert counterparty_id in [counterparty["id"] for counterparty in counterparties_all]
 
     # Delete all created counterparties
     for counterparty_id in counterparty_ids:
         sync_client.Counterparties.delete_counterparty(counterparty_id=counterparty_id)
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
 
     # Fetch all counterparties
     counterparties_all = sync_client.Counterparties.get_all_counterparties()
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     for counterparty_id in counterparty_ids:
         assert counterparty_id not in [counterparty["id"] for counterparty in counterparties_all]
 
@@ -149,7 +150,7 @@ async def test_async_get_all_counterparties(async_client: AsyncClient):
     """Test the async `get_all_counterparties` counterparties method"""
     # Get Counterparties (no params)
     counterparties_all = await async_client.Counterparties.get_all_counterparties()
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     assert isinstance(counterparties_all, list)
     for counterparty in counterparties_all:
         assert isinstance(counterparty, dict)
@@ -161,7 +162,7 @@ async def test_async_get_all_counterparties(async_client: AsyncClient):
         created_before="2020-01-01",
         limit=10,
     )
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     assert isinstance(counterparties_all, list)
     assert len(counterparties_all) == 0
 
@@ -171,7 +172,7 @@ async def test_async_get_counterparty(async_client: AsyncClient):
     """Test the async `get_counterparty` counterparties method"""
     # Get all counterparties
     counterparties_all = await async_client.Counterparties.get_all_counterparties()
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     assert isinstance(counterparties_all, list)
     assert len(counterparties_all) > 0
 
@@ -181,7 +182,7 @@ async def test_async_get_counterparty(async_client: AsyncClient):
         counterparty = await async_client.Counterparties.get_counterparty(
             counterparty_id=counterparty_id
         )
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))
         assert isinstance(counterparty, dict)
 
 
@@ -195,7 +196,7 @@ async def test_async_validate_account_name(async_client: AsyncClient):
         individual_first_name="John",
         individual_last_name="Doe",
     )
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     assert response["result_code"] == "cannot_be_checked"
 
     # Validate UK company counterparty (business account)
@@ -204,7 +205,7 @@ async def test_async_validate_account_name(async_client: AsyncClient):
         account_no="12345678",
         company_name="John Smith Co.",
     )
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     assert response["result_code"] == "cannot_be_checked"
 
 
@@ -220,7 +221,7 @@ async def test_async_create_delete_counterparty(async_client: AsyncClient):
         name="Test User 1",
         revtag="john1pvki",
     )
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     counterparty_ids.append(counterparty["id"])
 
     # Create UK Individual Counterparty
@@ -232,7 +233,7 @@ async def test_async_create_delete_counterparty(async_client: AsyncClient):
         sort_code="54-01-05",
         account_no="12345678",
     )
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     counterparty_ids.append(counterparty["id"])
 
     # Create UK Company Counterparty
@@ -243,7 +244,7 @@ async def test_async_create_delete_counterparty(async_client: AsyncClient):
         sort_code="54-01-05",
         account_no="12345678",
     )
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     counterparty_ids.append(counterparty["id"])
 
     # Create International Business Counterparty (eurozone with EUR)
@@ -253,7 +254,7 @@ async def test_async_create_delete_counterparty(async_client: AsyncClient):
         currency="EUR",
         iban="FR1420041010050500013M02606",
     )
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     counterparty_ids.append(counterparty["id"])
 
     # Create International Business Counterparty (outside eurozone)
@@ -267,22 +268,22 @@ async def test_async_create_delete_counterparty(async_client: AsyncClient):
         address_country="CH",
         address_postcode="8001",
     )
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     counterparty_ids.append(counterparty["id"])
 
     # Fetch all counterparties
     counterparties_all = await async_client.Counterparties.get_all_counterparties()
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     for counterparty_id in counterparty_ids:
         assert counterparty_id in [counterparty["id"] for counterparty in counterparties_all]
 
     # Delete all created counterparties
     for counterparty_id in counterparty_ids:
         await async_client.Counterparties.delete_counterparty(counterparty_id=counterparty_id)
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))
 
     # Fetch all counterparties
     counterparties_all = await async_client.Counterparties.get_all_counterparties()
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     for counterparty_id in counterparty_ids:
         assert counterparty_id not in [counterparty["id"] for counterparty in counterparties_all]

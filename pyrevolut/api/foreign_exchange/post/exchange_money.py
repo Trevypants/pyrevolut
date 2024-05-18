@@ -24,7 +24,7 @@ class ExchangeMoney:
         Specify the amount in the to object.
     """
 
-    ROUTE = "/exchange"
+    ROUTE = "/1.0/exchange"
 
     class Body(BaseModel):
         """

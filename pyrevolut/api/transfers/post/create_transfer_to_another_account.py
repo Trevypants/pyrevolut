@@ -29,7 +29,7 @@ class CreateTransferToAnotherAccount:
     leverage our Payment drafts (/payment-drafts) endpoint.
     """
 
-    ROUTE = "/pay"
+    ROUTE = "/1.0/pay"
 
     class Body(BaseModel):
         """

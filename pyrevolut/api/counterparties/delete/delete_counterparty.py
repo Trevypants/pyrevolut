@@ -6,7 +6,7 @@ class DeleteCounterparty:
     When a counterparty is deleted, you cannot make any payments to the counterparty.
     """
 
-    ROUTE = "/counterparty/{counterparty_id}"
+    ROUTE = "/1.0/counterparty/{counterparty_id}"
 
     class Params(BaseModel):
         """

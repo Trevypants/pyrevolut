@@ -11,7 +11,7 @@ class RetrieveFullBankDetails:
     Get all the bank details of one of your accounts. Specify the account by its ID.
     """
 
-    ROUTE = "/accounts/{account_id}/bank-details"
+    ROUTE = "/1.0/accounts/{account_id}/bank-details"
 
     class Params(BaseModel):
         """

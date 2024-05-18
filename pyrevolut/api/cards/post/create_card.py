@@ -15,7 +15,7 @@ class CreateCard:
     To create a physical card, use the Revolut Business app.
     """
 
-    ROUTE = "/cards"
+    ROUTE = "/1.0/cards"
 
     class Body(BaseModel):
         """

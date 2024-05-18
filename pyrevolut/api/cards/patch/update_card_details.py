@@ -12,7 +12,7 @@ class UpdateCardDetails:
     Updating a spending limit does not reset the spending counter.
     """
 
-    ROUTE = "/cards/{card_id}"
+    ROUTE = "/1.0/cards/{card_id}"
 
     class Body(BaseModel):
         """

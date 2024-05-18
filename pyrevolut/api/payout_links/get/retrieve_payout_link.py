@@ -12,7 +12,7 @@ class RetrievePayoutLink:
     This feature is available in the UK and the EEA.
     """
 
-    ROUTE = "/payout-links/{payout_link_id}"
+    ROUTE = "/1.0/payout-links/{payout_link_id}"
 
     class Params(BaseModel):
         """

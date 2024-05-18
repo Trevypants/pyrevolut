@@ -1,6 +1,7 @@
 import time
 import asyncio
 import pytest
+import random
 
 from pyrevolut.client import Client
 
@@ -11,7 +12,7 @@ def test_sync_get_team_members(sync_client: Client):
     with pytest.raises(ValueError, match="This feature is not available in Sandbox."):
         # Get all team members (no params)
         team_members = sync_client.TeamMembers.get_team_members()
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
 
         assert isinstance(team_members, list)
         assert all(isinstance(team_member, dict) for team_member in team_members)
@@ -21,7 +22,7 @@ def test_sync_get_team_members(sync_client: Client):
             created_before="2020-01-01",
             limit=10,
         )
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
         assert isinstance(team_members, list)
         assert len(team_members) == 0
 
@@ -32,7 +33,7 @@ def test_sync_get_team_roles(sync_client: Client):
     with pytest.raises(ValueError, match="This feature is not available in Sandbox."):
         # Get all team roles (no params)
         team_roles = sync_client.TeamMembers.get_team_roles()
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
 
         assert isinstance(team_roles, list)
         assert all(isinstance(team_role, dict) for team_role in team_roles)
@@ -42,7 +43,7 @@ def test_sync_get_team_roles(sync_client: Client):
             created_before="2020-01-01",
             limit=10,
         )
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
         assert isinstance(team_roles, list)
         assert len(team_roles) == 0
 
@@ -53,7 +54,7 @@ def test_sync_invite_team_member(sync_client: Client):
     with pytest.raises(ValueError, match="This feature is not available in Sandbox."):
         # Get all team roles
         team_roles = sync_client.TeamMembers.get_team_roles()
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
 
         # Get the first team role
         team_role = team_roles[0]
@@ -63,7 +64,7 @@ def test_sync_invite_team_member(sync_client: Client):
             email="johndoe@example.com",
             role_id=team_role["id"],
         )
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
         assert isinstance(response, dict)
         assert response["email"] == "johndoe@example.com"
 
@@ -75,7 +76,7 @@ async def test_async_get_team_members(async_client: Client):
     with pytest.raises(ValueError, match="This feature is not available in Sandbox."):
         # Get all team members (no params)
         team_members = await async_client.TeamMembers.get_team_members()
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))
 
         assert isinstance(team_members, list)
         assert all(isinstance(team_member, dict) for team_member in team_members)
@@ -85,7 +86,7 @@ async def test_async_get_team_members(async_client: Client):
             created_before="2020-01-01",
             limit=10,
         )
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))
         assert isinstance(team_members, list)
         assert len(team_members) == 0
 
@@ -97,7 +98,7 @@ async def test_async_get_team_roles(async_client: Client):
     with pytest.raises(ValueError, match="This feature is not available in Sandbox."):
         # Get all team roles (no params)
         team_roles = await async_client.TeamMembers.get_team_roles()
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))
 
         assert isinstance(team_roles, list)
         assert all(isinstance(team_role, dict) for team_role in team_roles)
@@ -107,7 +108,7 @@ async def test_async_get_team_roles(async_client: Client):
             created_before="2020-01-01",
             limit=10,
         )
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))
         assert isinstance(team_roles, list)
         assert len(team_roles) == 0
 
@@ -119,7 +120,7 @@ async def test_async_invite_team_member(async_client: Client):
     with pytest.raises(ValueError, match="This feature is not available in Sandbox."):
         # Get all team roles
         team_roles = await async_client.TeamMembers.get_team_roles()
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))
 
         # Get the first team role
         team_role = team_roles[0]
@@ -129,6 +130,6 @@ async def test_async_invite_team_member(async_client: Client):
             email="johndoe@example.com",
             role_id=team_role["id"],
         )
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))
         assert isinstance(response, dict)
         assert response["email"] == "johndoe@example.com"

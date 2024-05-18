@@ -10,7 +10,7 @@ class RetrieveWebhook:
     Get the information about a specific webhook by ID.
     """
 
-    ROUTE = "/webhooks/{webhook_id}"
+    ROUTE = "/2.0/webhooks/{webhook_id}"
 
     class Params(BaseModel):
         """

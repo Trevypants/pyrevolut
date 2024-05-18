@@ -15,7 +15,7 @@ class UpdateWebhook:
     The fields that you don't specify are not updated.
     """
 
-    ROUTE = "/webhooks/{webhook_id}"
+    ROUTE = "/2.0/webhooks/{webhook_id}"
 
     class Body(BaseModel):
         """

@@ -22,7 +22,7 @@ class CreateCounterparty:
         Test User 9 & john9pvki
     """
 
-    ROUTE = "/counterparty"
+    ROUTE = "/1.0/counterparty"
 
     class Body(BaseModel):
         """Request body for the endpoint."""

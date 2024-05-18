@@ -27,7 +27,7 @@ class RetrieveListOfTransactions:
     plans can only access information older than 90 days within 5 minutes of the first authorisation.
     """
 
-    ROUTE = "/transactions"
+    ROUTE = "/1.0/transactions"
 
     class Params(BaseModel):
         """

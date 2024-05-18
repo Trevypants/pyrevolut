@@ -8,7 +8,7 @@ class RetrieveAllAccounts:
     Get a list of all your accounts.
     """
 
-    ROUTE = "/accounts"
+    ROUTE = "/1.0/accounts"
 
     class Params(BaseModel):
         """

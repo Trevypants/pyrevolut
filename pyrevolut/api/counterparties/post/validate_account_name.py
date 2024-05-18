@@ -31,7 +31,7 @@ class ValidateAccountName:
     This functionality is only available to UK-based businesses.
     """
 
-    ROUTE = "/account-name-validation"
+    ROUTE = "/1.0/account-name-validation"
 
     class Body(BaseModel):
         """

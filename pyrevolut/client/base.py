@@ -45,9 +45,9 @@ class BaseClient:
 
         # Set domain based on environment
         if self.sandbox:
-            self.domain = "https://sandbox-b2b.revolut.com/api/1.0"
+            self.domain = "https://sandbox-b2b.revolut.com/api"
         else:
-            self.domain = "https://b2b.revolut.com/api/1.0"
+            self.domain = "https://b2b.revolut.com/api"
 
         # Load the credentials
         self.__load_credentials()

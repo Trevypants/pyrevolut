@@ -10,7 +10,7 @@ class FreezeCard:
     and no content is returned in the response.
     """
 
-    ROUTE = "/cards/{card_id}/freeze"
+    ROUTE = "/1.0/cards/{card_id}/freeze"
 
     class Body(BaseModel):
         """

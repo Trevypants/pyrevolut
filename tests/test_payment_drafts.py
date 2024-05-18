@@ -2,6 +2,7 @@ import time
 import asyncio
 from decimal import Decimal
 import pytest
+import random
 
 from pyrevolut.client import Client
 from pyrevolut.api import EnumAccountState
@@ -11,7 +12,7 @@ def test_sync_get_all_payment_drafts(sync_client: Client):
     """Test the sync `get_all_payment_drafts` payment drafts method"""
     # Get all payment drafts
     drafts = sync_client.PaymentDrafts.get_all_payment_drafts()
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     assert isinstance(drafts, dict)
     for draft in drafts["payment_orders"]:
         assert isinstance(draft, dict)
@@ -21,7 +22,7 @@ def test_sync_get_payment_draft(sync_client: Client):
     """Test the sync `get_payment_draft` payment drafts method"""
     # Get all payment drafts
     drafts = sync_client.PaymentDrafts.get_all_payment_drafts()
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     assert isinstance(drafts, dict)
     for draft in drafts["payment_orders"]:
         assert isinstance(draft, dict)
@@ -29,7 +30,7 @@ def test_sync_get_payment_draft(sync_client: Client):
 
         # Get the payment draft by ID
         response = sync_client.PaymentDrafts.get_payment_draft(payment_draft_id=draft_id)
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
         assert isinstance(response, dict)
         assert response["id"] == draft_id
 
@@ -38,7 +39,7 @@ def test_sync_create_delete_payment_draft(sync_client: Client):
     """Test the sync `create_payment_draft` and `delete_payment_draft` payment drafts methods"""
     # Get all accounts
     accounts = sync_client.Accounts.get_all_accounts()
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
 
     # Get GBP account
     gbp_account = next(
@@ -51,7 +52,7 @@ def test_sync_create_delete_payment_draft(sync_client: Client):
 
     # Get recipients
     recipients = sync_client.Counterparties.get_all_counterparties()
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
 
     # Get the first recipient in the UK (GB)
     recipient = next(recipient for recipient in recipients if recipient["country"] == "GB")
@@ -72,11 +73,11 @@ def test_sync_create_delete_payment_draft(sync_client: Client):
             title="Test payment draft",
             schedule_for="2025-01-01",
         )
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
 
         # Delete the payment draft
         sync_client.PaymentDrafts.delete_payment_draft(payment_draft_id=response["id"])
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
 
 
 @pytest.mark.asyncio
@@ -84,7 +85,7 @@ async def test_async_get_all_payment_drafts(async_client: Client):
     """Test the async `get_all_payment_drafts` payment drafts method"""
     # Get all payment drafts
     drafts = await async_client.PaymentDrafts.get_all_payment_drafts()
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     assert isinstance(drafts, dict)
     for draft in drafts["payment_orders"]:
         assert isinstance(draft, dict)
@@ -95,7 +96,7 @@ async def test_async_get_payment_draft(async_client: Client):
     """Test the async `get_payment_draft` payment drafts method"""
     # Get all payment drafts
     drafts = await async_client.PaymentDrafts.get_all_payment_drafts()
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     assert isinstance(drafts, dict)
     for draft in drafts["payment_orders"]:
         assert isinstance(draft, dict)
@@ -103,7 +104,7 @@ async def test_async_get_payment_draft(async_client: Client):
 
         # Get the payment draft by ID
         response = await async_client.PaymentDrafts.get_payment_draft(payment_draft_id=draft_id)
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))
         assert isinstance(response, dict)
         assert response["id"] == draft_id
 
@@ -113,7 +114,7 @@ async def test_async_create_delete_payment_draft(async_client: Client):
     """Test the async `create_payment_draft` and `delete_payment_draft` payment drafts methods"""
     # Get all accounts
     accounts = await async_client.Accounts.get_all_accounts()
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
 
     # Get GBP account
     gbp_account = next(
@@ -126,7 +127,7 @@ async def test_async_create_delete_payment_draft(async_client: Client):
 
     # Get recipients
     recipients = await async_client.Counterparties.get_all_counterparties()
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
 
     # Get the first recipient in the UK (GB)
     recipient = next(recipient for recipient in recipients if recipient["country"] == "GB")
@@ -147,8 +148,8 @@ async def test_async_create_delete_payment_draft(async_client: Client):
             title="Test payment draft",
             schedule_for="2025-01-01",
         )
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))
 
         # Delete the payment draft
         await async_client.PaymentDrafts.delete_payment_draft(payment_draft_id=response["id"])
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))

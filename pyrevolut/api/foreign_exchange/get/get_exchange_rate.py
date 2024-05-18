@@ -12,7 +12,7 @@ class GetExchangeRate:
     Get the sell exchange rate between two currencies.
     """
 
-    ROUTE = "/rate"
+    ROUTE = "/1.0/rate"
 
     class Params(BaseModel):
         """

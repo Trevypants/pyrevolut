@@ -2,6 +2,7 @@ import time
 import asyncio
 from uuid import uuid4
 from decimal import Decimal
+import random
 
 import pytest
 
@@ -17,7 +18,7 @@ def test_sync_get_transfer_reasons(sync_client: Client):
     """Test the sync `get_transfer_reasons` transfers method"""
     # Get all transfer reasons
     transfer_reasons = sync_client.Transfers.get_transfer_reasons()
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     assert isinstance(transfer_reasons, list)
     for transfer_reason in transfer_reasons:
         assert isinstance(transfer_reason, dict)
@@ -28,7 +29,7 @@ def test_sync_move_money_between_accounts(sync_client: Client):
 
     # Get all accounts
     accounts = sync_client.Accounts.get_all_accounts()
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
 
     # Get both GBP
     gbp_account1 = next(
@@ -57,12 +58,12 @@ def test_sync_move_money_between_accounts(sync_client: Client):
         currency="GBP",
         reference="PyRevolut Test",
     )
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     assert response["state"] == EnumTransactionState.COMPLETED
 
     # Check balances
     accounts = sync_client.Accounts.get_all_accounts()
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     gbp_balance1_new = next(
         account["balance"] for account in accounts if account["id"] == gbp_account1["id"]
     )
@@ -81,12 +82,12 @@ def test_sync_move_money_between_accounts(sync_client: Client):
         currency="GBP",
         reference="PyRevolut Test",
     )
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     assert response["state"] == EnumTransactionState.COMPLETED
 
     # Check balances
     accounts = sync_client.Accounts.get_all_accounts()
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     gbp_balance1_new = next(
         account["balance"] for account in accounts if account["id"] == gbp_account1["id"]
     )
@@ -102,7 +103,7 @@ def test_sync_create_transfer_to_another_account(sync_client: Client):
 
     # Get all accounts
     accounts = sync_client.Accounts.get_all_accounts()
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
 
     # Get EUR account
     eur_account = next(
@@ -123,7 +124,7 @@ def test_sync_create_transfer_to_another_account(sync_client: Client):
             reference="PyRevolut Test",
             state=EnumTransactionState.COMPLETED,
         )
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
         assert response["state"] == EnumTransactionState.COMPLETED
 
     # Get all counterparties
@@ -156,12 +157,12 @@ def test_sync_create_transfer_to_another_account(sync_client: Client):
         reference="PyRevolut Test",
         transfer_reason_code=EnumTransferReasonCode.FAMILY_SUPPORT,
     )
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     assert response["state"] == EnumTransactionState.PENDING
 
     # Check balance
     account = sync_client.Accounts.get_account(account_id=eur_account["id"])
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
     assert account["balance"] == eur_balance - Decimal("1")
 
 
@@ -170,7 +171,7 @@ async def test_async_get_transfer_reasons(async_client: Client):
     """Test the async `get_transfer_reasons` transfers method"""
     # Get all transfer reasons
     transfer_reasons = await async_client.Transfers.get_transfer_reasons()
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     assert isinstance(transfer_reasons, list)
     for transfer_reason in transfer_reasons:
         assert isinstance(transfer_reason, dict)
@@ -182,7 +183,7 @@ async def test_async_move_money_between_accounts(async_client: Client):
 
     # Get all accounts
     accounts = await async_client.Accounts.get_all_accounts()
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
 
     # Get both GBP
     gbp_account1 = next(
@@ -211,12 +212,12 @@ async def test_async_move_money_between_accounts(async_client: Client):
         currency="GBP",
         reference="PyRevolut Test",
     )
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     assert response["state"] == EnumTransactionState.COMPLETED
 
     # Check balances
     accounts = await async_client.Accounts.get_all_accounts()
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     gbp_balance1_new = next(
         account["balance"] for account in accounts if account["id"] == gbp_account1["id"]
     )
@@ -235,12 +236,12 @@ async def test_async_move_money_between_accounts(async_client: Client):
         currency="GBP",
         reference="PyRevolut Test",
     )
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     assert response["state"] == EnumTransactionState.COMPLETED
 
     # Check balances
     accounts = await async_client.Accounts.get_all_accounts()
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     gbp_balance1_new = next(
         account["balance"] for account in accounts if account["id"] == gbp_account1["id"]
     )
@@ -257,7 +258,7 @@ async def test_async_create_transfer_to_another_account(async_client: Client):
 
     # Get all accounts
     accounts = await async_client.Accounts.get_all_accounts()
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
 
     # Get EUR account
     eur_account = next(
@@ -278,7 +279,7 @@ async def test_async_create_transfer_to_another_account(async_client: Client):
             reference="PyRevolut Test",
             state=EnumTransactionState.COMPLETED,
         )
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))
         assert response["state"] == EnumTransactionState.COMPLETED
 
     # Get all counterparties
@@ -311,10 +312,10 @@ async def test_async_create_transfer_to_another_account(async_client: Client):
         reference="PyRevolut Test",
         transfer_reason_code=EnumTransferReasonCode.FAMILY_SUPPORT,
     )
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     assert response["state"] == EnumTransactionState.PENDING
 
     # Check balance
     account = await async_client.Accounts.get_account(account_id=eur_account["id"])
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
     assert account["balance"] == eur_balance - Decimal("1")

@@ -14,7 +14,7 @@ class RetrievePaymentDraft:
     Get the information about a specific payment draft by ID.
     """
 
-    ROUTE = "/payment-drafts/{payment_draft_id}"
+    ROUTE = "/1.0/payment-drafts/{payment_draft_id}"
 
     class Params(BaseModel):
         """

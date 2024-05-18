@@ -15,7 +15,7 @@ class MoveMoneyBetweenAccounts:
     The resulting transaction has the type transfer.
     """
 
-    ROUTE = "/transfer"
+    ROUTE = "/1.0/transfer"
 
     class Body(BaseModel):
         """

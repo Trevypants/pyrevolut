@@ -7,7 +7,7 @@ class DeletePaymentDraft:
     You can delete a payment draft only if it isn't processed.
     """
 
-    ROUTE = "/payment-drafts/{payment_draft_id}"
+    ROUTE = "/1.0/payment-drafts/{payment_draft_id}"
 
     class Params(BaseModel):
         """

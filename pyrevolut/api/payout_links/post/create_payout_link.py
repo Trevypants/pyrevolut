@@ -22,7 +22,7 @@ class CreatePayoutLink:
     This feature is available in the UK and the EEA.
     """
 
-    ROUTE = "/payout-links"
+    ROUTE = "/1.0/payout-links"
 
     class Body(BaseModel):
         """

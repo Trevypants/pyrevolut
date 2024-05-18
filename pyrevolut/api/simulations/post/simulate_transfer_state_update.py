@@ -17,7 +17,7 @@ class SimulateTransferStateUpdate:
     The resulting state is final and cannot be changed.
     """
 
-    ROUTE = "/sandbox/transactions/{transfer_id}/{action}"
+    ROUTE = "/1.0/sandbox/transactions/{transfer_id}/{action}"
 
     class Body(BaseModel):
         """

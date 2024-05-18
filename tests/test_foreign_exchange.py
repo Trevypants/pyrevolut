@@ -3,6 +3,7 @@ import asyncio
 from uuid import uuid4
 from decimal import Decimal
 import pytest
+import random
 
 from pyrevolut.client import Client, AsyncClient
 from pyrevolut.api import EnumAccountState, EnumTransactionState
@@ -15,21 +16,21 @@ def test_sync_get_exchange_rate(sync_client: Client):
         from_currency="EUR",
         to_currency="USD",
     )
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
 
     # Get Exchange Rate USD to EUR
     sync_client.ForeignExchange.get_exchange_rate(
         from_currency="USD",
         to_currency="EUR",
     )
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
 
     # Get Exchange Rate EUR to GBP
     sync_client.ForeignExchange.get_exchange_rate(
         from_currency="EUR",
         to_currency="GBP",
     )
-    time.sleep(1)
+    time.sleep(random.randint(1, 3))
 
 
 def test_sync_exchange_money(sync_client: Client):
@@ -38,7 +39,7 @@ def test_sync_exchange_money(sync_client: Client):
     with pytest.raises(ValueError, match="Something went wrong"):
         # Get all accounts
         accounts = sync_client.Accounts.get_all_accounts()
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
 
         # Get GBP and EUR accounts
         gbp_account = next(
@@ -69,12 +70,12 @@ def test_sync_exchange_money(sync_client: Client):
             to_amount=None,
             reference="PyRevolut Test",
         )
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
         assert response["state"] == EnumTransactionState.COMPLETED
 
         # Check balances
         accounts = sync_client.Accounts.get_all_accounts()
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
         gbp_balance2 = next(
             account["balance"]
             for account in accounts
@@ -103,12 +104,12 @@ def test_sync_exchange_money(sync_client: Client):
             to_amount=Decimal("1"),
             reference="PyRevolut Test",
         )
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
         assert response["state"] == EnumTransactionState.COMPLETED
 
         # Check balances
         accounts = sync_client.Accounts.get_all_accounts()
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
         gbp_balance3 = next(
             account["balance"]
             for account in accounts
@@ -132,21 +133,21 @@ async def test_async_get_exchange_rate(async_client: AsyncClient):
         from_currency="EUR",
         to_currency="USD",
     )
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
 
     # Get Exchange Rate USD to EUR
     await async_client.ForeignExchange.get_exchange_rate(
         from_currency="USD",
         to_currency="EUR",
     )
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
 
     # Get Exchange Rate EUR to GBP
     await async_client.ForeignExchange.get_exchange_rate(
         from_currency="EUR",
         to_currency="GBP",
     )
-    await asyncio.sleep(1)
+    await asyncio.sleep(random.randint(1, 3))
 
 
 @pytest.mark.asyncio
@@ -156,7 +157,7 @@ async def test_async_exchange_money(async_client: AsyncClient):
     with pytest.raises(ValueError, match="Something went wrong"):
         # Get all accounts
         accounts = await async_client.Accounts.get_all_accounts()
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))
 
         # Get GBP and EUR accounts
         gbp_account = next(
@@ -187,12 +188,12 @@ async def test_async_exchange_money(async_client: AsyncClient):
             to_amount=None,
             reference="PyRevolut Test",
         )
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))
         assert response["state"] == EnumTransactionState.COMPLETED
 
         # Check balances
         accounts = await async_client.Accounts.get_all_accounts()
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))
         gbp_balance2 = next(
             account["balance"]
             for account in accounts
@@ -221,12 +222,12 @@ async def test_async_exchange_money(async_client: AsyncClient):
             to_amount=Decimal("1"),
             reference="PyRevolut Test",
         )
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))
         assert response["state"] == EnumTransactionState.COMPLETED
 
         # Check balances
         accounts = await async_client.Accounts.get_all_accounts()
-        await asyncio.sleep(1)
+        await asyncio.sleep(random.randint(1, 3))
         gbp_balance3 = next(
             account["balance"]
             for account in accounts

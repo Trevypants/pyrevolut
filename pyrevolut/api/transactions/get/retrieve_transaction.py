@@ -23,7 +23,7 @@ class RetrieveTransaction:
         /transaction/{request_id}?id_type=request_id
     """
 
-    ROUTE = "/transaction/{id}"
+    ROUTE = "/1.0/transaction/{id}"
 
     class Params(BaseModel):
         """
