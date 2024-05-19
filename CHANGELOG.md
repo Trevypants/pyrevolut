@@ -1,3 +1,11 @@
+## v0.6.0 (2024-05-19)
+
+### Feat
+
+- added options to specify how to handle errors
+- added option to choose output type between 'raw', 'dict', and 'model'
+- added client option to return pydantic models instead of dicts
+
 ## v0.5.1 (2024-05-19)
 
 ### Refactor
