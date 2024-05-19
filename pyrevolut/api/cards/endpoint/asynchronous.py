@@ -70,7 +70,7 @@ class EndpointCardsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def get_card(
         self,
@@ -101,7 +101,7 @@ class EndpointCardsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def get_card_sensitive_details(
         self,
@@ -133,7 +133,7 @@ class EndpointCardsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def create_card(
         self,
@@ -294,7 +294,7 @@ class EndpointCardsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def freeze_card(
         self,
@@ -329,7 +329,7 @@ class EndpointCardsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response())
+        return self.process_resp(response={}, response_model=endpoint.Response)
 
     async def unfreeze_card(
         self,
@@ -364,7 +364,7 @@ class EndpointCardsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response())
+        return self.process_resp(response={}, response_model=endpoint.Response)
 
     async def update_card(
         self,
@@ -527,7 +527,7 @@ class EndpointCardsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def delete_card(
         self,
@@ -562,7 +562,7 @@ class EndpointCardsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response())
+        return self.process_resp(response={}, response_model=endpoint.Response)
 
     def __process_limit_model(
         self,

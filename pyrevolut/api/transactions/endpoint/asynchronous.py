@@ -98,7 +98,7 @@ class EndpointTransactionsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def get_transaction(
         self,
@@ -151,4 +151,4 @@ class EndpointTransactionsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)

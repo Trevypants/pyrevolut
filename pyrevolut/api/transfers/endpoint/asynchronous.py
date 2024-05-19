@@ -50,7 +50,7 @@ class EndpointTransfersAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def create_transfer_to_another_account(
         self,
@@ -156,7 +156,7 @@ class EndpointTransfersAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def move_money_between_accounts(
         self,
@@ -214,4 +214,4 @@ class EndpointTransfersAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)

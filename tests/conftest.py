@@ -43,7 +43,7 @@ def base_sync_client():
     client = Client(
         creds_loc=CREDENTIALS_LOC,
         sandbox=True,
-        return_dict=True,
+        return_type="dict",
     )
 
     # Yield for test
@@ -62,7 +62,7 @@ def base_async_client():
     client = AsyncClient(
         creds_loc=CREDENTIALS_LOC,
         sandbox=True,
-        return_dict=True,
+        return_type="dict",
     )
 
     # Yield for test

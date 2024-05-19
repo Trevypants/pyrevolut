@@ -1,4 +1,4 @@
-from typing import Type, TypeVar
+from typing import Type, TypeVar, Literal
 import logging
 
 from pydantic import BaseModel
@@ -24,14 +24,14 @@ class BaseClient:
     credentials: ModelCreds
     domain: str
     sandbox: bool
-    return_dict: bool
+    return_type: Literal["raw", "dict", "model"] = "dict"
     client: SyncClient | AsyncClient | None = None
 
     def __init__(
         self,
         creds_loc: str = "credentials/creds.json",
         sandbox: bool = True,
-        return_dict: bool = True,
+        return_type: Literal["raw", "dict", "model"] = "dict",
     ):
         """Create a new Revolut client
 
@@ -41,15 +41,24 @@ class BaseClient:
             The location of the credentials file, by default "credentials/creds.json"
         sandbox : bool, optional
             Whether to use the sandbox environment, by default True
-        return_dict : bool, optional
-            Whether to return the API responses as dictionaries or as pydantic models.
-            If True, the responses will be returned as dictionaries.
-            If False, the responses will be returned as pydantic models.
-            By default, True
+        return_type : Literal["raw", "dict", "model"], optional
+            The return type for the API responses, by default "dict"
+            If "raw":
+                The raw response will be returned
+            If "dict":
+                The response will be the dictionary representation of the Pydantic model.
+                So it will have Decimals, UUIDs, etc instead of the raw string values.
+            If "model":
+                The response will be a Pydantic model containing all processed response data.
         """
         self.creds_loc = creds_loc
         self.sandbox = sandbox
-        self.return_dict = return_dict
+        assert return_type in [
+            "raw",
+            "dict",
+            "model",
+        ], "return_type must be 'raw', 'dict', or 'model'"
+        self.return_type = return_type
 
         # Set domain based on environment
         if self.sandbox:

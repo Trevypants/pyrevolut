@@ -96,7 +96,7 @@ class EndpointPayoutLinksAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def get_payout_link(
         self,
@@ -130,7 +130,7 @@ class EndpointPayoutLinksAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def create_payout_link(
         self,
@@ -230,7 +230,7 @@ class EndpointPayoutLinksAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def cancel_payout_link(
         self,
@@ -266,4 +266,4 @@ class EndpointPayoutLinksAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response())
+        return self.process_resp(response={}, response_model=endpoint.Response)

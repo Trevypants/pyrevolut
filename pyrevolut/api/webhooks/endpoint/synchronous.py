@@ -64,7 +64,7 @@ class EndpointWebhooksSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def get_webhook(
         self,
@@ -94,7 +94,7 @@ class EndpointWebhooksSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def get_failed_webhook_events(
         self,
@@ -147,7 +147,7 @@ class EndpointWebhooksSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def create_webhook(
         self,
@@ -189,7 +189,7 @@ class EndpointWebhooksSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def rotate_webhook_secret(
         self,
@@ -228,7 +228,7 @@ class EndpointWebhooksSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def update_webhook(
         self,
@@ -272,7 +272,7 @@ class EndpointWebhooksSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def delete_webhook(
         self,
@@ -304,4 +304,4 @@ class EndpointWebhooksSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response())
+        return self.process_resp(response={}, response_model=endpoint.Response)

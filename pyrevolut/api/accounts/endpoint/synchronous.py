@@ -40,7 +40,7 @@ class EndpointAccountsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def get_account(
         self,
@@ -70,7 +70,7 @@ class EndpointAccountsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def get_full_bank_details(
         self,
@@ -100,4 +100,4 @@ class EndpointAccountsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()[0]))
+        return self.process_resp(response=response.json()[0], response_model=endpoint.Response)

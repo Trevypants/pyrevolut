@@ -68,7 +68,7 @@ class EndpointTeamMembersSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def get_team_roles(
         self,
@@ -118,7 +118,7 @@ class EndpointTeamMembersSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def invite_team_member(
         self,
@@ -165,7 +165,7 @@ class EndpointTeamMembersSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def __check_sandbox(self):
         """

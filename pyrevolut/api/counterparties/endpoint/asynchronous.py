@@ -96,7 +96,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def get_counterparty(
         self,
@@ -126,7 +126,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def create_counterparty(
         self,
@@ -265,7 +265,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def validate_account_name(
         self,
@@ -336,7 +336,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response(**response.json()))
+        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def delete_counterparty(
         self,
@@ -366,4 +366,4 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return self.process_resp(endpoint.Response())
+        return self.process_resp(response={}, response_model=endpoint.Response)
