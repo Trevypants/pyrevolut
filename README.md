@@ -130,8 +130,8 @@ The SDK currently supports the following APIs:
   - [x] Retrieve a payout link
   - [x] Create a payout link
   - [x] Cancel a payout link
-- [ ] Simulations (Sandbox only)
-  - [ ] Simulate a transfer state update
+- [x] Simulations (Sandbox only)
+  - [x] Simulate a transfer state update
   - [x] Simulate an account top-up
 - [ ] Team members (Live only)
   - [ ] Retrieve a list of team members

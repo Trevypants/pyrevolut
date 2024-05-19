@@ -1,9 +1,13 @@
 import asyncio
+import time
+import random
+from decimal import Decimal
 
 import pytest
 import pytest_asyncio
 
 from pyrevolut.client import Client, AsyncClient
+from pyrevolut.api import EnumTransactionState
 
 """ Pytest Fixture Scopes
 
@@ -80,6 +84,20 @@ def sync_client(base_sync_client: Client):
     # Initialize the sync client
     base_sync_client.open()
 
+    # Check that all accounts have funds, otherwise top them up
+    accounts = base_sync_client.Accounts.get_all_accounts()
+    time.sleep(random.randint(1, 3))
+    for account in accounts:
+        if account["balance"] == Decimal("0"):
+            base_sync_client.Simulations.simulate_account_topup(
+                account_id=account["id"],
+                amount=Decimal("100.00"),
+                currency=account["currency"],
+                reference="Sugar Daddy <3",
+                state=EnumTransactionState.COMPLETED,
+            )
+            time.sleep(random.randint(1, 3))
+
     # Yield for test
     yield base_sync_client
 
@@ -103,6 +121,20 @@ async def async_client(base_async_client: AsyncClient):
     """
     # Initialize the async client
     await base_async_client.open()
+
+    # Check that all accounts have funds, otherwise top them up
+    accounts = await base_async_client.Accounts.get_all_accounts()
+    await asyncio.sleep(random.randint(1, 3))
+    for account in accounts:
+        if account["balance"] == Decimal("0"):
+            await base_async_client.Simulations.simulate_account_topup(
+                account_id=account["id"],
+                amount=Decimal("100.00"),
+                currency=account["currency"],
+                reference="Sugar Daddy <3",
+                state=EnumTransactionState.COMPLETED,
+            )
+            await asyncio.sleep(random.randint(1, 3))
 
     # Yield for test
     yield base_async_client
