@@ -92,13 +92,12 @@ class EndpointTransactionsSync(BaseEndpointSync):
             type=transaction_type,
         )
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def get_transaction(
         self,
@@ -145,10 +144,9 @@ class EndpointTransactionsSync(BaseEndpointSync):
         path = endpoint.ROUTE.format(id=transaction_id or request_id)
         params = endpoint.Params(id_type="request_id" if request_id else None)
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)

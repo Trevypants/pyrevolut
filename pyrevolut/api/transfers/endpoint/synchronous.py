@@ -44,13 +44,12 @@ class EndpointTransfersSync(BaseEndpointSync):
         path = endpoint.ROUTE
         params = endpoint.Params()
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def create_transfer_to_another_account(
         self,
@@ -150,13 +149,12 @@ class EndpointTransfersSync(BaseEndpointSync):
             transfer_reason_code=transfer_reason_code,
         )
 
-        response = self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def move_money_between_accounts(
         self,
@@ -208,10 +206,9 @@ class EndpointTransfersSync(BaseEndpointSync):
             reference=reference,
         )
 
-        response = self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)

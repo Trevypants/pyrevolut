@@ -46,13 +46,12 @@ class EndpointForeignExchangeSync(BaseEndpointSync):
             amount=amount,
         )
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def exchange_money(
         self,
@@ -126,10 +125,9 @@ class EndpointForeignExchangeSync(BaseEndpointSync):
             request_id=request_id,
         )
 
-        response = self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)

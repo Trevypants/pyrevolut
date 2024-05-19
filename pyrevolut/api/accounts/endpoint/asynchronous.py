@@ -34,13 +34,12 @@ class EndpointAccountsAsync(BaseEndpointAsync):
         path = endpoint.ROUTE
         params = endpoint.Params()
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def get_account(
         self,
@@ -64,13 +63,12 @@ class EndpointAccountsAsync(BaseEndpointAsync):
         path = endpoint.ROUTE.format(account_id=account_id)
         params = endpoint.Params()
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def get_full_bank_details(
         self,
@@ -94,10 +92,9 @@ class EndpointAccountsAsync(BaseEndpointAsync):
         path = endpoint.ROUTE.format(account_id=account_id)
         params = endpoint.Params()
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json()[0], response_model=endpoint.Response)

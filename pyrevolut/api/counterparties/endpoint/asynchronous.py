@@ -90,13 +90,12 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             limit=limit,
         )
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def get_counterparty(
         self,
@@ -120,13 +119,12 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
         path = endpoint.ROUTE.format(counterparty_id=counterparty_id)
         params = endpoint.Params()
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def create_counterparty(
         self,
@@ -259,13 +257,12 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             else None,
         )
 
-        response = await self.client.post(
+        return await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def validate_account_name(
         self,
@@ -330,13 +327,12 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             else None,
         )
 
-        response = await self.client.post(
+        return await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def delete_counterparty(
         self,
@@ -360,10 +356,9 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
         path = endpoint.ROUTE.format(counterparty_id=counterparty_id)
         params = endpoint.Params()
 
-        await self.client.delete(
+        return await self.client.delete(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response={}, response_model=endpoint.Response)

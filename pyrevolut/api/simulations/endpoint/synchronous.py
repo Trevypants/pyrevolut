@@ -1,12 +1,12 @@
 from uuid import UUID
 from decimal import Decimal
 
+from pyrevolut.exceptions import InvalidEnvironmentException
 from pyrevolut.api.common import (
     BaseEndpointSync,
     EnumTransactionState,
     EnumSimulateTransferStateAction,
 )
-
 from pyrevolut.api.simulations.post import SimulateAccountTopup, SimulateTransferStateUpdate
 
 
@@ -80,13 +80,12 @@ class EndpointSimulationsSync(BaseEndpointSync):
             state=state,
         )
 
-        response = self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def simulate_transfer_state_update(
         self,
@@ -128,13 +127,12 @@ class EndpointSimulationsSync(BaseEndpointSync):
         path = endpoint.ROUTE.format(transfer_id=transfer_id, action=action)
         body = endpoint.Body()
 
-        response = self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def __check_sandbox(self):
         """
@@ -142,8 +140,8 @@ class EndpointSimulationsSync(BaseEndpointSync):
 
         Raises
         ------
-        ValueError
+        InvalidEnvironmentException
             If the sandbox is enabled.
         """
         if not self.client.sandbox:
-            raise ValueError("This feature is only available in the Sandbox.")
+            raise InvalidEnvironmentException("This feature is only available in the Sandbox.")

@@ -58,13 +58,12 @@ class EndpointWebhooksSync(BaseEndpointSync):
         path = endpoint.ROUTE
         params = endpoint.Params()
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def get_webhook(
         self,
@@ -88,13 +87,12 @@ class EndpointWebhooksSync(BaseEndpointSync):
         path = endpoint.ROUTE.format(webhook_id=webhook_id)
         params = endpoint.Params()
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def get_failed_webhook_events(
         self,
@@ -141,13 +139,12 @@ class EndpointWebhooksSync(BaseEndpointSync):
             created_before=created_before,
         )
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def create_webhook(
         self,
@@ -183,13 +180,12 @@ class EndpointWebhooksSync(BaseEndpointSync):
             events=events,
         )
 
-        response = self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def rotate_webhook_secret(
         self,
@@ -222,13 +218,12 @@ class EndpointWebhooksSync(BaseEndpointSync):
             expiration_period=expiration_period,
         )
 
-        response = self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def update_webhook(
         self,
@@ -266,13 +261,12 @@ class EndpointWebhooksSync(BaseEndpointSync):
             events=events,
         )
 
-        response = self.client.patch(
+        return self.client.patch(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def delete_webhook(
         self,
@@ -298,10 +292,9 @@ class EndpointWebhooksSync(BaseEndpointSync):
         path = endpoint.ROUTE.format(webhook_id=webhook_id)
         params = endpoint.Params()
 
-        self.client.delete(
+        return self.client.delete(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response={}, response_model=endpoint.Response)

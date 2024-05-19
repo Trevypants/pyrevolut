@@ -41,13 +41,12 @@ class EndpointPaymentDraftsAsync(BaseEndpointAsync):
         path = endpoint.ROUTE
         params = endpoint.Params()
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def get_payment_draft(
         self,
@@ -71,13 +70,12 @@ class EndpointPaymentDraftsAsync(BaseEndpointAsync):
         path = endpoint.ROUTE.format(payment_draft_id=payment_draft_id)
         params = endpoint.Params()
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def create_payment_draft(
         self,
@@ -170,13 +168,12 @@ class EndpointPaymentDraftsAsync(BaseEndpointAsync):
             ],
         )
 
-        response = await self.client.post(
+        return await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def delete_payment_draft(
         self,
@@ -201,10 +198,9 @@ class EndpointPaymentDraftsAsync(BaseEndpointAsync):
         path = endpoint.ROUTE.format(payment_draft_id=payment_draft_id)
         params = endpoint.Params()
 
-        response = await self.client.delete(
+        return await self.client.delete(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)

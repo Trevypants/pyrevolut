@@ -44,13 +44,12 @@ class EndpointTransfersAsync(BaseEndpointAsync):
         path = endpoint.ROUTE
         params = endpoint.Params()
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def create_transfer_to_another_account(
         self,
@@ -150,13 +149,12 @@ class EndpointTransfersAsync(BaseEndpointAsync):
             transfer_reason_code=transfer_reason_code,
         )
 
-        response = await self.client.post(
+        return await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def move_money_between_accounts(
         self,
@@ -208,10 +206,9 @@ class EndpointTransfersAsync(BaseEndpointAsync):
             reference=reference,
         )
 
-        response = await self.client.post(
+        return await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)

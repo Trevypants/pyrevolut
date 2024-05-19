@@ -48,7 +48,9 @@ def test_sync_get_full_bank_details(sync_client: Client):
         account_id = account["id"]
         bank_details = sync_client.Accounts.get_full_bank_details(account_id)
         time.sleep(random.randint(1, 3))
-        assert isinstance(bank_details, dict)
+        assert isinstance(bank_details, list)
+        for bank_detail in bank_details:
+            assert isinstance(bank_detail, dict)
 
 
 @pytest.mark.asyncio
@@ -96,4 +98,6 @@ async def test_async_get_full_bank_details(async_client: AsyncClient):
         account_id = account["id"]
         bank_details = await async_client.Accounts.get_full_bank_details(account_id)
         await asyncio.sleep(random.randint(1, 3))
-        assert isinstance(bank_details, dict)
+        assert isinstance(bank_details, list)
+        for bank_detail in bank_details:
+            assert isinstance(bank_detail, dict)

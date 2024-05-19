@@ -5,9 +5,9 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from pyrevolut.api.common import BaseEndpointSync, EnumMerchantCategory
 from pyrevolut.utils import DateTime
-
+from pyrevolut.exceptions import InvalidEnvironmentException
+from pyrevolut.api.common import BaseEndpointSync, EnumMerchantCategory
 from pyrevolut.api.cards.get import (
     RetrieveListOfCards,
     RetrieveCardDetails,
@@ -64,13 +64,12 @@ class EndpointCardsSync(BaseEndpointSync):
             limit=limit,
         )
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def get_card(
         self,
@@ -95,13 +94,12 @@ class EndpointCardsSync(BaseEndpointSync):
         path = endpoint.ROUTE.format(card_id=card_id)
         params = endpoint.Params()
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def get_card_sensitive_details(
         self,
@@ -127,13 +125,12 @@ class EndpointCardsSync(BaseEndpointSync):
         path = endpoint.ROUTE.format(card_id=card_id)
         params = endpoint.Params()
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def create_card(
         self,
@@ -288,13 +285,12 @@ class EndpointCardsSync(BaseEndpointSync):
             spending_limits=spending_limits,
         )
 
-        response = self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def freeze_card(
         self,
@@ -323,13 +319,12 @@ class EndpointCardsSync(BaseEndpointSync):
         path = endpoint.ROUTE.format(card_id=card_id)
         body = endpoint.Body()
 
-        self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response={}, response_model=endpoint.Response)
 
     def unfreeze_card(
         self,
@@ -360,11 +355,10 @@ class EndpointCardsSync(BaseEndpointSync):
 
         self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response={}, response_model=endpoint.Response)
 
     def update_card(
         self,
@@ -521,13 +515,12 @@ class EndpointCardsSync(BaseEndpointSync):
             spending_limits=spending_limits,
         )
 
-        response = self.client.patch(
+        return self.client.patch(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def delete_card(
         self,
@@ -556,13 +549,12 @@ class EndpointCardsSync(BaseEndpointSync):
         path = endpoint.ROUTE.format(card_id=card_id)
         params = endpoint.Params()
 
-        self.client.delete(
+        return self.client.delete(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response={}, response_model=endpoint.Response)
 
     def __process_limit_model(
         self,
@@ -588,8 +580,8 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Raises
         ------
-        ValueError
+        InvalidEnvironmentException
             If the sandbox is enabled.
         """
         if self.client.sandbox:
-            raise ValueError("This feature is not available in Sandbox.")
+            raise InvalidEnvironmentException("This feature is not available in Sandbox.")

@@ -46,13 +46,12 @@ class EndpointForeignExchangeAsync(BaseEndpointAsync):
             amount=amount,
         )
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def exchange_money(
         self,
@@ -126,10 +125,9 @@ class EndpointForeignExchangeAsync(BaseEndpointAsync):
             request_id=request_id,
         )
 
-        response = await self.client.post(
+        return await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)

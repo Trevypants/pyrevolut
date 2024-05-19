@@ -52,13 +52,21 @@ class Client(BaseClient):
         self.client.close()
         self.client = None
 
-    def get(self, path: str, params: Type[BaseModel] | None = None, **kwargs):
+    def get(
+        self,
+        path: str,
+        response_model: Type[BaseModel],
+        params: Type[BaseModel] | None = None,
+        **kwargs,
+    ):
         """Send a GET request to the Revolut API
 
         Parameters
         ----------
         path : str
             The path to send the request to
+        response_model : Type[BaseModel]
+            The model to use for the response
         params : Type[BaseModel] | None
             The parameters to add to the request route
 
@@ -74,16 +82,28 @@ class Client(BaseClient):
                 **kwargs,
             )
         )
-        self.log_response(response=resp)
-        return resp
+        return self.process_response(
+            response=resp,
+            response_model=response_model,
+            return_type=None,
+            error_response=None,
+        )
 
-    def post(self, path: str, body: Type[BaseModel] | None = None, **kwargs):
+    def post(
+        self,
+        path: str,
+        response_model: Type[BaseModel],
+        body: Type[BaseModel] | None = None,
+        **kwargs,
+    ):
         """Send a POST request to the Revolut API
 
         Parameters
         ----------
         path : str
             The path to send the request to
+        response_model : Type[BaseModel]
+            The model to use for the response
         body : Type[BaseModel] | None
             The body to send in the request
 
@@ -99,16 +119,28 @@ class Client(BaseClient):
                 **kwargs,
             )
         )
-        self.log_response(response=resp)
-        return resp
+        return self.process_response(
+            response=resp,
+            response_model=response_model,
+            return_type=None,
+            error_response=None,
+        )
 
-    def patch(self, path: str, body: Type[BaseModel] | None = None, **kwargs):
+    def patch(
+        self,
+        path: str,
+        response_model: Type[BaseModel],
+        body: Type[BaseModel] | None = None,
+        **kwargs,
+    ):
         """Send a PATCH request to the Revolut API
 
         Parameters
         ----------
         path : str
             The path to send the request to
+        response_model : Type[BaseModel]
+            The model to use for the response
         body : Type[BaseModel]
             The body to send in the request
 
@@ -124,12 +156,17 @@ class Client(BaseClient):
                 **kwargs,
             )
         )
-        self.log_response(response=resp)
-        return resp
+        return self.process_response(
+            response=resp,
+            response_model=response_model,
+            return_type=None,
+            error_response=None,
+        )
 
     def delete(
         self,
         path: str,
+        response_model: Type[BaseModel],
         params: Type[BaseModel] | None = None,
         **kwargs,
     ):
@@ -139,6 +176,8 @@ class Client(BaseClient):
         ----------
         path : str
             The path to send the request to
+        response_model : Type[BaseModel]
+            The model to use for the response
         params : Type[BaseModel] | None
             The parameters to add to the request route
 
@@ -154,16 +193,28 @@ class Client(BaseClient):
                 **kwargs,
             )
         )
-        self.log_response(response=resp)
-        return resp
+        return self.process_response(
+            response=resp,
+            response_model=response_model,
+            return_type=None,
+            error_response=None,
+        )
 
-    def put(self, path: str, body: Type[BaseModel] | None = None, **kwargs):
+    def put(
+        self,
+        response_model: Type[BaseModel],
+        path: str,
+        body: Type[BaseModel] | None = None,
+        **kwargs,
+    ):
         """Send a PUT request to the Revolut API
 
         Parameters
         ----------
         path : str
             The path to send the request to
+        response_model : Type[BaseModel]
+            The model to use for the response
         body : Type[BaseModel] | None
             The body to send in the request
 
@@ -179,8 +230,12 @@ class Client(BaseClient):
                 **kwargs,
             )
         )
-        self.log_response(response=resp)
-        return resp
+        return self.process_response(
+            response=resp,
+            response_model=response_model,
+            return_type=None,
+            error_response=None,
+        )
 
     def __load_resources(self):
         """Loads all the resources from the resources directory"""

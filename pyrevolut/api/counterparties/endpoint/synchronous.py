@@ -90,13 +90,12 @@ class EndpointCounterpartiesSync(BaseEndpointSync):
             limit=limit,
         )
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def get_counterparty(
         self,
@@ -119,13 +118,12 @@ class EndpointCounterpartiesSync(BaseEndpointSync):
         path = endpoint.ROUTE.format(counterparty_id=counterparty_id)
         params = endpoint.Params()
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def create_counterparty(
         self,
@@ -258,13 +256,12 @@ class EndpointCounterpartiesSync(BaseEndpointSync):
             else None,
         )
 
-        response = self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def validate_account_name(
         self,
@@ -329,13 +326,12 @@ class EndpointCounterpartiesSync(BaseEndpointSync):
             else None,
         )
 
-        response = self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def delete_counterparty(
         self,
@@ -359,10 +355,9 @@ class EndpointCounterpartiesSync(BaseEndpointSync):
         path = endpoint.ROUTE.format(counterparty_id=counterparty_id)
         params = endpoint.Params()
 
-        self.client.delete(
+        return self.client.delete(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response={}, response_model=endpoint.Response)

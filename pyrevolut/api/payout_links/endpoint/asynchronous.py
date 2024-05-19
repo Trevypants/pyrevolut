@@ -90,13 +90,12 @@ class EndpointPayoutLinksAsync(BaseEndpointAsync):
             limit=limit,
         )
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def get_payout_link(
         self,
@@ -124,13 +123,12 @@ class EndpointPayoutLinksAsync(BaseEndpointAsync):
         path = endpoint.ROUTE.format(payout_link_id=payout_link_id)
         params = endpoint.Params()
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def create_payout_link(
         self,
@@ -224,13 +222,12 @@ class EndpointPayoutLinksAsync(BaseEndpointAsync):
             transfer_reasion_code=transfer_reason_code,
         )
 
-        response = await self.client.post(
+        return await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def cancel_payout_link(
         self,
@@ -260,10 +257,9 @@ class EndpointPayoutLinksAsync(BaseEndpointAsync):
         path = endpoint.ROUTE.format(payout_link_id=payout_link_id)
         body = endpoint.Body()
 
-        await self.client.post(
+        return await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response={}, response_model=endpoint.Response)

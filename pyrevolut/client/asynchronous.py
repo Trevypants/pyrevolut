@@ -53,13 +53,21 @@ class AsyncClient(BaseClient):
         await self.client.aclose()
         self.client = None
 
-    async def get(self, path: str, params: Type[BaseModel] | None = None, **kwargs):
+    async def get(
+        self,
+        path: str,
+        response_model: Type[BaseModel],
+        params: Type[BaseModel] | None = None,
+        **kwargs,
+    ):
         """Send an async GET request to the Revolut API
 
         Parameters
         ----------
         path : str
             The path to send the request to
+        response_model : Type[BaseModel]
+            The model to use for the response
         params : Type[BaseModel] | None
             The parameters to send in the request
 
@@ -75,16 +83,28 @@ class AsyncClient(BaseClient):
                 **kwargs,
             )
         )
-        self.log_response(response=resp)
-        return resp
+        return self.process_response(
+            response=resp,
+            response_model=response_model,
+            return_type=None,
+            error_response=None,
+        )
 
-    async def post(self, path: str, body: Type[BaseModel] | None = None, **kwargs):
+    async def post(
+        self,
+        path: str,
+        response_model: Type[BaseModel],
+        body: Type[BaseModel] | None = None,
+        **kwargs,
+    ):
         """Send an async POST request to the Revolut API
 
         Parameters
         ----------
         path : str
             The path to send the request to
+        response_model : Type[BaseModel]
+            The model to use for the response
         body : Type[BaseModel] | None
             The body to send in the request
 
@@ -100,16 +120,28 @@ class AsyncClient(BaseClient):
                 **kwargs,
             )
         )
-        self.log_response(response=resp)
-        return resp
+        return self.process_response(
+            response=resp,
+            response_model=response_model,
+            return_type=None,
+            error_response=None,
+        )
 
-    async def patch(self, path: str, body: Type[BaseModel] | None = None, **kwargs):
+    async def patch(
+        self,
+        path: str,
+        response_model: Type[BaseModel],
+        body: Type[BaseModel] | None = None,
+        **kwargs,
+    ):
         """Send an async PATCH request to the Revolut API
 
         Parameters
         ----------
         path : str
             The path to send the request to
+        response_model : Type[BaseModel]
+            The model to use for the response
         body : Type[BaseModel] | None
             The body to send in the request
 
@@ -125,12 +157,17 @@ class AsyncClient(BaseClient):
                 **kwargs,
             )
         )
-        self.log_response(response=resp)
-        return resp
+        return self.process_response(
+            response=resp,
+            response_model=response_model,
+            return_type=None,
+            error_response=None,
+        )
 
     async def delete(
         self,
         path: str,
+        response_model: Type[BaseModel],
         params: Type[BaseModel] | None = None,
         **kwargs,
     ):
@@ -140,6 +177,8 @@ class AsyncClient(BaseClient):
         ----------
         path : str
             The path to send the request to
+        response_model : Type[BaseModel]
+            The model to use for the response
         params : Type[BaseModel] | None
             The parameters to add to the request route
 
@@ -155,16 +194,28 @@ class AsyncClient(BaseClient):
                 **kwargs,
             )
         )
-        self.log_response(response=resp)
-        return resp
+        return self.process_response(
+            response=resp,
+            response_model=response_model,
+            return_type=None,
+            error_response=None,
+        )
 
-    async def put(self, path: str, body: Type[BaseModel] | None = None, **kwargs):
+    async def put(
+        self,
+        path: str,
+        response_model: Type[BaseModel],
+        body: Type[BaseModel] | None = None,
+        **kwargs,
+    ):
         """Send an async PUT request to the Revolut API
 
         Parameters
         ----------
         path : str
             The path to send the request to
+        response_model : Type[BaseModel]
+            The model to use for the response
         body : Type[BaseModel] | None
             The body to send in the request
 
@@ -180,8 +231,12 @@ class AsyncClient(BaseClient):
                 **kwargs,
             )
         )
-        self.log_response(response=resp)
-        return resp
+        return self.process_response(
+            response=resp,
+            response_model=response_model,
+            return_type=None,
+            error_response=None,
+        )
 
     def __load_resources(self):
         """Loads all the resources from the resources directory"""

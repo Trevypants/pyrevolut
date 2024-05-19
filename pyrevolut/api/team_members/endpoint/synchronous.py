@@ -1,9 +1,9 @@
 from uuid import UUID
 from datetime import datetime
 
+from pyrevolut.exceptions import InvalidEnvironmentException
 from pyrevolut.utils.datetime import DateTime
 from pyrevolut.api.common import BaseEndpointSync
-
 from pyrevolut.api.team_members.get import RetrieveListOfTeamMembers, RetrieveTeamRoles
 from pyrevolut.api.team_members.post import InviteTeamMember
 
@@ -62,13 +62,12 @@ class EndpointTeamMembersSync(BaseEndpointSync):
             limit=limit,
         )
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def get_team_roles(
         self,
@@ -112,13 +111,12 @@ class EndpointTeamMembersSync(BaseEndpointSync):
             limit=limit,
         )
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def invite_team_member(
         self,
@@ -159,13 +157,12 @@ class EndpointTeamMembersSync(BaseEndpointSync):
             role_id=role_id,
         )
 
-        response = self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     def __check_sandbox(self):
         """
@@ -173,8 +170,8 @@ class EndpointTeamMembersSync(BaseEndpointSync):
 
         Raises
         ------
-        ValueError
+        InvalidEnvironmentException
             If the sandbox is enabled.
         """
         if self.client.sandbox:
-            raise ValueError("This feature is not available in Sandbox.")
+            raise InvalidEnvironmentException("This feature is not available in Sandbox.")

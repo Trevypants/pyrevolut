@@ -7,6 +7,7 @@ import random
 
 from pyrevolut.client import Client, AsyncClient
 from pyrevolut.api import EnumAccountState, EnumTransactionState
+from pyrevolut.exceptions import PyRevolutAPIException
 
 
 def test_sync_get_exchange_rate(sync_client: Client):
@@ -36,7 +37,7 @@ def test_sync_get_exchange_rate(sync_client: Client):
 def test_sync_exchange_money(sync_client: Client):
     """Test the sync `exchange_money` foreign exchange method"""
 
-    with pytest.raises(ValueError, match="Something went wrong"):
+    with pytest.raises(PyRevolutAPIException, match="Something went wrong"):
         # Get all accounts
         accounts = sync_client.Accounts.get_all_accounts()
         time.sleep(random.randint(1, 3))
@@ -154,7 +155,7 @@ async def test_async_get_exchange_rate(async_client: AsyncClient):
 async def test_async_exchange_money(async_client: AsyncClient):
     """Test the async `exchange_money` foreign exchange method"""
 
-    with pytest.raises(ValueError, match="Something went wrong"):
+    with pytest.raises(PyRevolutAPIException, match="Something went wrong"):
         # Get all accounts
         accounts = await async_client.Accounts.get_all_accounts()
         await asyncio.sleep(random.randint(1, 3))

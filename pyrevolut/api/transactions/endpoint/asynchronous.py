@@ -92,13 +92,12 @@ class EndpointTransactionsAsync(BaseEndpointAsync):
             type=transaction_type,
         )
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def get_transaction(
         self,
@@ -145,10 +144,9 @@ class EndpointTransactionsAsync(BaseEndpointAsync):
         path = endpoint.ROUTE.format(id=transaction_id or request_id)
         params = endpoint.Params(id_type="request_id" if request_id else None)
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)

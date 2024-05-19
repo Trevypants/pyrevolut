@@ -5,9 +5,9 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from pyrevolut.api.common import BaseEndpointAsync, EnumMerchantCategory
 from pyrevolut.utils import DateTime
-
+from pyrevolut.exceptions import InvalidEnvironmentException
+from pyrevolut.api.common import BaseEndpointAsync, EnumMerchantCategory
 from pyrevolut.api.cards.get import (
     RetrieveListOfCards,
     RetrieveCardDetails,
@@ -64,13 +64,12 @@ class EndpointCardsAsync(BaseEndpointAsync):
             limit=limit,
         )
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def get_card(
         self,
@@ -95,13 +94,12 @@ class EndpointCardsAsync(BaseEndpointAsync):
         path = endpoint.ROUTE.format(card_id=card_id)
         params = endpoint.Params()
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def get_card_sensitive_details(
         self,
@@ -127,13 +125,12 @@ class EndpointCardsAsync(BaseEndpointAsync):
         path = endpoint.ROUTE.format(card_id=card_id)
         params = endpoint.Params()
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def create_card(
         self,
@@ -288,13 +285,12 @@ class EndpointCardsAsync(BaseEndpointAsync):
             spending_limits=spending_limits,
         )
 
-        response = await self.client.post(
+        return await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def freeze_card(
         self,
@@ -325,11 +321,10 @@ class EndpointCardsAsync(BaseEndpointAsync):
 
         await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response={}, response_model=endpoint.Response)
 
     async def unfreeze_card(
         self,
@@ -358,13 +353,12 @@ class EndpointCardsAsync(BaseEndpointAsync):
         path = endpoint.ROUTE.format(card_id=card_id)
         body = endpoint.Body()
 
-        await self.client.post(
+        return await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response={}, response_model=endpoint.Response)
 
     async def update_card(
         self,
@@ -521,13 +515,12 @@ class EndpointCardsAsync(BaseEndpointAsync):
             spending_limits=spending_limits,
         )
 
-        response = await self.client.patch(
+        return await self.client.patch(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return self.process_resp(response=response.json(), response_model=endpoint.Response)
 
     async def delete_card(
         self,
@@ -556,13 +549,12 @@ class EndpointCardsAsync(BaseEndpointAsync):
         path = endpoint.ROUTE.format(card_id=card_id)
         params = endpoint.Params()
 
-        await self.client.delete(
+        return await self.client.delete(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return self.process_resp(response={}, response_model=endpoint.Response)
 
     def __process_limit_model(
         self,
@@ -588,8 +580,8 @@ class EndpointCardsAsync(BaseEndpointAsync):
 
         Raises
         ------
-        ValueError
+        InvalidEnvironmentException
             If the sandbox is enabled.
         """
         if self.client.sandbox:
-            raise ValueError("This feature is not available in Sandbox.")
+            raise InvalidEnvironmentException("This feature is not available in Sandbox.")
