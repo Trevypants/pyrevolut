@@ -83,7 +83,7 @@ pyrevolut auth-manual
 
 ```
 
-Alternatively, you can use call the CLI via Python.
+or equivalently
 
 ```bash
 
@@ -92,6 +92,29 @@ python -m pyrevolut auth-manual
 ```
 
 Upon completion, you will have a `.json` file that you can use to authenticate your application.
+
+Alternatively, in the event that you already have all your credential information stored, you can simply create a `.json` file with the following structure:
+
+```json
+{
+    "certificate": {
+        "public": "public-certificate-base64-encoded",
+        "private": "private-key-base64-encoded",
+        "expiration_dt": "2500-01-01T00:00:00Z"
+    },
+    "client_assert_jwt": {
+        "jwt": "client-assertion-jwt",
+        "expiration_dt": "2500-01-01T00:00:00Z"
+    },
+    "tokens": {
+        "access_token": "access-token",
+        "refresh_token": "refresh-token",
+        "token_type": "bearer",
+        "access_token_expiration_dt": "2020-01-01T17:22:42.934699Z",
+        "refresh_token_expiration_dt": "2500-01-01T00:00:00Z"
+    }
+}
+```
 
 ## API Support Status
 
