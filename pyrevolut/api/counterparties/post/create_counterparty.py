@@ -65,7 +65,9 @@ class CreateCounterparty:
             ] = None
             country: Annotated[
                 CountryAlpha2,
-                Field(description="The country of the counterparty as the 2-letter ISO 3166 code."),
+                Field(
+                    description="The country of the counterparty as the 2-letter ISO 3166 code."
+                ),
             ]
             postcode: Annotated[
                 str,
@@ -206,11 +208,15 @@ class CreateCounterparty:
 
             # Name check
             if self.profile_type == EnumProfileType.PERSONAL:
-                assert self.name is not None, "name is required for personal profile type."
+                assert (
+                    self.name is not None
+                ), "name is required for personal profile type."
 
             # Profile type check
             if self.profile_type is not None:
-                assert self.revtag is not None, "revtag is required when profile_type is specified."
+                assert (
+                    self.revtag is not None
+                ), "revtag is required when profile_type is specified."
             else:
                 assert (
                     self.revtag is None
@@ -224,7 +230,9 @@ class CreateCounterparty:
 
             # Sort code check
             if self.currency == "GBP":
-                assert self.sort_code is not None, "sort_code is required for GBP accounts."
+                assert (
+                    self.sort_code is not None
+                ), "sort_code is required for GBP accounts."
 
             # Routing number check
             if self.currency == "USD":
@@ -238,7 +246,9 @@ class CreateCounterparty:
 
             # BSB code check
             if self.currency == "AUD":
-                assert self.bsb_code is not None, "bsb_code is required for AUD accounts."
+                assert (
+                    self.bsb_code is not None
+                ), "bsb_code is required for AUD accounts."
 
             return self
 

@@ -29,7 +29,7 @@ class EndpointPayoutLinksAsync(BaseEndpointAsync):
         created_before: datetime | DateTime | str | int | float | None = None,
         limit: int | None = None,
         **kwargs,
-    ):
+    ) -> list[dict] | list[RetrieveListOfPayoutLinks.Response]:
         """
         Get all the links that you have created, or use the query parameters to filter the results.
 
@@ -79,7 +79,7 @@ class EndpointPayoutLinksAsync(BaseEndpointAsync):
 
         Returns
         -------
-        list[dict]
+        list[dict] | list[RetrieveListOfPayoutLinks.Response]
             A list of payout links.
         """
         endpoint = RetrieveListOfPayoutLinks
@@ -90,19 +90,18 @@ class EndpointPayoutLinksAsync(BaseEndpointAsync):
             limit=limit,
         )
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     async def get_payout_link(
         self,
         payout_link_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | RetrievePayoutLink.Response:
         """
         Get the information about a specific link by its ID.
 
@@ -117,20 +116,19 @@ class EndpointPayoutLinksAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | RetrievePayoutLink.Response
             The payout link information.
         """
         endpoint = RetrievePayoutLink
         path = endpoint.ROUTE.format(payout_link_id=payout_link_id)
         params = endpoint.Params()
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     async def create_payout_link(
         self,
@@ -145,7 +143,7 @@ class EndpointPayoutLinksAsync(BaseEndpointAsync):
         expiry_period: Duration | str | None = None,
         transfer_reason_code: EnumTransferReasonCode | None = None,
         **kwargs,
-    ):
+    ) -> dict | CreatePayoutLink.Response:
         """
         Create a payout link to send money even when you don't have the full
         banking details of the counterparty.
@@ -206,7 +204,7 @@ class EndpointPayoutLinksAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | CreatePayoutLink.Response
             The payout link information.
         """
         endpoint = CreatePayoutLink
@@ -224,19 +222,18 @@ class EndpointPayoutLinksAsync(BaseEndpointAsync):
             transfer_reasion_code=transfer_reason_code,
         )
 
-        response = await self.client.post(
+        return await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     async def cancel_payout_link(
         self,
         payout_link_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | CancelPayoutLink.Response:
         """
         Cancel a payout link.
         You can only cancel a link that hasn't been claimed yet.
@@ -253,17 +250,16 @@ class EndpointPayoutLinksAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | CancelPayoutLink.Response
             An empty dictionary.
         """
         endpoint = CancelPayoutLink
         path = endpoint.ROUTE.format(payout_link_id=payout_link_id)
         body = endpoint.Body()
 
-        await self.client.post(
+        return await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return endpoint.Response().model_dump()

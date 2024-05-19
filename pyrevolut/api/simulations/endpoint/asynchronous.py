@@ -1,13 +1,16 @@
 from uuid import UUID
 from decimal import Decimal
 
+from pyrevolut.exceptions import InvalidEnvironmentException
 from pyrevolut.api.common import (
     BaseEndpointAsync,
     EnumTransactionState,
     EnumSimulateTransferStateAction,
 )
-
-from pyrevolut.api.simulations.post import SimulateAccountTopup, SimulateTransferStateUpdate
+from pyrevolut.api.simulations.post import (
+    SimulateAccountTopup,
+    SimulateTransferStateUpdate,
+)
 
 
 class EndpointSimulationsAsync(BaseEndpointAsync):
@@ -26,7 +29,7 @@ class EndpointSimulationsAsync(BaseEndpointAsync):
         reference: str | None = None,
         state: EnumTransactionState | None = None,
         **kwargs,
-    ):
+    ) -> dict | SimulateAccountTopup.Response:
         """
         Simulate a top-up of your account in the Sandbox environment.
 
@@ -66,7 +69,7 @@ class EndpointSimulationsAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | SimulateAccountTopup.Response
             The top-up transaction information.
         """
         self.__check_sandbox()
@@ -80,20 +83,19 @@ class EndpointSimulationsAsync(BaseEndpointAsync):
             state=state,
         )
 
-        response = await self.client.post(
+        return await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     async def simulate_transfer_state_update(
         self,
         transfer_id: UUID,
         action: EnumSimulateTransferStateAction,
         **kwargs,
-    ):
+    ) -> dict | SimulateTransferStateUpdate.Response:
         """
         Simulate a transfer state change in the Sandbox environment.
 
@@ -120,7 +122,7 @@ class EndpointSimulationsAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | SimulateTransferStateUpdate.Response
             The updated transfer information.
         """
         self.__check_sandbox()
@@ -128,13 +130,12 @@ class EndpointSimulationsAsync(BaseEndpointAsync):
         path = endpoint.ROUTE.format(transfer_id=transfer_id, action=action)
         body = endpoint.Body()
 
-        response = await self.client.post(
+        return await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     def __check_sandbox(self):
         """
@@ -142,8 +143,10 @@ class EndpointSimulationsAsync(BaseEndpointAsync):
 
         Raises
         ------
-        ValueError
+        InvalidEnvironmentException
             If the sandbox is enabled.
         """
         if not self.client.sandbox:
-            raise ValueError("This feature is only available in the Sandbox.")
+            raise InvalidEnvironmentException(
+                "This feature is only available in the Sandbox."
+            )

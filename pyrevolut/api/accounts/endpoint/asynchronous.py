@@ -17,7 +17,7 @@ class EndpointAccountsAsync(BaseEndpointAsync):
     async def get_all_accounts(
         self,
         **kwargs,
-    ):
+    ) -> list[dict] | list[RetrieveAllAccounts.Response]:
         """
         Get a list of all your accounts.
 
@@ -27,26 +27,25 @@ class EndpointAccountsAsync(BaseEndpointAsync):
 
         Returns
         -------
-        list
+        list[dict] | list[RetrieveAllAccounts.Response]
             The list of all your accounts
         """
         endpoint = RetrieveAllAccounts
         path = endpoint.ROUTE
         params = endpoint.Params()
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     async def get_account(
         self,
         account_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | RetrieveAnAccount.Response:
         """
         Get the information about one of your accounts. Specify the account by its ID.
 
@@ -57,26 +56,25 @@ class EndpointAccountsAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | RetrieveAnAccount.Response
             The information about the account
         """
         endpoint = RetrieveAnAccount
         path = endpoint.ROUTE.format(account_id=account_id)
         params = endpoint.Params()
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     async def get_full_bank_details(
         self,
         account_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | RetrieveFullBankDetails.Response:
         """
         Get all the bank details of one of your accounts. Specify the account by its ID.
 
@@ -87,17 +85,16 @@ class EndpointAccountsAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | RetrieveFullBankDetails.Response
             The bank details of the account
         """
         endpoint = RetrieveFullBankDetails
         path = endpoint.ROUTE.format(account_id=account_id)
         params = endpoint.Params()
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()[0]).model_dump()

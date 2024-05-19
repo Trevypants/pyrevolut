@@ -37,11 +37,15 @@ class MoveMoneyBetweenAccounts:
         ]
         source_account_id: Annotated[
             UUID,
-            Field(description="The ID of the source account that you transfer the funds from."),
+            Field(
+                description="The ID of the source account that you transfer the funds from."
+            ),
         ]
         target_account_id: Annotated[
             UUID,
-            Field(description="The ID of the target account that you transfer the funds to."),
+            Field(
+                description="The ID of the target account that you transfer the funds to."
+            ),
         ]
         amount: Annotated[
             Decimal,

@@ -8,7 +8,10 @@ from pyrevolut.api.common import (
 )
 
 from pyrevolut.api.transfers.get import GetTransferReasons
-from pyrevolut.api.transfers.post import CreateTransferToAnotherAccount, MoveMoneyBetweenAccounts
+from pyrevolut.api.transfers.post import (
+    CreateTransferToAnotherAccount,
+    MoveMoneyBetweenAccounts,
+)
 
 
 class EndpointTransfersSync(BaseEndpointSync):
@@ -21,7 +24,7 @@ class EndpointTransfersSync(BaseEndpointSync):
     def get_transfer_reasons(
         self,
         **kwargs,
-    ):
+    ) -> list[dict] | list[GetTransferReasons.Response]:
         """
         In order to initiate a transfer in certain currencies and countries,
         you must provide a transfer reason.
@@ -37,20 +40,19 @@ class EndpointTransfersSync(BaseEndpointSync):
 
         Returns
         -------
-        list[dict]
+        list[dict] | list[GetTransferReasons.Response]
             A list of transfer reasons.
         """
         endpoint = GetTransferReasons
         path = endpoint.ROUTE
         params = endpoint.Params()
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     def create_transfer_to_another_account(
         self,
@@ -65,7 +67,7 @@ class EndpointTransfersSync(BaseEndpointSync):
         charge_bearer: EnumChargeBearer | None = None,
         transfer_reason_code: EnumTransferReasonCode | None = None,
         **kwargs,
-    ):
+    ) -> dict | CreateTransferToAnotherAccount.Response:
         """
         Make a payment to a counterparty.
         The resulting transaction has the type transfer.
@@ -130,7 +132,7 @@ class EndpointTransfersSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | CreateTransferToAnotherAccount.Response
             The details of the transfer.
         """
         endpoint = CreateTransferToAnotherAccount
@@ -150,13 +152,12 @@ class EndpointTransfersSync(BaseEndpointSync):
             transfer_reason_code=transfer_reason_code,
         )
 
-        response = self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     def move_money_between_accounts(
         self,
@@ -167,7 +168,7 @@ class EndpointTransfersSync(BaseEndpointSync):
         currency: str,
         reference: str | None = None,
         **kwargs,
-    ):
+    ) -> dict | MoveMoneyBetweenAccounts.Response:
         """
         Move money between the Revolut accounts of the business in the same currency.
 
@@ -194,7 +195,7 @@ class EndpointTransfersSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | MoveMoneyBetweenAccounts.Response
             The details of the transfer.
         """
         endpoint = MoveMoneyBetweenAccounts
@@ -208,10 +209,9 @@ class EndpointTransfersSync(BaseEndpointSync):
             reference=reference,
         )
 
-        response = self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()

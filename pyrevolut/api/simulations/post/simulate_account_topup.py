@@ -102,7 +102,9 @@ class SimulateAccountTopup:
         The response model.
         """
 
-        id: Annotated[UUID, Field(description="The ID of the account that was topped up.")]
+        id: Annotated[
+            UUID, Field(description="The ID of the account that was topped up.")
+        ]
         state: Annotated[
             EnumTransactionState,
             Field(
@@ -126,7 +128,9 @@ class SimulateAccountTopup:
         ]
         created_at: Annotated[
             DateTime,
-            Field(description="The date and time the transaction was created in ISO 8601 format."),
+            Field(
+                description="The date and time the transaction was created in ISO 8601 format."
+            ),
         ]
         completed_at: Annotated[
             DateTime | None,

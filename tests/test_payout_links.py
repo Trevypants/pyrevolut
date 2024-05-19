@@ -137,7 +137,9 @@ async def test_async_get_payout_link(async_client: Client):
         link_id = link["id"]
 
         # Get the payout link by ID
-        response = await async_client.PayoutLinks.get_payout_link(payout_link_id=link_id)
+        response = await async_client.PayoutLinks.get_payout_link(
+            payout_link_id=link_id
+        )
         await asyncio.sleep(random.randint(1, 3))
         assert isinstance(response, dict)
         assert response["id"] == link_id
@@ -179,7 +181,9 @@ async def test_async_create_cancel_payout_link(async_client: Client):
     assert response["state"] == EnumPayoutLinkState.ACTIVE
 
     # Get the payout link by ID
-    response = await async_client.PayoutLinks.get_payout_link(payout_link_id=response["id"])
+    response = await async_client.PayoutLinks.get_payout_link(
+        payout_link_id=response["id"]
+    )
     await asyncio.sleep(random.randint(1, 3))
     assert isinstance(response, dict)
     assert response["id"] == response["id"]
@@ -190,7 +194,9 @@ async def test_async_create_cancel_payout_link(async_client: Client):
     await asyncio.sleep(random.randint(1, 3))
 
     # Get the payout link by ID
-    response = await async_client.PayoutLinks.get_payout_link(payout_link_id=response["id"])
+    response = await async_client.PayoutLinks.get_payout_link(
+        payout_link_id=response["id"]
+    )
     await asyncio.sleep(random.randint(1, 3))
     assert isinstance(response, dict)
     assert response["id"] == response["id"]

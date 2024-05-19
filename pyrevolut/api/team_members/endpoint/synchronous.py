@@ -1,9 +1,9 @@
 from uuid import UUID
 from datetime import datetime
 
+from pyrevolut.exceptions import InvalidEnvironmentException
 from pyrevolut.utils.datetime import DateTime
 from pyrevolut.api.common import BaseEndpointSync
-
 from pyrevolut.api.team_members.get import RetrieveListOfTeamMembers, RetrieveTeamRoles
 from pyrevolut.api.team_members.post import InviteTeamMember
 
@@ -23,7 +23,7 @@ class EndpointTeamMembersSync(BaseEndpointSync):
         created_before: datetime | DateTime | str | int | float | None = None,
         limit: int | None = None,
         **kwargs,
-    ):
+    ) -> list[dict] | list[RetrieveListOfTeamMembers.Response]:
         """
         Get information about all the team members of your business.
 
@@ -51,7 +51,7 @@ class EndpointTeamMembersSync(BaseEndpointSync):
 
         Returns
         -------
-        list
+        list[dict] | list[RetrieveListOfTeamMembers.Response]
             The list of all team members in your organisation.
         """
         self.__check_sandbox()
@@ -62,20 +62,19 @@ class EndpointTeamMembersSync(BaseEndpointSync):
             limit=limit,
         )
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     def get_team_roles(
         self,
         created_before: datetime | DateTime | str | int | float | None = None,
         limit: int | None = None,
         **kwargs,
-    ):
+    ) -> list[dict] | list[RetrieveTeamRoles.Response]:
         """
         Get the list of roles for your business.
 
@@ -101,7 +100,7 @@ class EndpointTeamMembersSync(BaseEndpointSync):
 
         Returns
         -------
-        list
+        list[dict] | list[RetrieveTeamRoles.Response]
             The list of all team roles in your organisation.
         """
         self.__check_sandbox()
@@ -112,20 +111,19 @@ class EndpointTeamMembersSync(BaseEndpointSync):
             limit=limit,
         )
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     def invite_team_member(
         self,
         email: str,
         role_id: UUID | str,
         **kwargs,
-    ):
+    ) -> dict | InviteTeamMember.Response:
         """
         Invite a new member to your business account.
 
@@ -148,7 +146,7 @@ class EndpointTeamMembersSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | InviteTeamMember.Response
             The response model.
         """
         self.__check_sandbox()
@@ -159,13 +157,12 @@ class EndpointTeamMembersSync(BaseEndpointSync):
             role_id=role_id,
         )
 
-        response = self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     def __check_sandbox(self):
         """
@@ -173,8 +170,10 @@ class EndpointTeamMembersSync(BaseEndpointSync):
 
         Raises
         ------
-        ValueError
+        InvalidEnvironmentException
             If the sandbox is enabled.
         """
         if self.client.sandbox:
-            raise ValueError("This feature is not available in Sandbox.")
+            raise InvalidEnvironmentException(
+                "This feature is not available in Sandbox."
+            )

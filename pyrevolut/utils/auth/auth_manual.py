@@ -96,15 +96,24 @@ def auth_manual_flow(
     console("--- Step (1/4) Generate Public and Private Certificates ---")
     console("-----------------------------------------------------------")
     while True:
-        expiration_dt = to_datetime(typer.prompt("Expiration datetime of the certificates (UTC)"))
-        country = typer.prompt("Country (2-letter code)")
-        email_address = typer.prompt(text="Email Address (can be left blank)", default="")
-        common_name = typer.prompt(
-            text="Common Name (fully qualified host name, can be left blank)", default=""
+        expiration_dt = to_datetime(
+            typer.prompt("Expiration datetime of the certificates (UTC)")
         )
-        state = typer.prompt(text="State or Province (full name, can be left blank)", default="")
+        country = typer.prompt("Country (2-letter code)")
+        email_address = typer.prompt(
+            text="Email Address (can be left blank)", default=""
+        )
+        common_name = typer.prompt(
+            text="Common Name (fully qualified host name, can be left blank)",
+            default="",
+        )
+        state = typer.prompt(
+            text="State or Province (full name, can be left blank)", default=""
+        )
         locality = typer.prompt(text="Locality (city, can be left blank)", default="")
-        organization = typer.prompt(text="Organization (company, can be left blank)", default="")
+        organization = typer.prompt(
+            text="Organization (company, can be left blank)", default=""
+        )
         organization_unit = typer.prompt(
             text="Organization Unit (section, can be left blank)", default=""
         )
@@ -152,10 +161,13 @@ def auth_manual_flow(
     while True:
         try:
             redirect_url: str = typer.prompt(
-                "OAuth redirect URI (e.g: https://example.com)", default="https://example.com"
+                "OAuth redirect URI (e.g: https://example.com)",
+                default="https://example.com",
             )
             if redirect_url.startswith("http://"):
-                raise ValueError(f"WARNING: Your redirect URL ({redirect_url}) is not secure.")
+                raise ValueError(
+                    f"WARNING: Your redirect URL ({redirect_url}) is not secure."
+                )
             break
         except ValueError:
             pass
@@ -212,7 +224,9 @@ def auth_manual_flow(
         suffix += f"&scope={','.join([scope for scope in scopes])}"
     suffix += "#authorize"
     consent_url = (
-        "https://sandbox-business.revolut.com/" if sandbox else "https://business.revolut.com/"
+        "https://sandbox-business.revolut.com/"
+        if sandbox
+        else "https://business.revolut.com/"
     ) + suffix
 
     console("\nPlease follow the instructions exactly:")
@@ -239,7 +253,9 @@ def auth_manual_flow(
         "access_token": resp.access_token.get_secret_value(),
         "refresh_token": resp.refresh_token.get_secret_value(),
         "token_type": resp.token_type,
-        "access_token_expiration_dt": dt_now.add(seconds=resp.expires_in).to_iso8601_string(),
+        "access_token_expiration_dt": dt_now.add(
+            seconds=resp.expires_in
+        ).to_iso8601_string(),
         # To comply with PSD2 SCA regulations, refresh tokens expire after 90 days
         "refresh_token_expiration_dt": dt_now.add(days=90).to_iso8601_string(),
     }
@@ -251,5 +267,9 @@ def auth_manual_flow(
     console(
         "\n====================================================================================="
     )
-    console(f"=                      Credentials Saved to {credentials_json}                  =")
-    console("=====================================================================================")
+    console(
+        f"=                      Credentials Saved to {credentials_json}                  ="
+    )
+    console(
+        "====================================================================================="
+    )

@@ -1,35 +1,21 @@
-# This workflow will install Python dependencies and run tests with a variety of Python versions
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
-
-name: Test Integration
+name: Upload Python Package to PyPI
 
 on:
-  pull_request:
-    branches:
-      - main
-    types:
-      - opened
-      - synchronize
+  push:
+    tags:
+      - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
-  test:
+  publish:
     strategy:
       max-parallel: 1
       matrix:
-        os: [
-            ubuntu-latest,
-            # windows-latest,
-            macos-latest,
-          ]
         python-version: [3.11]
     defaults:
       run:
         shell: bash
-
-    runs-on: ${{ matrix.os }}
-
     environment: ${{ github.base_ref }}
-
+    runs-on: ubuntu-latest
     steps:
       #----------------------------------------------
       #   ----------- check-out repo  ------------
@@ -72,14 +58,10 @@ jobs:
         run: |
           poetry install --no-interaction
 
-      #-----------------------------------------------
-      #   ------------- run test suite ------------
-      #-----------------------------------------------
-      - name: 🧪 Run tests
-        if: always()
+      #------------------------------------------------
+      #   ------------  build and publish  ------------
+      #------------------------------------------------
+      - name: Build and publish
         env:
-          CREDENTIALS_JSON: ${{ secrets.PYTEST_CREDENTIALS }}
-        run: |
-          source $VENV
-          echo $CREDENTIALS_JSON | base64 -d > ./tests/test_creds.json
-          make test
+          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+        run: make publish

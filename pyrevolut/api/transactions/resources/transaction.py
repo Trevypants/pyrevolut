@@ -8,7 +8,11 @@ from pydantic_extra_types.country import CountryAlpha2, CountryAlpha3
 from pydantic_extra_types.phone_numbers import PhoneNumber
 
 from pyrevolut.utils import DateTime, Date
-from pyrevolut.api.common import EnumTransactionType, EnumTransactionState, EnumAccountType
+from pyrevolut.api.common import (
+    EnumTransactionType,
+    EnumTransactionState,
+    EnumAccountType,
+)
 
 
 class ResourceTransaction(BaseModel):
@@ -21,10 +25,14 @@ class ResourceTransaction(BaseModel):
 
         name: Annotated[str, Field(description="The name of the merchant.")]
         city: Annotated[str, Field(description="The city of the merchant.")]
-        category_code: Annotated[str, Field(description="The category code of the merchant.")]
+        category_code: Annotated[
+            str, Field(description="The category code of the merchant.")
+        ]
         country: Annotated[
             CountryAlpha2 | CountryAlpha3,
-            Field(description="The country of the merchant as the 2-letter ISO 3166 code."),
+            Field(
+                description="The country of the merchant as the 2-letter ISO 3166 code."
+            ),
         ]
 
     class ModelLeg(BaseModel):
@@ -77,7 +85,9 @@ class ResourceTransaction(BaseModel):
         ] = None
         account_id: Annotated[
             UUID,
-            Field(description="The ID of the account that the transaction leg is associated with."),
+            Field(
+                description="The ID of the account that the transaction leg is associated with."
+            ),
         ]
         counterparty: Annotated[
             ModelCounterparty | None,
@@ -111,27 +121,41 @@ class ResourceTransaction(BaseModel):
         ] = None
         phone: Annotated[
             PhoneNumber | None,
-            Field(description="The phone number of the cardholder in the E.164 format."),
+            Field(
+                description="The phone number of the cardholder in the E.164 format."
+            ),
         ] = None
 
     id: Annotated[UUID, Field(description="The ID of the transaction.")]
-    type: Annotated[EnumTransactionType, Field(description="Indicates the transaction type.")]
+    type: Annotated[
+        EnumTransactionType, Field(description="Indicates the transaction type.")
+    ]
     request_id: Annotated[
         str | None,
-        Field(description="The request ID that you provided previously.", max_length=40),
+        Field(
+            description="The request ID that you provided previously.", max_length=40
+        ),
     ] = None
-    state: Annotated[EnumTransactionState, Field(description="Indicates the transaction state.")]
+    state: Annotated[
+        EnumTransactionState, Field(description="Indicates the transaction state.")
+    ]
     reason_code: Annotated[
         str | None,
-        Field(description="The reason code when the transaction state is declined or failed."),
+        Field(
+            description="The reason code when the transaction state is declined or failed."
+        ),
     ] = None
     created_at: Annotated[
         DateTime,
-        Field(description="The date and time the transaction was created in ISO 8601 format."),
+        Field(
+            description="The date and time the transaction was created in ISO 8601 format."
+        ),
     ]
     updated_at: Annotated[
         DateTime,
-        Field(description="The date and time the transaction was last updated in ISO 8601 format."),
+        Field(
+            description="The date and time the transaction was last updated in ISO 8601 format."
+        ),
     ]
     completed_at: Annotated[
         DateTime | None,
@@ -156,7 +180,9 @@ class ResourceTransaction(BaseModel):
     ] = None
     merchant: Annotated[
         ModelMerchant | None,
-        Field(description="The information about the merchant (only for card transfers)."),
+        Field(
+            description="The information about the merchant (only for card transfers)."
+        ),
     ] = None
     reference: Annotated[
         str | None,

@@ -41,9 +41,13 @@ class ResourceTransfer(BaseModel):
     ]
     created_at: Annotated[
         DateTime,
-        Field(description="The date and time the transaction was created in ISO 8601 format."),
+        Field(
+            description="The date and time the transaction was created in ISO 8601 format."
+        ),
     ]
     completed_at: Annotated[
         DateTime | None,
-        Field(description="The date and time the transaction was completed in ISO 8601 format."),
+        Field(
+            description="The date and time the transaction was completed in ISO 8601 format."
+        ),
     ] = None

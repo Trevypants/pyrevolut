@@ -5,7 +5,10 @@ from datetime import date
 from pyrevolut.utils import Date
 from pyrevolut.api.common import BaseEndpointSync
 
-from pyrevolut.api.payment_drafts.get import RetrieveAllPaymentDrafts, RetrievePaymentDraft
+from pyrevolut.api.payment_drafts.get import (
+    RetrieveAllPaymentDrafts,
+    RetrievePaymentDraft,
+)
 from pyrevolut.api.payment_drafts.post import CreatePaymentDraft
 from pyrevolut.api.payment_drafts.delete import DeletePaymentDraft
 
@@ -24,7 +27,7 @@ class EndpointPaymentDraftsSync(BaseEndpointSync):
     def get_all_payment_drafts(
         self,
         **kwargs,
-    ):
+    ) -> dict | RetrieveAllPaymentDrafts.Response:
         """
         Get a list of all the payment drafts that aren't processed.
 
@@ -34,26 +37,25 @@ class EndpointPaymentDraftsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | RetrieveAllPaymentDrafts.Response
             A dict with the information about the payment drafts.
         """
         endpoint = RetrieveAllPaymentDrafts
         path = endpoint.ROUTE
         params = endpoint.Params()
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     def get_payment_draft(
         self,
         payment_draft_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | RetrievePaymentDraft.Response:
         """
         Get the information about a specific payment draft by ID.
 
@@ -64,20 +66,19 @@ class EndpointPaymentDraftsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | RetrievePaymentDraft.Response
             A dict with the information about the payment draft.
         """
         endpoint = RetrievePaymentDraft
         path = endpoint.ROUTE.format(payment_draft_id=payment_draft_id)
         params = endpoint.Params()
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     def create_payment_draft(
         self,
@@ -91,7 +92,7 @@ class EndpointPaymentDraftsSync(BaseEndpointSync):
         title: str | None = None,
         schedule_for: date | Date | str | None = None,
         **kwargs,
-    ):
+    ) -> dict | CreatePaymentDraft.Response:
         """
         Create a payment draft.
 
@@ -122,7 +123,7 @@ class EndpointPaymentDraftsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | CreatePaymentDraft.Response
             A dict with the information about the payment draft created.
         """
         assert (
@@ -170,19 +171,18 @@ class EndpointPaymentDraftsSync(BaseEndpointSync):
             ],
         )
 
-        response = self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     def delete_payment_draft(
         self,
         payment_draft_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | DeletePaymentDraft.Response:
         """
         Delete a payment draft with the given ID.
         You can delete a payment draft only if it isn't processed.
@@ -194,17 +194,16 @@ class EndpointPaymentDraftsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | DeletePaymentDraft.Response
             A dict with the information about the payment draft deleted.
         """
         endpoint = DeletePaymentDraft
         path = endpoint.ROUTE.format(payment_draft_id=payment_draft_id)
         params = endpoint.Params()
 
-        response = self.client.delete(
+        return self.client.delete(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()

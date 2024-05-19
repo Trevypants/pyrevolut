@@ -11,6 +11,7 @@ from pyrevolut.api import (
     EnumAccountState,
     EnumTransactionState,
     EnumTransferReasonCode,
+    EnumSimulateTransferStateAction,
 )
 
 
@@ -65,10 +66,14 @@ def test_sync_move_money_between_accounts(sync_client: Client):
     accounts = sync_client.Accounts.get_all_accounts()
     time.sleep(random.randint(1, 3))
     gbp_balance1_new = next(
-        account["balance"] for account in accounts if account["id"] == gbp_account1["id"]
+        account["balance"]
+        for account in accounts
+        if account["id"] == gbp_account1["id"]
     )
     gbp_balance2_new = next(
-        account["balance"] for account in accounts if account["id"] == gbp_account2["id"]
+        account["balance"]
+        for account in accounts
+        if account["id"] == gbp_account2["id"]
     )
     assert gbp_balance2_new == gbp_balance2 + Decimal("1")
     assert gbp_balance1_new == gbp_balance1 - Decimal("1")
@@ -89,10 +94,14 @@ def test_sync_move_money_between_accounts(sync_client: Client):
     accounts = sync_client.Accounts.get_all_accounts()
     time.sleep(random.randint(1, 3))
     gbp_balance1_new = next(
-        account["balance"] for account in accounts if account["id"] == gbp_account1["id"]
+        account["balance"]
+        for account in accounts
+        if account["id"] == gbp_account1["id"]
     )
     gbp_balance2_new = next(
-        account["balance"] for account in accounts if account["id"] == gbp_account2["id"]
+        account["balance"]
+        for account in accounts
+        if account["id"] == gbp_account2["id"]
     )
     assert gbp_balance2_new == gbp_balance2
     assert gbp_balance1_new == gbp_balance1
@@ -165,6 +174,14 @@ def test_sync_create_transfer_to_another_account(sync_client: Client):
     time.sleep(random.randint(1, 3))
     assert account["balance"] == eur_balance - Decimal("1")
 
+    # Complete the transfer via simulation
+    response = sync_client.Simulations.simulate_transfer_state_update(
+        transfer_id=response["id"],
+        action=EnumSimulateTransferStateAction.COMPLETE,
+    )
+    time.sleep(random.randint(1, 3))
+    assert response["state"] == EnumTransactionState.COMPLETED
+
 
 @pytest.mark.asyncio
 async def test_async_get_transfer_reasons(async_client: Client):
@@ -219,10 +236,14 @@ async def test_async_move_money_between_accounts(async_client: Client):
     accounts = await async_client.Accounts.get_all_accounts()
     await asyncio.sleep(random.randint(1, 3))
     gbp_balance1_new = next(
-        account["balance"] for account in accounts if account["id"] == gbp_account1["id"]
+        account["balance"]
+        for account in accounts
+        if account["id"] == gbp_account1["id"]
     )
     gbp_balance2_new = next(
-        account["balance"] for account in accounts if account["id"] == gbp_account2["id"]
+        account["balance"]
+        for account in accounts
+        if account["id"] == gbp_account2["id"]
     )
     assert gbp_balance2_new == gbp_balance2 + Decimal("1")
     assert gbp_balance1_new == gbp_balance1 - Decimal("1")
@@ -243,10 +264,14 @@ async def test_async_move_money_between_accounts(async_client: Client):
     accounts = await async_client.Accounts.get_all_accounts()
     await asyncio.sleep(random.randint(1, 3))
     gbp_balance1_new = next(
-        account["balance"] for account in accounts if account["id"] == gbp_account1["id"]
+        account["balance"]
+        for account in accounts
+        if account["id"] == gbp_account1["id"]
     )
     gbp_balance2_new = next(
-        account["balance"] for account in accounts if account["id"] == gbp_account2["id"]
+        account["balance"]
+        for account in accounts
+        if account["id"] == gbp_account2["id"]
     )
     assert gbp_balance2_new == gbp_balance2
     assert gbp_balance1_new == gbp_balance1
@@ -319,3 +344,11 @@ async def test_async_create_transfer_to_another_account(async_client: Client):
     account = await async_client.Accounts.get_account(account_id=eur_account["id"])
     await asyncio.sleep(random.randint(1, 3))
     assert account["balance"] == eur_balance - Decimal("1")
+
+    # Complete the transfer via simulation
+    response = await async_client.Simulations.simulate_transfer_state_update(
+        transfer_id=response["id"],
+        action=EnumSimulateTransferStateAction.COMPLETE,
+    )
+    await asyncio.sleep(random.randint(1, 3))
+    assert response["state"] == EnumTransactionState.COMPLETED

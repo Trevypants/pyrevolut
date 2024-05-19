@@ -63,7 +63,9 @@ def create_client_assert_jwt(
     }
 
     # Create the JWT assertion using the private key
-    assertion_string = jwt.encode(payload=payload, key=private_credentials_key, algorithm="RS256")
+    assertion_string = jwt.encode(
+        payload=payload, key=private_credentials_key, algorithm="RS256"
+    )
 
     # Save the JWT assertion to a file if save_location is provided
     if save_location is not None:

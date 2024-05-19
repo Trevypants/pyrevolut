@@ -39,7 +39,9 @@ def test_sync_get_counterparty(sync_client: Client):
     # Get Counterparty
     for counterparty in counterparties_all:
         counterparty_id = counterparty["id"]
-        counterparty = sync_client.Counterparties.get_counterparty(counterparty_id=counterparty_id)
+        counterparty = sync_client.Counterparties.get_counterparty(
+            counterparty_id=counterparty_id
+        )
         time.sleep(random.randint(1, 3))
         assert isinstance(counterparty, dict)
 
@@ -131,7 +133,9 @@ def test_create_delete_counterparty(sync_client: Client):
     counterparties_all = sync_client.Counterparties.get_all_counterparties()
     time.sleep(random.randint(1, 3))
     for counterparty_id in counterparty_ids:
-        assert counterparty_id in [counterparty["id"] for counterparty in counterparties_all]
+        assert counterparty_id in [
+            counterparty["id"] for counterparty in counterparties_all
+        ]
 
     # Delete all created counterparties
     for counterparty_id in counterparty_ids:
@@ -142,7 +146,9 @@ def test_create_delete_counterparty(sync_client: Client):
     counterparties_all = sync_client.Counterparties.get_all_counterparties()
     time.sleep(random.randint(1, 3))
     for counterparty_id in counterparty_ids:
-        assert counterparty_id not in [counterparty["id"] for counterparty in counterparties_all]
+        assert counterparty_id not in [
+            counterparty["id"] for counterparty in counterparties_all
+        ]
 
 
 @pytest.mark.asyncio
@@ -275,15 +281,21 @@ async def test_async_create_delete_counterparty(async_client: AsyncClient):
     counterparties_all = await async_client.Counterparties.get_all_counterparties()
     await asyncio.sleep(random.randint(1, 3))
     for counterparty_id in counterparty_ids:
-        assert counterparty_id in [counterparty["id"] for counterparty in counterparties_all]
+        assert counterparty_id in [
+            counterparty["id"] for counterparty in counterparties_all
+        ]
 
     # Delete all created counterparties
     for counterparty_id in counterparty_ids:
-        await async_client.Counterparties.delete_counterparty(counterparty_id=counterparty_id)
+        await async_client.Counterparties.delete_counterparty(
+            counterparty_id=counterparty_id
+        )
         await asyncio.sleep(random.randint(1, 3))
 
     # Fetch all counterparties
     counterparties_all = await async_client.Counterparties.get_all_counterparties()
     await asyncio.sleep(random.randint(1, 3))
     for counterparty_id in counterparty_ids:
-        assert counterparty_id not in [counterparty["id"] for counterparty in counterparties_all]
+        assert counterparty_id not in [
+            counterparty["id"] for counterparty in counterparties_all
+        ]

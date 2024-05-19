@@ -19,7 +19,12 @@ If working on MacOs or Linux, make sure to have `curl` capabilities to run the `
 When pushing changes to the repository, make sure to follow the steps below:
 
 1. Create a new branch with a descriptive name that reflects the changes you are making. For example, if you are adding a new feature, the branch name could be `feature/new-feature`. If you are fixing a bug, the branch name could be `bugfix/fix-bug`.
-2. Make the necessary changes in the codebase.
+2. Make the necessary changes in the codebase. Make sure to format the code using
+    
+```bash
+make format
+```
+
 3. Run the tests to ensure that the changes do not break the existing functionality. This can be done by running the following command:
 
 ```bash

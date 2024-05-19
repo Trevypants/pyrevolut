@@ -28,7 +28,9 @@ class InviteTeamMember:
         The body of the request.
         """
 
-        email: Annotated[EmailStr, Field(description="The email address of the invited member.")]
+        email: Annotated[
+            EmailStr, Field(description="The email address of the invited member.")
+        ]
         role_id: Annotated[
             UUID | str,
             Field(description="The ID of the role to assign to the new member."),
@@ -37,15 +39,19 @@ class InviteTeamMember:
     class Response(BaseModel):
         """The response model."""
 
-        email: Annotated[EmailStr, Field(description="The email address of the invited member.")]
+        email: Annotated[
+            EmailStr, Field(description="The email address of the invited member.")
+        ]
         id: Annotated[UUID, Field(description="The ID of the invited member.")]
         role_id: Annotated[
             UUID | str,
             Field(description="The ID of the role assigned to the member."),
         ]
         created_at: Annotated[
-            DateTime, Field(description="The date and time when the member was created.")
+            DateTime,
+            Field(description="The date and time when the member was created."),
         ]
         updated_at: Annotated[
-            DateTime, Field(description="The date and time when the member was last updated.")
+            DateTime,
+            Field(description="The date and time when the member was last updated."),
         ]

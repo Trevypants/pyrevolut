@@ -7,7 +7,10 @@ from pyrevolut.api.common import (
     EnumTransactionType,
 )
 
-from pyrevolut.api.transactions.get import RetrieveListOfTransactions, RetrieveTransaction
+from pyrevolut.api.transactions.get import (
+    RetrieveListOfTransactions,
+    RetrieveTransaction,
+)
 
 
 class EndpointTransactionsAsync(BaseEndpointAsync):
@@ -28,7 +31,7 @@ class EndpointTransactionsAsync(BaseEndpointAsync):
         limit: int | None = None,
         transaction_type: EnumTransactionType | None = None,
         **kwargs,
-    ):
+    ) -> list[dict] | list[RetrieveListOfTransactions.Response]:
         """
         Retrieve the historical transactions based on the provided query criteria.
 
@@ -79,7 +82,7 @@ class EndpointTransactionsAsync(BaseEndpointAsync):
 
         Returns
         -------
-        list[dict]
+        list[dict] | list[RetrieveListOfTransactions.Response]
             A list of transactions.
         """
         endpoint = RetrieveListOfTransactions
@@ -92,20 +95,19 @@ class EndpointTransactionsAsync(BaseEndpointAsync):
             type=transaction_type,
         )
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     async def get_transaction(
         self,
         transaction_id: UUID | None = None,
         request_id: str | None = None,
         **kwargs,
-    ):
+    ) -> dict | RetrieveTransaction.Response:
         """
         Retrieve the details of a specific transaction.
         The details can include, for example, cardholder details for card payments.
@@ -133,10 +135,12 @@ class EndpointTransactionsAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | RetrieveTransaction.Response
             The details of the transaction.
         """
-        assert transaction_id or request_id, "Either transaction_id or request_id must be provided."
+        assert (
+            transaction_id or request_id
+        ), "Either transaction_id or request_id must be provided."
         assert not (
             transaction_id and request_id
         ), "Either transaction_id or request_id must be provided, not both."
@@ -145,10 +149,9 @@ class EndpointTransactionsAsync(BaseEndpointAsync):
         path = endpoint.ROUTE.format(id=transaction_id or request_id)
         params = endpoint.Params(id_type="request_id" if request_id else None)
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()

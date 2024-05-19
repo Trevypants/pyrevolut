@@ -4,7 +4,10 @@ from datetime import datetime
 from pyrevolut.api.common import BaseEndpointAsync, EnumProfileType
 from pyrevolut.utils import DateTime
 
-from pyrevolut.api.counterparties.get import RetrieveListOfCounterparties, RetrieveCounterparty
+from pyrevolut.api.counterparties.get import (
+    RetrieveListOfCounterparties,
+    RetrieveCounterparty,
+)
 from pyrevolut.api.counterparties.post import CreateCounterparty, ValidateAccountName
 from pyrevolut.api.counterparties.delete import DeleteCounterparty
 
@@ -39,7 +42,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
         created_before: datetime | DateTime | str | int | float | None = None,
         limit: int | None = None,
         **kwargs,
-    ):
+    ) -> list[dict] | list[RetrieveListOfCounterparties.Response]:
         """
         Get all the counterparties that you have created, or use the query parameters to filter the results.
 
@@ -75,7 +78,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
 
         Returns
         -------
-        list
+        list[dict] | list[RetrieveListOfCounterparties.Response]
             The list of all counterparties that you have created.
         """
         endpoint = RetrieveListOfCounterparties
@@ -90,31 +93,41 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             limit=limit,
         )
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     async def get_counterparty(
         self,
         counterparty_id: UUID,
         **kwargs,
-    ):
-        """Get the information about a specific counterparty by ID."""
+    ) -> dict | RetrieveCounterparty.Response:
+        """Get the information about a specific counterparty by ID.
+
+        Parameters
+        ----------
+        counterparty_id : UUID
+            The ID of the counterparty to retrieve.
+
+        Returns
+        -------
+        dict | RetrieveCounterparty.Response
+            The information about the counterparty.
+
+        """
         endpoint = RetrieveCounterparty
         path = endpoint.ROUTE.format(counterparty_id=counterparty_id)
         params = endpoint.Params()
 
-        response = await self.client.get(
+        return await self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     async def create_counterparty(
         self,
@@ -141,7 +154,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
         address_country: str | None = None,
         address_postcode: str | None = None,
         **kwargs,
-    ):
+    ) -> dict | CreateCounterparty.Response:
         """
         Create a new counterparty to transact with.
 
@@ -209,7 +222,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | CreateCounterparty.Response
             A dict with the information about the created counterparty.
         """
         endpoint = CreateCounterparty
@@ -218,12 +231,14 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             company_name=company_name,
             profile_type=profile_type,
             name=name,
-            individual_name=endpoint.Body.ModelIndividualName(
-                first_name=individual_first_name,
-                last_name=individual_last_name,
-            )
-            if individual_first_name is not None or individual_last_name is not None
-            else None,
+            individual_name=(
+                endpoint.Body.ModelIndividualName(
+                    first_name=individual_first_name,
+                    last_name=individual_last_name,
+                )
+                if individual_first_name is not None or individual_last_name is not None
+                else None
+            ),
             bank_country=bank_country,
             currency=currency,
             revtag=revtag,
@@ -235,25 +250,26 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             clabe=clabe,
             isfc=isfc,
             bsb_code=bsb_code,
-            address=endpoint.Body.ModelAddress(
-                street_line1=address_street_line1,
-                street_line2=address_street_line2,
-                region=address_region,
-                city=address_city,
-                country=address_country,
-                postcode=address_postcode,
-            )
-            if address_country is not None and address_postcode is not None
-            else None,
+            address=(
+                endpoint.Body.ModelAddress(
+                    street_line1=address_street_line1,
+                    street_line2=address_street_line2,
+                    region=address_region,
+                    city=address_city,
+                    country=address_country,
+                    postcode=address_postcode,
+                )
+                if address_country is not None and address_postcode is not None
+                else None
+            ),
         )
 
-        response = await self.client.post(
+        return await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     async def validate_account_name(
         self,
@@ -263,7 +279,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
         individual_first_name: str | None = None,
         individual_last_name: str | None = None,
         **kwargs,
-    ):
+    ) -> dict | ValidateAccountName.Response:
         """
         Use Confirmation of Payee (CoP) to validate a UK counterparty's account name
         against their account number and sort code when adding a counterparty or making a
@@ -301,7 +317,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | ValidateAccountName.Response
             A dict with the information about the validated account name.
         """
         endpoint = ValidateAccountName
@@ -310,27 +326,28 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             account_no=account_no,
             sort_code=sort_code,
             company_name=company_name,
-            individual_name=endpoint.Body.ModelIndividualName(
-                first_name=individual_first_name,
-                last_name=individual_last_name,
-            )
-            if individual_first_name is not None or individual_last_name is not None
-            else None,
+            individual_name=(
+                endpoint.Body.ModelIndividualName(
+                    first_name=individual_first_name,
+                    last_name=individual_last_name,
+                )
+                if individual_first_name is not None or individual_last_name is not None
+                else None
+            ),
         )
 
-        response = await self.client.post(
+        return await self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     async def delete_counterparty(
         self,
         counterparty_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | DeleteCounterparty.Response:
         """Delete a counterparty with the given ID.
         When a counterparty is deleted, you cannot make any payments to the counterparty.
 
@@ -341,17 +358,16 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | DeleteCounterparty.Response
             An empty dict.
         """
         endpoint = DeleteCounterparty
         path = endpoint.ROUTE.format(counterparty_id=counterparty_id)
         params = endpoint.Params()
 
-        await self.client.delete(
+        return await self.client.delete(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return endpoint.Response().model_dump()

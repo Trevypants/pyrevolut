@@ -47,11 +47,15 @@ class ResourcePayoutLink(BaseModel):
     ]
     created_at: Annotated[
         DateTime,
-        Field(description="The date and time the payout link was created in ISO 8601 format."),
+        Field(
+            description="The date and time the payout link was created in ISO 8601 format."
+        ),
     ]
     updated_at: Annotated[
         DateTime,
-        Field(description="The date and time the payout link was last updated in ISO 8601 format."),
+        Field(
+            description="The date and time the payout link was last updated in ISO 8601 format."
+        ),
     ]
     counterparty_name: Annotated[
         str, Field(description="The name of the counterparty provided by the sender.")
@@ -85,7 +89,9 @@ class ResourcePayoutLink(BaseModel):
     ]
     request_id: Annotated[
         str,
-        Field(description="The ID of the request, provided by the sender.", max_length=40),
+        Field(
+            description="The ID of the request, provided by the sender.", max_length=40
+        ),
     ]
     expiry_date: Annotated[
         DateTime,
@@ -132,11 +138,15 @@ class ResourcePayoutLink(BaseModel):
     ] = None
     url: Annotated[
         HttpUrl | None,
-        Field(description="The URL of the payout link. Returned only for active payout links."),
+        Field(
+            description="The URL of the payout link. Returned only for active payout links."
+        ),
     ] = None
     reference: Annotated[
         str,
-        Field(description="The reference for the payout transaction, provided by the sender."),
+        Field(
+            description="The reference for the payout transaction, provided by the sender."
+        ),
     ]
     transfer_reason_code: Annotated[
         EnumTransferReasonCode | None,

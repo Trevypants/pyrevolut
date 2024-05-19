@@ -1,4 +1,5 @@
 """This module holds the Webhooks resource models."""
+
 # flake8: noqa: F401
 
 from .payout_link_created import ResourcePayoutLinkCreated

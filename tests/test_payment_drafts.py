@@ -6,6 +6,7 @@ import random
 
 from pyrevolut.client import Client
 from pyrevolut.api import EnumAccountState
+from pyrevolut.exceptions import PyRevolutAPIException
 
 
 def test_sync_get_all_payment_drafts(sync_client: Client):
@@ -29,7 +30,9 @@ def test_sync_get_payment_draft(sync_client: Client):
         draft_id = draft["id"]
 
         # Get the payment draft by ID
-        response = sync_client.PaymentDrafts.get_payment_draft(payment_draft_id=draft_id)
+        response = sync_client.PaymentDrafts.get_payment_draft(
+            payment_draft_id=draft_id
+        )
         time.sleep(random.randint(1, 3))
         assert isinstance(response, dict)
         assert response["id"] == draft_id
@@ -55,10 +58,12 @@ def test_sync_create_delete_payment_draft(sync_client: Client):
     time.sleep(random.randint(1, 3))
 
     # Get the first recipient in the UK (GB)
-    recipient = next(recipient for recipient in recipients if recipient["country"] == "GB")
+    recipient = next(
+        recipient for recipient in recipients if recipient["country"] == "GB"
+    )
 
     with pytest.raises(
-        ValueError,
+        PyRevolutAPIException,
         match="Oops! An error occurred while processing your request. It has been logged for further investigation.",
     ):
         # Create a payment draft
@@ -103,7 +108,9 @@ async def test_async_get_payment_draft(async_client: Client):
         draft_id = draft["id"]
 
         # Get the payment draft by ID
-        response = await async_client.PaymentDrafts.get_payment_draft(payment_draft_id=draft_id)
+        response = await async_client.PaymentDrafts.get_payment_draft(
+            payment_draft_id=draft_id
+        )
         await asyncio.sleep(random.randint(1, 3))
         assert isinstance(response, dict)
         assert response["id"] == draft_id
@@ -130,10 +137,12 @@ async def test_async_create_delete_payment_draft(async_client: Client):
     await asyncio.sleep(random.randint(1, 3))
 
     # Get the first recipient in the UK (GB)
-    recipient = next(recipient for recipient in recipients if recipient["country"] == "GB")
+    recipient = next(
+        recipient for recipient in recipients if recipient["country"] == "GB"
+    )
 
     with pytest.raises(
-        ValueError,
+        PyRevolutAPIException,
         match="Oops! An error occurred while processing your request. It has been logged for further investigation.",
     ):
         # Create a payment draft
@@ -151,5 +160,7 @@ async def test_async_create_delete_payment_draft(async_client: Client):
         await asyncio.sleep(random.randint(1, 3))
 
         # Delete the payment draft
-        await async_client.PaymentDrafts.delete_payment_draft(payment_draft_id=response["id"])
+        await async_client.PaymentDrafts.delete_payment_draft(
+            payment_draft_id=response["id"]
+        )
         await asyncio.sleep(random.randint(1, 3))

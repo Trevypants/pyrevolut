@@ -1,12 +1,13 @@
-from typing import Type, TypeVar
+from typing import Type, TypeVar, Literal, Annotated
 import logging
+import json
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import pendulum
 
 from httpx import AsyncClient
 from httpx import Client as SyncClient
-from httpx import HTTPStatusError, Response
+from httpx import Request, Response
 
 from pyrevolut.utils.auth import (
     ModelCreds,
@@ -14,22 +15,37 @@ from pyrevolut.utils.auth import (
     save_creds,
     load_creds,
 )
+from pyrevolut.exceptions import PyRevolutAPIException, BadRequestException
 
 
+BM = TypeVar("BM", bound=Type[BaseModel])
 D = TypeVar("D", dict, list)  # TypeVar for dictionary or list
 
 
+class ModelError(BaseModel):
+    """Model for the error response"""
+
+    code: Annotated[str, Field(description="The error code")]
+    message: Annotated[str, Field(description="The error message")]
+
+
 class BaseClient:
+    """The base client for the Revolut API"""
+
     creds_loc: str
     credentials: ModelCreds
     domain: str
     sandbox: bool
+    return_type: Literal["raw", "dict", "model"] = "dict"
+    error_response: Literal["raw", "raise", "dict", "model"] = "raise"
     client: SyncClient | AsyncClient | None = None
 
     def __init__(
         self,
         creds_loc: str = "credentials/creds.json",
         sandbox: bool = True,
+        return_type: Literal["raw", "dict", "model"] = "dict",
+        error_response: Literal["raw", "raise", "dict", "model"] = "raise",
     ):
         """Create a new Revolut client
 
@@ -39,9 +55,40 @@ class BaseClient:
             The location of the credentials file, by default "credentials/creds.json"
         sandbox : bool, optional
             Whether to use the sandbox environment, by default True
+        return_type : Literal["raw", "dict", "model"], optional
+            The return type for the API responses, by default "dict"
+            If "raw":
+                The raw response will be returned
+            If "dict":
+                The response will be the dictionary representation of the Pydantic model.
+                So it will have Decimals, UUIDs, etc instead of the raw string values.
+            If "model":
+                The response will be a Pydantic model containing all processed response data.
+        error_response : Literal["raw", "raise", "dict", "model"], optional
+            How the client should handle error responses, by default "raise"
+            If "raw":
+                The client will return the raw error response
+            If "raise":
+                The client will raise a ValueError if the response is an error
+            If "dict":
+                The client will return a dictionary representation of the error response
+            If "model":
+                The client will return a Pydantic model of the error response
         """
         self.creds_loc = creds_loc
         self.sandbox = sandbox
+        assert return_type in [
+            "raw",
+            "dict",
+            "model",
+        ], "return_type must be 'raw', 'dict', or 'model'"
+        self.return_type = return_type
+        assert error_response in [
+            "raise",
+            "dict",
+            "model",
+        ], "error_response must be 'raise', 'dict', or 'model'"
+        self.error_response = error_response
 
         # Set domain based on environment
         if self.sandbox:
@@ -52,24 +99,131 @@ class BaseClient:
         # Load the credentials
         self.__load_credentials()
 
+    def process_response(
+        self,
+        response: Response,
+        response_model: BM,
+        return_type: Literal["raw", "dict", "model"] | None = None,
+        error_response: Literal["raw", "raise", "dict", "model"] | None = "raise",
+    ):
+        """Processes the response and returns the desired format.
+        Will additionally log the request and response.
+
+        Parameters
+        ----------
+        response : Response
+            The HTTPX response to process
+        response_model : BM
+            The Pydantic model to use for the response
+        return_type : Literal["raw", "dict", "model"] | None, optional
+            The return type for the API responses, by default None.
+            If "raw":
+                The raw response will be returned
+            If "dict":
+                The response will be the dictionary representation of the Pydantic model.
+                So it will have Decimals, UUIDs, etc instead of the raw string values.
+            If "model":
+                The response will be a Pydantic model containing all processed response data.
+            If None:
+                The default return type of the client will be used.
+        error_response : Literal["raw", "raise", "dict", "model"] | None, optional
+            How the client should handle error responses, by default None.
+            If "raw":
+                The client will return the raw error response
+            If "raise":
+                The client will raise a ValueError if the response is an error
+            If "dict":
+                The client will return a dictionary representation of the error response
+            If "model":
+                The client will return a Pydantic model of the error response
+            If None:
+                The default error response type of the client will be used.
+
+        Returns
+        -------
+        BM | dict | list[BM] | list[dict]
+            The response in the desired format
+        """
+        if return_type is None:
+            return_type = self.return_type
+        if error_response is None:
+            error_response = self.error_response
+
+        # Log the request
+        self.log_request(request=response.request)
+
+        # Log the response
+        self.log_response(response=response)
+
+        # Check for error response
+        if response.is_error:
+            if error_response == "raise":
+                if response.status_code == 400:
+                    raise BadRequestException(response.text)
+                raise PyRevolutAPIException(response.text)
+            elif error_response == "raw":
+                return response.json()
+            elif error_response == "dict":
+                return ModelError(**response.json()).model_dump()
+            elif error_response == "model":
+                return ModelError(**response.json())
+            else:
+                raise ValueError(f"Invalid error response type: {error_response}")
+
+        # Raw response
+        try:
+            raw_response = response.json()
+        except json.JSONDecodeError:
+            raw_response = {}
+        if return_type == "raw":
+            return raw_response
+
+        # Dict response
+        if isinstance(raw_response, list):
+            model_response = [response_model(**resp) for resp in raw_response]
+        else:
+            model_response = response_model(**raw_response)
+        if return_type == "dict":
+            if isinstance(model_response, list):
+                return [resp.model_dump() for resp in model_response]
+            return model_response.model_dump()
+
+        # Model response
+        if return_type == "model":
+            return model_response
+
+    def log_request(self, request: Request):
+        """Log the request to the API
+
+        Parameters
+        ----------
+        request : Request
+            The request to log
+
+        Returns
+        -------
+        None
+        """
+        logging.info(
+            f"Request: {request.method} {request.url} - {request.headers} - {request.content.decode() if request.content else None}"
+        )
+
     def log_response(self, response: Response):
         """Log the response from the API.
-        If the response is an error, raise an error
 
         Parameters
         ----------
         response : Response
             The response from the API
+
+        Returns
+        -------
+        None
         """
         if not response.is_error:
             logging.info(f"Response: {response.status_code} - {response.text}")
         else:
             logging.error(f"Response: {response.status_code} - {response.text}")
-
-            try:
-                response.raise_for_status()
-            except HTTPStatusError as exc:
-                raise ValueError(f"Error {response.status_code}: {response.text}") from exc
 
     def _prep_get(
         self,
@@ -413,12 +567,16 @@ class BaseClient:
         - If the access token is expired, refresh it.
 
         """
-        solution_msg = "\n\nPlease reauthenticate using the `pyrevolut auth-manual` command."
+        solution_msg = (
+            "\n\nPlease reauthenticate using the `pyrevolut auth-manual` command."
+        )
 
         try:
             self.credentials = load_creds(location=self.creds_loc)
         except FileNotFoundError as exc:
-            raise ValueError(f"Credentials file not found: {exc}. {solution_msg}") from exc
+            raise ValueError(
+                f"Credentials file not found: {exc}. {solution_msg}"
+            ) from exc
         except Exception as exc:
             raise ValueError(f"Error loading credentials: {exc}.") from exc
 
@@ -457,9 +615,9 @@ class BaseClient:
             )
             self.credentials.tokens.access_token = resp.access_token.get_secret_value()
             self.credentials.tokens.token_type = resp.token_type
-            self.credentials.tokens.access_token_expiration_dt = pendulum.now(tz="UTC").add(
-                seconds=resp.expires_in
-            )
+            self.credentials.tokens.access_token_expiration_dt = pendulum.now(
+                tz="UTC"
+            ).add(seconds=resp.expires_in)
             save_creds(creds=self.credentials, location=self.creds_loc, indent=4)
         except Exception as exc:
             raise ValueError(f"Error refreshing access token: {exc}.") from exc

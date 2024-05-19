@@ -64,9 +64,13 @@ class RetrieveTeamRoles:
         name: Annotated[str, Field(description="The name of the role.")]
         created_at: Annotated[
             DateTime,
-            Field(description="The date and time the role was created in ISO 8601 format."),
+            Field(
+                description="The date and time the role was created in ISO 8601 format."
+            ),
         ]
         updated_at: Annotated[
             DateTime,
-            Field(description="The date and time the role was last updated in ISO 8601 format."),
+            Field(
+                description="The date and time the role was last updated in ISO 8601 format."
+            ),
         ]

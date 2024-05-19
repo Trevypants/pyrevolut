@@ -8,3 +8,8 @@ test_init.py
 credentials/**
 test_init.py
 **.json
+.mypy_cache
+.pytest_cache
+.ruff_cache
+.coverage
+coverage.xml

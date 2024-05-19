@@ -42,9 +42,13 @@ class ResourceAccount(BaseModel):
     ]
     created_at: Annotated[
         DateTime,
-        Field(description="The date and time the account was created in ISO 8601 format."),
+        Field(
+            description="The date and time the account was created in ISO 8601 format."
+        ),
     ]
     updated_at: Annotated[
         DateTime,
-        Field(description="The date and time the account was last updated in ISO 8601 format."),
+        Field(
+            description="The date and time the account was last updated in ISO 8601 format."
+        ),
     ]

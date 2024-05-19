@@ -5,9 +5,9 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from pyrevolut.api.common import BaseEndpointSync, EnumMerchantCategory
 from pyrevolut.utils import DateTime
-
+from pyrevolut.exceptions import InvalidEnvironmentException
+from pyrevolut.api.common import BaseEndpointSync, EnumMerchantCategory
 from pyrevolut.api.cards.get import (
     RetrieveListOfCards,
     RetrieveCardDetails,
@@ -32,7 +32,7 @@ class EndpointCardsSync(BaseEndpointSync):
         created_before: datetime | DateTime | str | int | float | None = None,
         limit: int | None = None,
         **kwargs,
-    ):
+    ) -> list[dict] | list[RetrieveListOfCards.Response]:
         """
         Get the list of all cards in your organisation.
         The results are paginated and sorted by the created_at date in reverse chronological order.
@@ -53,7 +53,7 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Returns
         -------
-        list
+        list[dict] | list[RetrieveListOfCards.Response]
             The list of all cards in your organisation.
         """
         self.__check_sandbox()
@@ -64,19 +64,18 @@ class EndpointCardsSync(BaseEndpointSync):
             limit=limit,
         )
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
 
     def get_card(
         self,
         card_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | RetrieveCardDetails.Response:
         """
         Get the details of a specific card, based on its ID.
 
@@ -87,7 +86,7 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | RetrieveCardDetails.Response
             The details of the card.
         """
         self.__check_sandbox()
@@ -95,19 +94,18 @@ class EndpointCardsSync(BaseEndpointSync):
         path = endpoint.ROUTE.format(card_id=card_id)
         params = endpoint.Params()
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     def get_card_sensitive_details(
         self,
         card_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | RetrieveSensitiveCardDetails.Response:
         """
         Get sensitive details of a specific card, based on its ID.
         Requires the READ_SENSITIVE_CARD_DATA token scope.
@@ -119,7 +117,7 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | RetrieveSensitiveCardDetails.Response
             The sensitive details of the card.
         """
         self.__check_sandbox()
@@ -127,13 +125,12 @@ class EndpointCardsSync(BaseEndpointSync):
         path = endpoint.ROUTE.format(card_id=card_id)
         params = endpoint.Params()
 
-        response = self.client.get(
+        return self.client.get(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     def create_card(
         self,
@@ -157,7 +154,7 @@ class EndpointCardsSync(BaseEndpointSync):
         all_time_limit_amount: Decimal | None = None,
         all_time_limit_currency: str | None = None,
         **kwargs,
-    ):
+    ) -> dict | CreateCard.Response:
         """
         Create a new card for an existing member of your Revolut Business team.
 
@@ -213,7 +210,7 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | CreateCard.Response
             The details of the created card.
         """
         self.__check_sandbox()
@@ -222,48 +219,64 @@ class EndpointCardsSync(BaseEndpointSync):
 
         # Create the SpendingLimits model (if applicable)
         spending_limits = endpoint.Body.ModelSpendingLimits(
-            single=endpoint.Body.ModelSpendingLimits.ModelSingle(
-                amount=single_limit_amount,
-                currency=single_limit_currency,
-            )
-            if single_limit_amount is not None and single_limit_currency is not None
-            else None,
-            day=endpoint.Body.ModelSpendingLimits.ModelDay(
-                amount=day_limit_amount,
-                currency=day_limit_currency,
-            )
-            if day_limit_amount is not None and day_limit_currency is not None
-            else None,
-            week=endpoint.Body.ModelSpendingLimits.ModelWeek(
-                amount=week_limit_amount,
-                currency=week_limit_currency,
-            )
-            if week_limit_amount is not None and week_limit_currency is not None
-            else None,
-            month=endpoint.Body.ModelSpendingLimits.ModelMonth(
-                amount=month_limit_amount,
-                currency=month_limit_currency,
-            )
-            if month_limit_amount is not None and month_limit_currency is not None
-            else None,
-            quarter=endpoint.Body.ModelSpendingLimits.ModelQuarter(
-                amount=quarter_limit_amount,
-                currency=quarter_limit_currency,
-            )
-            if quarter_limit_amount is not None and quarter_limit_currency is not None
-            else None,
-            year=endpoint.Body.ModelSpendingLimits.ModelYear(
-                amount=year_limit_amount,
-                currency=year_limit_currency,
-            )
-            if year_limit_amount is not None and year_limit_currency is not None
-            else None,
-            all_time=endpoint.Body.ModelSpendingLimits.ModelAllTime(
-                amount=all_time_limit_amount,
-                currency=all_time_limit_currency,
-            )
-            if all_time_limit_amount is not None and all_time_limit_currency is not None
-            else None,
+            single=(
+                endpoint.Body.ModelSpendingLimits.ModelSingle(
+                    amount=single_limit_amount,
+                    currency=single_limit_currency,
+                )
+                if single_limit_amount is not None and single_limit_currency is not None
+                else None
+            ),
+            day=(
+                endpoint.Body.ModelSpendingLimits.ModelDay(
+                    amount=day_limit_amount,
+                    currency=day_limit_currency,
+                )
+                if day_limit_amount is not None and day_limit_currency is not None
+                else None
+            ),
+            week=(
+                endpoint.Body.ModelSpendingLimits.ModelWeek(
+                    amount=week_limit_amount,
+                    currency=week_limit_currency,
+                )
+                if week_limit_amount is not None and week_limit_currency is not None
+                else None
+            ),
+            month=(
+                endpoint.Body.ModelSpendingLimits.ModelMonth(
+                    amount=month_limit_amount,
+                    currency=month_limit_currency,
+                )
+                if month_limit_amount is not None and month_limit_currency is not None
+                else None
+            ),
+            quarter=(
+                endpoint.Body.ModelSpendingLimits.ModelQuarter(
+                    amount=quarter_limit_amount,
+                    currency=quarter_limit_currency,
+                )
+                if quarter_limit_amount is not None
+                and quarter_limit_currency is not None
+                else None
+            ),
+            year=(
+                endpoint.Body.ModelSpendingLimits.ModelYear(
+                    amount=year_limit_amount,
+                    currency=year_limit_currency,
+                )
+                if year_limit_amount is not None and year_limit_currency is not None
+                else None
+            ),
+            all_time=(
+                endpoint.Body.ModelSpendingLimits.ModelAllTime(
+                    amount=all_time_limit_amount,
+                    currency=all_time_limit_currency,
+                )
+                if all_time_limit_amount is not None
+                and all_time_limit_currency is not None
+                else None
+            ),
         )
         if not any(
             [
@@ -288,19 +301,18 @@ class EndpointCardsSync(BaseEndpointSync):
             spending_limits=spending_limits,
         )
 
-        response = self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     def freeze_card(
         self,
         card_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | FreezeCard.Response:
         """
         Freeze a card to make it temporarily unavailable for spending.
         You can only freeze a card that is in the state active.
@@ -315,7 +327,7 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | FreezeCard.Response
             An empty dictionary.
         """
         self.__check_sandbox()
@@ -323,19 +335,18 @@ class EndpointCardsSync(BaseEndpointSync):
         path = endpoint.ROUTE.format(card_id=card_id)
         body = endpoint.Body()
 
-        self.client.post(
+        return self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return endpoint.Response().model_dump()
 
     def unfreeze_card(
         self,
         card_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | UnfreezeCard.Response:
         """
         Unfreeze a card to make it available for spending again.
         You can only unfreeze a card that is in the state frozen.
@@ -350,7 +361,7 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | UnfreezeCard.Response
             An empty dictionary.
         """
         self.__check_sandbox()
@@ -360,11 +371,10 @@ class EndpointCardsSync(BaseEndpointSync):
 
         self.client.post(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return endpoint.Response().model_dump()
 
     def update_card(
         self,
@@ -386,7 +396,7 @@ class EndpointCardsSync(BaseEndpointSync):
         all_time_limit_amount: Decimal | Literal["null"] | None = None,
         all_time_limit_currency: str | Literal["null"] | None = None,
         **kwargs,
-    ):
+    ) -> dict | UpdateCardDetails.Response:
         """
         Update details of a specific card, based on its ID.
         Updating a spending limit does not reset the spending counter.
@@ -445,7 +455,7 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | UpdateCardDetails.Response
             The updated details of the card.
         """
         self.__check_sandbox()
@@ -521,19 +531,18 @@ class EndpointCardsSync(BaseEndpointSync):
             spending_limits=spending_limits,
         )
 
-        response = self.client.patch(
+        return self.client.patch(
             path=path,
+            response_model=endpoint.Response,
             body=body,
             **kwargs,
         )
-
-        return endpoint.Response(**response.json()).model_dump()
 
     def delete_card(
         self,
         card_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | TerminateCard.Response:
         """
         Terminate a specific card, based on its ID.
 
@@ -548,7 +557,7 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | TerminateCard.Response
             An empty dictionary.
         """
         self.__check_sandbox()
@@ -556,13 +565,12 @@ class EndpointCardsSync(BaseEndpointSync):
         path = endpoint.ROUTE.format(card_id=card_id)
         params = endpoint.Params()
 
-        self.client.delete(
+        return self.client.delete(
             path=path,
+            response_model=endpoint.Response,
             params=params,
             **kwargs,
         )
-
-        return endpoint.Response().model_dump()
 
     def __process_limit_model(
         self,
@@ -588,8 +596,10 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Raises
         ------
-        ValueError
+        InvalidEnvironmentException
             If the sandbox is enabled.
         """
         if self.client.sandbox:
-            raise ValueError("This feature is not available in Sandbox.")
+            raise InvalidEnvironmentException(
+                "This feature is not available in Sandbox."
+            )

@@ -18,10 +18,12 @@ class ModelCreds(BaseModel):
         model_config = ConfigDict(validate_assignment=True, extra="forbid")
 
         public: Annotated[
-            SecretStr, Field(description="The public certificate in base64 encoded format")
+            SecretStr,
+            Field(description="The public certificate in base64 encoded format"),
         ]
         private: Annotated[
-            SecretStr, Field(description="The private certificate in base64 encoded format")
+            SecretStr,
+            Field(description="The private certificate in base64 encoded format"),
         ]
         expiration_dt: Annotated[
             DateTime, Field(description="The expiration datetime of the certificates")
@@ -38,7 +40,9 @@ class ModelCreds(BaseModel):
         model_config = ConfigDict(validate_assignment=True, extra="forbid")
 
         jwt: Annotated[SecretStr, Field(description="The JWT assertion string")]
-        expiration_dt: Annotated[DateTime, Field(description="The expiration datetime of the JWT")]
+        expiration_dt: Annotated[
+            DateTime, Field(description="The expiration datetime of the JWT")
+        ]
 
         @field_serializer("jwt", when_used="json")
         def dump_secret(self, value: SecretStr) -> str:
@@ -65,7 +69,9 @@ class ModelCreds(BaseModel):
             """Serialize the secret value to a string"""
             return value.get_secret_value()
 
-    certificate: Annotated[ModelCertificate, Field(description="The certificate information")]
+    certificate: Annotated[
+        ModelCertificate, Field(description="The certificate information")
+    ]
     client_assert_jwt: Annotated[
         ModelClientAssertJWT, Field(description="The client assertion JWT information")
     ]
@@ -81,7 +87,9 @@ class ModelCreds(BaseModel):
         bool
         """
         # Subtract 1 minute to ensure that the token still works for a little bit
-        return self.tokens.access_token_expiration_dt.subtract(minutes=1) < pendulum.now(tz="UTC")
+        return self.tokens.access_token_expiration_dt.subtract(
+            minutes=1
+        ) < pendulum.now(tz="UTC")
 
     @property
     def credentials_expired(self) -> bool:
