@@ -1,3 +1,9 @@
+## v0.6.1 (2024-05-19)
+
+### Fix
+
+- replaced all decimals with floats
+
 ## v0.6.0 (2024-05-19)
 
 ### Feat
