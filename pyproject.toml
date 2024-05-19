@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "pyrevolut"
 version = "0.3.0"
-description = ""
+description = "An unofficial Python API Wrapper for the Revolut Business API"
 authors = ["Trevor Visser <trevor.visser@gmail.com>"]
 readme = "README.md"
 
