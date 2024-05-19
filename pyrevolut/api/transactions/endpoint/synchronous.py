@@ -28,7 +28,7 @@ class EndpointTransactionsSync(BaseEndpointSync):
         limit: int | None = None,
         transaction_type: EnumTransactionType | None = None,
         **kwargs,
-    ):
+    ) -> list[dict] | list[RetrieveListOfTransactions.Response]:
         """
         Retrieve the historical transactions based on the provided query criteria.
 
@@ -79,7 +79,7 @@ class EndpointTransactionsSync(BaseEndpointSync):
 
         Returns
         -------
-        list[dict]
+        list[dict] | list[RetrieveListOfTransactions.Response]
             A list of transactions.
         """
         endpoint = RetrieveListOfTransactions
@@ -98,14 +98,14 @@ class EndpointTransactionsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
+        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
 
     def get_transaction(
         self,
         transaction_id: UUID | None = None,
         request_id: str | None = None,
         **kwargs,
-    ):
+    ) -> dict | RetrieveTransaction.Response:
         """
         Retrieve the details of a specific transaction.
         The details can include, for example, cardholder details for card payments.
@@ -133,7 +133,7 @@ class EndpointTransactionsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | RetrieveTransaction.Response
             The details of the transaction.
         """
         assert transaction_id or request_id, "Either transaction_id or request_id must be provided."
@@ -151,4 +151,4 @@ class EndpointTransactionsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))

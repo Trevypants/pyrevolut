@@ -32,7 +32,7 @@ class EndpointCardsSync(BaseEndpointSync):
         created_before: datetime | DateTime | str | int | float | None = None,
         limit: int | None = None,
         **kwargs,
-    ):
+    ) -> list[dict] | list[RetrieveListOfCards.Response]:
         """
         Get the list of all cards in your organisation.
         The results are paginated and sorted by the created_at date in reverse chronological order.
@@ -53,7 +53,7 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Returns
         -------
-        list
+        list[dict] | list[RetrieveListOfCards.Response]
             The list of all cards in your organisation.
         """
         self.__check_sandbox()
@@ -70,13 +70,13 @@ class EndpointCardsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
+        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
 
     def get_card(
         self,
         card_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | RetrieveCardDetails.Response:
         """
         Get the details of a specific card, based on its ID.
 
@@ -87,7 +87,7 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | RetrieveCardDetails.Response
             The details of the card.
         """
         self.__check_sandbox()
@@ -101,13 +101,13 @@ class EndpointCardsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     def get_card_sensitive_details(
         self,
         card_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | RetrieveSensitiveCardDetails.Response:
         """
         Get sensitive details of a specific card, based on its ID.
         Requires the READ_SENSITIVE_CARD_DATA token scope.
@@ -119,7 +119,7 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | RetrieveSensitiveCardDetails.Response
             The sensitive details of the card.
         """
         self.__check_sandbox()
@@ -133,7 +133,7 @@ class EndpointCardsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     def create_card(
         self,
@@ -157,7 +157,7 @@ class EndpointCardsSync(BaseEndpointSync):
         all_time_limit_amount: Decimal | None = None,
         all_time_limit_currency: str | None = None,
         **kwargs,
-    ):
+    ) -> dict | CreateCard.Response:
         """
         Create a new card for an existing member of your Revolut Business team.
 
@@ -213,7 +213,7 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | CreateCard.Response
             The details of the created card.
         """
         self.__check_sandbox()
@@ -294,13 +294,13 @@ class EndpointCardsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     def freeze_card(
         self,
         card_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | FreezeCard.Response:
         """
         Freeze a card to make it temporarily unavailable for spending.
         You can only freeze a card that is in the state active.
@@ -315,7 +315,7 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | FreezeCard.Response
             An empty dictionary.
         """
         self.__check_sandbox()
@@ -329,13 +329,13 @@ class EndpointCardsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response().model_dump()
+        return self.process_resp(endpoint.Response())
 
     def unfreeze_card(
         self,
         card_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | UnfreezeCard.Response:
         """
         Unfreeze a card to make it available for spending again.
         You can only unfreeze a card that is in the state frozen.
@@ -350,7 +350,7 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | UnfreezeCard.Response
             An empty dictionary.
         """
         self.__check_sandbox()
@@ -364,7 +364,7 @@ class EndpointCardsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response().model_dump()
+        return self.process_resp(endpoint.Response())
 
     def update_card(
         self,
@@ -386,7 +386,7 @@ class EndpointCardsSync(BaseEndpointSync):
         all_time_limit_amount: Decimal | Literal["null"] | None = None,
         all_time_limit_currency: str | Literal["null"] | None = None,
         **kwargs,
-    ):
+    ) -> dict | UpdateCardDetails.Response:
         """
         Update details of a specific card, based on its ID.
         Updating a spending limit does not reset the spending counter.
@@ -445,7 +445,7 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | UpdateCardDetails.Response
             The updated details of the card.
         """
         self.__check_sandbox()
@@ -527,13 +527,13 @@ class EndpointCardsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     def delete_card(
         self,
         card_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | TerminateCard.Response:
         """
         Terminate a specific card, based on its ID.
 
@@ -548,7 +548,7 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | TerminateCard.Response
             An empty dictionary.
         """
         self.__check_sandbox()
@@ -562,7 +562,7 @@ class EndpointCardsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response().model_dump()
+        return self.process_resp(endpoint.Response())
 
     def __process_limit_model(
         self,

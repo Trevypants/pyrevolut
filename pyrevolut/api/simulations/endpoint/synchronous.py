@@ -26,7 +26,7 @@ class EndpointSimulationsSync(BaseEndpointSync):
         reference: str | None = None,
         state: EnumTransactionState | None = None,
         **kwargs,
-    ):
+    ) -> dict | SimulateAccountTopup.Response:
         """
         Simulate a top-up of your account in the Sandbox environment.
 
@@ -66,7 +66,7 @@ class EndpointSimulationsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | SimulateAccountTopup.Response
             The top-up transaction information.
         """
         self.__check_sandbox()
@@ -86,14 +86,14 @@ class EndpointSimulationsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     def simulate_transfer_state_update(
         self,
         transfer_id: UUID,
         action: EnumSimulateTransferStateAction,
         **kwargs,
-    ):
+    ) -> dict | SimulateTransferStateUpdate.Response:
         """
         Simulate a transfer state change in the Sandbox environment.
 
@@ -120,7 +120,7 @@ class EndpointSimulationsSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | SimulateTransferStateUpdate.Response
             The updated transfer information.
         """
         self.__check_sandbox()
@@ -134,7 +134,7 @@ class EndpointSimulationsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     def __check_sandbox(self):
         """

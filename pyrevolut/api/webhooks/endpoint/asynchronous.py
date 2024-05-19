@@ -41,7 +41,7 @@ class EndpointWebhooksAsync(BaseEndpointAsync):
     async def get_all_webhooks(
         self,
         **kwargs,
-    ):
+    ) -> list[dict] | list[RetrieveListOfWebhooks.Response]:
         """
         Get the list of all your existing webhooks and their details.
 
@@ -51,7 +51,7 @@ class EndpointWebhooksAsync(BaseEndpointAsync):
 
         Returns
         -------
-        list
+        list[dict] | list[RetrieveListOfWebhooks.Response]
             The list of all your existing webhooks and their details.
         """
         endpoint = RetrieveListOfWebhooks
@@ -64,15 +64,25 @@ class EndpointWebhooksAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
+        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
 
     async def get_webhook(
         self,
         webhook_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | RetrieveWebhook.Response:
         """
         Get the information about a specific webhook by ID.
+
+        Parameters
+        ----------
+        webhook_id : UUID
+            The ID of the webhook.
+
+        Returns
+        -------
+        dict | RetrieveWebhook.Response
+            The information about the webhook.
         """
         endpoint = RetrieveWebhook
         path = endpoint.ROUTE.format(webhook_id=webhook_id)
@@ -84,7 +94,7 @@ class EndpointWebhooksAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     async def get_failed_webhook_events(
         self,
@@ -92,7 +102,7 @@ class EndpointWebhooksAsync(BaseEndpointAsync):
         limit: int | None = None,
         created_before: datetime | DateTime | str | int | float | None = None,
         **kwargs,
-    ):
+    ) -> list[dict] | list[RetrieveListOfFailedWebhooks.Response]:
         """
         Get the list of all your failed webhook events, or use the query
         parameters to filter the results.
@@ -121,7 +131,7 @@ class EndpointWebhooksAsync(BaseEndpointAsync):
 
         Returns
         -------
-        list
+        list[dict] | list[RetrieveListOfFailedWebhooks.Response]
             The list of all your failed webhook events.
         """
         endpoint = RetrieveListOfFailedWebhooks
@@ -137,14 +147,14 @@ class EndpointWebhooksAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
+        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
 
     async def create_webhook(
         self,
         url: str,
         events: list[EnumWebhookEvent] | None = None,
         **kwargs,
-    ):
+    ) -> dict | CreateWebhook.Response:
         """
         Create a new webhook to receive event notifications to the specified URL.
         Provide a list of event types that you want to subscribe to and a URL for the webhook.
@@ -163,7 +173,7 @@ class EndpointWebhooksAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | CreateWebhook.Response
             The response model for the request.
         """
         endpoint = CreateWebhook
@@ -179,14 +189,14 @@ class EndpointWebhooksAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     async def rotate_webhook_secret(
         self,
         webhook_id: UUID,
         expiration_period: Duration | None = None,
         **kwargs,
-    ):
+    ) -> dict | RotateWebhookSecret.Response:
         """
         Rotate a signing secret for a specific webhook.
 
@@ -203,7 +213,7 @@ class EndpointWebhooksAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | RotateWebhookSecret.Response
             The response model for the request.
         """
         endpoint = RotateWebhookSecret
@@ -218,7 +228,7 @@ class EndpointWebhooksAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     async def update_webhook(
         self,
@@ -226,7 +236,7 @@ class EndpointWebhooksAsync(BaseEndpointAsync):
         url: str | None = None,
         events: list[EnumWebhookEvent] | None = None,
         **kwargs,
-    ):
+    ) -> dict | UpdateWebhook.Response:
         """
         Update an existing webhook. Change the URL to which event notifications are
         sent or the list of event types to be notified about.
@@ -246,7 +256,7 @@ class EndpointWebhooksAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | UpdateWebhook.Response
             The response model for the request.
         """
         endpoint = UpdateWebhook
@@ -262,13 +272,13 @@ class EndpointWebhooksAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     async def delete_webhook(
         self,
         webhook_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | DeleteWebhook.Response:
         """
         Delete a specific webhook.
 
@@ -281,7 +291,7 @@ class EndpointWebhooksAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | DeleteWebhook.Response
             An empty dictionary.
         """
         endpoint = DeleteWebhook
@@ -294,4 +304,4 @@ class EndpointWebhooksAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response().model_dump()
+        return self.process_resp(endpoint.Response())

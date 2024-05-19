@@ -24,12 +24,14 @@ class BaseClient:
     credentials: ModelCreds
     domain: str
     sandbox: bool
+    return_dict: bool
     client: SyncClient | AsyncClient | None = None
 
     def __init__(
         self,
         creds_loc: str = "credentials/creds.json",
         sandbox: bool = True,
+        return_dict: bool = True,
     ):
         """Create a new Revolut client
 
@@ -39,9 +41,15 @@ class BaseClient:
             The location of the credentials file, by default "credentials/creds.json"
         sandbox : bool, optional
             Whether to use the sandbox environment, by default True
+        return_dict : bool, optional
+            Whether to return the API responses as dictionaries or as pydantic models.
+            If True, the responses will be returned as dictionaries.
+            If False, the responses will be returned as pydantic models.
+            By default, True
         """
         self.creds_loc = creds_loc
         self.sandbox = sandbox
+        self.return_dict = return_dict
 
         # Set domain based on environment
         if self.sandbox:

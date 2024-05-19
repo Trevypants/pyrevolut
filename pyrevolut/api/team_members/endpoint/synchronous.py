@@ -23,7 +23,7 @@ class EndpointTeamMembersSync(BaseEndpointSync):
         created_before: datetime | DateTime | str | int | float | None = None,
         limit: int | None = None,
         **kwargs,
-    ):
+    ) -> list[dict] | list[RetrieveListOfTeamMembers.Response]:
         """
         Get information about all the team members of your business.
 
@@ -51,7 +51,7 @@ class EndpointTeamMembersSync(BaseEndpointSync):
 
         Returns
         -------
-        list
+        list[dict] | list[RetrieveListOfTeamMembers.Response]
             The list of all team members in your organisation.
         """
         self.__check_sandbox()
@@ -68,14 +68,14 @@ class EndpointTeamMembersSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
+        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
 
     def get_team_roles(
         self,
         created_before: datetime | DateTime | str | int | float | None = None,
         limit: int | None = None,
         **kwargs,
-    ):
+    ) -> list[dict] | list[RetrieveTeamRoles.Response]:
         """
         Get the list of roles for your business.
 
@@ -101,7 +101,7 @@ class EndpointTeamMembersSync(BaseEndpointSync):
 
         Returns
         -------
-        list
+        list[dict] | list[RetrieveTeamRoles.Response]
             The list of all team roles in your organisation.
         """
         self.__check_sandbox()
@@ -118,14 +118,14 @@ class EndpointTeamMembersSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
+        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
 
     def invite_team_member(
         self,
         email: str,
         role_id: UUID | str,
         **kwargs,
-    ):
+    ) -> dict | InviteTeamMember.Response:
         """
         Invite a new member to your business account.
 
@@ -148,7 +148,7 @@ class EndpointTeamMembersSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | InviteTeamMember.Response
             The response model.
         """
         self.__check_sandbox()
@@ -165,7 +165,7 @@ class EndpointTeamMembersSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     def __check_sandbox(self):
         """

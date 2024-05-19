@@ -17,7 +17,7 @@ class EndpointAccountsAsync(BaseEndpointAsync):
     async def get_all_accounts(
         self,
         **kwargs,
-    ):
+    ) -> list[dict] | list[RetrieveAllAccounts.Response]:
         """
         Get a list of all your accounts.
 
@@ -27,7 +27,7 @@ class EndpointAccountsAsync(BaseEndpointAsync):
 
         Returns
         -------
-        list
+        list[dict] | list[RetrieveAllAccounts.Response]
             The list of all your accounts
         """
         endpoint = RetrieveAllAccounts
@@ -40,13 +40,13 @@ class EndpointAccountsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
+        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
 
     async def get_account(
         self,
         account_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | RetrieveAnAccount.Response:
         """
         Get the information about one of your accounts. Specify the account by its ID.
 
@@ -57,7 +57,7 @@ class EndpointAccountsAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | RetrieveAnAccount.Response
             The information about the account
         """
         endpoint = RetrieveAnAccount
@@ -70,13 +70,13 @@ class EndpointAccountsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     async def get_full_bank_details(
         self,
         account_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | RetrieveFullBankDetails.Response:
         """
         Get all the bank details of one of your accounts. Specify the account by its ID.
 
@@ -87,7 +87,7 @@ class EndpointAccountsAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | RetrieveFullBankDetails.Response
             The bank details of the account
         """
         endpoint = RetrieveFullBankDetails
@@ -100,4 +100,4 @@ class EndpointAccountsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()[0]).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()[0]))

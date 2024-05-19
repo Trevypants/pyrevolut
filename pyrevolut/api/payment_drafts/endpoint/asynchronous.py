@@ -24,7 +24,7 @@ class EndpointPaymentDraftsAsync(BaseEndpointAsync):
     async def get_all_payment_drafts(
         self,
         **kwargs,
-    ):
+    ) -> dict | RetrieveAllPaymentDrafts.Response:
         """
         Get a list of all the payment drafts that aren't processed.
 
@@ -34,7 +34,7 @@ class EndpointPaymentDraftsAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | RetrieveAllPaymentDrafts.Response
             A dict with the information about the payment drafts.
         """
         endpoint = RetrieveAllPaymentDrafts
@@ -47,13 +47,13 @@ class EndpointPaymentDraftsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     async def get_payment_draft(
         self,
         payment_draft_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | RetrievePaymentDraft.Response:
         """
         Get the information about a specific payment draft by ID.
 
@@ -64,7 +64,7 @@ class EndpointPaymentDraftsAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | RetrievePaymentDraft.Response
             A dict with the information about the payment draft.
         """
         endpoint = RetrievePaymentDraft
@@ -77,7 +77,7 @@ class EndpointPaymentDraftsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     async def create_payment_draft(
         self,
@@ -91,7 +91,7 @@ class EndpointPaymentDraftsAsync(BaseEndpointAsync):
         title: str | None = None,
         schedule_for: date | Date | str | None = None,
         **kwargs,
-    ):
+    ) -> dict | CreatePaymentDraft.Response:
         """
         Create a payment draft.
 
@@ -122,7 +122,7 @@ class EndpointPaymentDraftsAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | CreatePaymentDraft.Response
             A dict with the information about the payment draft created.
         """
         assert (
@@ -176,13 +176,13 @@ class EndpointPaymentDraftsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     async def delete_payment_draft(
         self,
         payment_draft_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | DeletePaymentDraft.Response:
         """
         Delete a payment draft with the given ID.
         You can delete a payment draft only if it isn't processed.
@@ -194,7 +194,7 @@ class EndpointPaymentDraftsAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | DeletePaymentDraft.Response
             A dict with the information about the payment draft deleted.
         """
         endpoint = DeletePaymentDraft
@@ -207,4 +207,4 @@ class EndpointPaymentDraftsAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))

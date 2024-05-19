@@ -19,7 +19,7 @@ class EndpointForeignExchangeSync(BaseEndpointSync):
         to_currency: str,
         amount: Decimal | None = None,
         **kwargs,
-    ):
+    ) -> dict | GetExchangeRate.Response:
         """
         Get the sell exchange rate between two currencies.
 
@@ -35,7 +35,7 @@ class EndpointForeignExchangeSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | GetExchangeRate.Response
             A dict with the information about the exchange rate.
         """
         endpoint = GetExchangeRate
@@ -52,7 +52,7 @@ class EndpointForeignExchangeSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     def exchange_money(
         self,
@@ -65,7 +65,7 @@ class EndpointForeignExchangeSync(BaseEndpointSync):
         to_amount: Decimal | None = None,
         reference: str | None = None,
         **kwargs,
-    ):
+    ) -> dict | ExchangeMoney.Response:
         """
         Exchange money using one of these methods:
 
@@ -106,7 +106,7 @@ class EndpointForeignExchangeSync(BaseEndpointSync):
 
         Returns
         -------
-        dict
+        dict | ExchangeMoney.Response
             A dict with the information about the exchange transaction.
         """
         endpoint = ExchangeMoney
@@ -132,4 +132,4 @@ class EndpointForeignExchangeSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))

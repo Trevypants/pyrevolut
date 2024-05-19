@@ -39,7 +39,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
         created_before: datetime | DateTime | str | int | float | None = None,
         limit: int | None = None,
         **kwargs,
-    ):
+    ) -> list[dict] | list[RetrieveListOfCounterparties.Response]:
         """
         Get all the counterparties that you have created, or use the query parameters to filter the results.
 
@@ -75,7 +75,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
 
         Returns
         -------
-        list
+        list[dict] | list[RetrieveListOfCounterparties.Response]
             The list of all counterparties that you have created.
         """
         endpoint = RetrieveListOfCounterparties
@@ -96,14 +96,26 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return [endpoint.Response(**resp).model_dump() for resp in response.json()]
+        return [self.process_resp(endpoint.Response(**resp)) for resp in response.json()]
 
     async def get_counterparty(
         self,
         counterparty_id: UUID,
         **kwargs,
-    ):
-        """Get the information about a specific counterparty by ID."""
+    ) -> dict | RetrieveCounterparty.Response:
+        """Get the information about a specific counterparty by ID.
+
+        Parameters
+        ----------
+        counterparty_id : UUID
+            The ID of the counterparty to retrieve.
+
+        Returns
+        -------
+        dict | RetrieveCounterparty.Response
+            The information about the counterparty.
+
+        """
         endpoint = RetrieveCounterparty
         path = endpoint.ROUTE.format(counterparty_id=counterparty_id)
         params = endpoint.Params()
@@ -114,7 +126,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     async def create_counterparty(
         self,
@@ -141,7 +153,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
         address_country: str | None = None,
         address_postcode: str | None = None,
         **kwargs,
-    ):
+    ) -> dict | CreateCounterparty.Response:
         """
         Create a new counterparty to transact with.
 
@@ -209,7 +221,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | CreateCounterparty.Response
             A dict with the information about the created counterparty.
         """
         endpoint = CreateCounterparty
@@ -253,7 +265,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     async def validate_account_name(
         self,
@@ -263,7 +275,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
         individual_first_name: str | None = None,
         individual_last_name: str | None = None,
         **kwargs,
-    ):
+    ) -> dict | ValidateAccountName.Response:
         """
         Use Confirmation of Payee (CoP) to validate a UK counterparty's account name
         against their account number and sort code when adding a counterparty or making a
@@ -301,7 +313,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | ValidateAccountName.Response
             A dict with the information about the validated account name.
         """
         endpoint = ValidateAccountName
@@ -324,13 +336,13 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json()).model_dump()
+        return self.process_resp(endpoint.Response(**response.json()))
 
     async def delete_counterparty(
         self,
         counterparty_id: UUID,
         **kwargs,
-    ):
+    ) -> dict | DeleteCounterparty.Response:
         """Delete a counterparty with the given ID.
         When a counterparty is deleted, you cannot make any payments to the counterparty.
 
@@ -341,7 +353,7 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
 
         Returns
         -------
-        dict
+        dict | DeleteCounterparty.Response
             An empty dict.
         """
         endpoint = DeleteCounterparty
@@ -354,4 +366,4 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             **kwargs,
         )
 
-        return endpoint.Response().model_dump()
+        return self.process_resp(endpoint.Response())
