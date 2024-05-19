@@ -13,7 +13,7 @@ class CreatePaymentDraft:
     Create a payment draft.
     """
 
-    ROUTE = "/payment-drafts"
+    ROUTE = "/1.0/payment-drafts"
 
     class Body(BaseModel):
         """

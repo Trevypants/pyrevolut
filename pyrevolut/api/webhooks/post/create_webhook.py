@@ -13,7 +13,7 @@ class CreateWebhook:
     Only HTTPS URLs are supported.
     """
 
-    ROUTE = "/webhooks"
+    ROUTE = "/2.0/webhooks"
 
     class Body(BaseModel):
         """

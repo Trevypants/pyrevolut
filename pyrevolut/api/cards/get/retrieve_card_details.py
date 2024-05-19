@@ -8,7 +8,7 @@ class RetrieveCardDetails:
     Get the details of a specific card, based on its ID.
     """
 
-    ROUTE = "/cards/{card_id}"
+    ROUTE = "/1.0/cards/{card_id}"
 
     class Params(BaseModel):
         """

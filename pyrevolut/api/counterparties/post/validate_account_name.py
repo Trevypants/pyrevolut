@@ -31,7 +31,7 @@ class ValidateAccountName:
     This functionality is only available to UK-based businesses.
     """
 
-    ROUTE = "/account-name-validation"
+    ROUTE = "/1.0/account-name-validation"
 
     class Body(BaseModel):
         """
@@ -200,16 +200,3 @@ class ValidateAccountName:
                 description="The name of the individual counterparty. Use when company_name is not specified.",
             ),
         ] = None
-
-        @model_validator(mode="after")
-        def check_inputs(self) -> "ValidateAccountName.Body":
-            """
-            Ensure that either the individual_name or company_name is provided.
-            """
-            if not self.company_name and not self.individual_name:
-                raise ValueError("You must provide either the company_name or individual_name.")
-            if self.company_name and self.individual_name:
-                raise ValueError(
-                    "You must provide either the company_name or individual_name, not both."
-                )
-            return self

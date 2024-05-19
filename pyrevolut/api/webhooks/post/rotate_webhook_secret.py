@@ -11,7 +11,7 @@ class RotateWebhookSecret:
     Rotate a signing secret for a specific webhook.
     """
 
-    ROUTE = "/webhooks/{webhook_id}/rotate-signing-secret"
+    ROUTE = "/2.0/webhooks/{webhook_id}/rotate-signing-secret"
 
     class Body(BaseModel):
         """

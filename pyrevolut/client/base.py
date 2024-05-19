@@ -36,6 +36,7 @@ class BaseClient:
         Parameters
         ----------
         creds_loc : str, optional
+            The location of the credentials file, by default "credentials/creds.json"
         sandbox : bool, optional
             Whether to use the sandbox environment, by default True
         """
@@ -44,9 +45,9 @@ class BaseClient:
 
         # Set domain based on environment
         if self.sandbox:
-            self.domain = "https://sandbox-b2b.revolut.com/api/1.0/"
+            self.domain = "https://sandbox-b2b.revolut.com/api"
         else:
-            self.domain = "https://b2b.revolut.com/api/1.0/"
+            self.domain = "https://b2b.revolut.com/api"
 
         # Load the credentials
         self.__load_credentials()
@@ -346,7 +347,7 @@ class BaseClient:
         if "http" in path:
             return path
 
-        return self.__remove_leading_slash(path)
+        return self.__remove_leading_slash(path=path)
 
     def __remove_leading_slash(self, path: str) -> str:
         """Remove the leading slash from a path if it exists and
@@ -385,17 +386,17 @@ class BaseClient:
         if isinstance(data, dict):
             for k, v in data.items():
                 if isinstance(v, dict):
-                    self.__replace_null_with_none(data_dict=v, data_list=None)
+                    self.__replace_null_with_none(data=v)
                 elif isinstance(v, list):
-                    self.__replace_null_with_none(data_dict=None, data_list=v)
+                    self.__replace_null_with_none(data=v)
                 elif v == "null":
                     data[k] = None
         elif isinstance(data, list):
             for i in range(len(data)):
                 if isinstance(data[i], dict):
-                    self.__replace_null_with_none(data_dict=data[i], data_list=None)
+                    self.__replace_null_with_none(data=data[i])
                 elif isinstance(data[i], list):
-                    self.__replace_null_with_none(data_dict=None, data_list=data[i])
+                    self.__replace_null_with_none(data=data[i])
                 elif data[i] == "null":
                     data[i] = None
         else:

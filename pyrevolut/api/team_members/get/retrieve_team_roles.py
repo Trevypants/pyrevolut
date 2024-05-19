@@ -17,7 +17,7 @@ class RetrieveTeamRoles:
     This feature is not available in Sandbox.
     """
 
-    ROUTE = "/roles"
+    ROUTE = "/1.0/roles"
 
     class Params(BaseModel):
         """

@@ -18,3 +18,4 @@ class EnumTransactionType(StrEnum):
     TOPUP_RETURN = "topup_return"
     TAX = "tax"
     TAX_REFUND = "tax_refund"
+    TEMP_BLOCK = "temp_block"

@@ -11,7 +11,7 @@ class RetrieveAllPaymentDrafts:
     Get a list of all the payment drafts that aren't processed.
     """
 
-    ROUTE = "/payment-drafts"
+    ROUTE = "/1.0/payment-drafts"
 
     class Params(BaseModel):
         """

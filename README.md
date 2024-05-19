@@ -97,11 +97,11 @@ Upon completion, you will have a `.json` file that you can use to authenticate y
 
 The SDK currently supports the following APIs:
 
-- [ ] Accounts
-  - [ ] Retrieve all accounts
-  - [ ] Retrieve an account
-  - [ ] Retrieve account's full bank details
-- [ ] Cards
+- [x] Accounts
+  - [x] Retrieve all accounts
+  - [x] Retrieve an account
+  - [x] Retrieve account's full bank details
+- [ ] Cards (Live only)
   - [ ] Retrieve a list of cards
   - [ ] Create a card
   - [ ] Retrieve card details
@@ -110,48 +110,48 @@ The SDK currently supports the following APIs:
   - [ ] Freeze a card
   - [ ] Unfreeze a card
   - [ ] Retrieve sensitive card details
-- [ ] Counterparties
-  - [ ] Retrieve a list of counterparties
-  - [ ] Retrieve a counterparty
-  - [ ] Delete a counterparty
-  - [ ] Create a counterparty
-  - [ ] Validate an account name (CoP)
+- [x] Counterparties
+  - [x] Retrieve a list of counterparties
+  - [x] Retrieve a counterparty
+  - [x] Delete a counterparty
+  - [x] Create a counterparty (Personal)
+  - [x] Create a counterparty (Business)
+  - [x] Validate an account name (CoP)
 - [ ] Foreign exchange
-  - [ ] Get an exchange rate
+  - [x] Get an exchange rate
   - [ ] Exchange money
 - [ ] Payment drafts
-  - [ ] Retrieve all payments drafts
+  - [x] Retrieve all payments drafts
   - [ ] Create a payment draft
-  - [ ] Retrieve a payment draft
+  - [x] Retrieve a payment draft
   - [ ] Delete a payment draft
-- [ ] Payout links
-  - [ ] Retrieve a list of payout links
-  - [ ] Retrieve a payout link
-  - [ ] Create a payout link
-  - [ ] Cancel a payout link
-  - [ ] Get transfer reasons
-- [ ] Simulations
-  - [ ] Simulate a transfer state update (Sandbox only)
-  - [ ] Simulate an account top-up (Sandbox only)
-- [ ] Team members
+- [x] Payout links
+  - [x] Retrieve a list of payout links
+  - [x] Retrieve a payout link
+  - [x] Create a payout link
+  - [x] Cancel a payout link
+- [ ] Simulations (Sandbox only)
+  - [ ] Simulate a transfer state update
+  - [x] Simulate an account top-up
+- [ ] Team members (Live only)
   - [ ] Retrieve a list of team members
   - [ ] Invite a new memebr to your business
   - [ ] Retrieve team roles
-- [ ] Transactions
-  - [ ] Retrieve a list of transactions
-  - [ ] Retrieve a transaction
-- [ ] Transfers
-  - [ ] Move money between your accounts
-  - [ ] Create a transfer to another account
-  - [ ] Get transfer reasons
-- [ ] Webhooks (v2)
-  - [ ] Create a new webhook
-  - [ ] Retrieve a list of webhooks
-  - [ ] Retrieve a webhook
-  - [ ] Update a webhook
-  - [ ] Delete a webhook
-  - [ ] Rotate a webhook signing secret
-  - [ ] Retrieve a list of failed webhook events
+- [x] Transactions
+  - [x] Retrieve a list of transactions
+  - [x] Retrieve a transaction
+- [x] Transfers
+  - [x] Move money between your accounts
+  - [x] Create a transfer to another account
+  - [x] Get transfer reasons
+- [x] Webhooks (v2)
+  - [x] Create a new webhook
+  - [x] Retrieve a list of webhooks
+  - [x] Retrieve a webhook
+  - [x] Update a webhook
+  - [x] Delete a webhook
+  - [x] Rotate a webhook signing secret
+  - [x] Retrieve a list of failed webhook events
 
 ## **Contributing**
 

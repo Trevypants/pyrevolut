@@ -1,7 +1,7 @@
 from typing import Annotated
 from decimal import Decimal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 from pyrevolut.utils import DateTime
 from pyrevolut.api.common import ModelBaseAmount
@@ -11,6 +11,11 @@ class ResourceForeignExchange(BaseModel):
     """
     Foreign Exchange resource model.
     """
+
+    model_config = ConfigDict(
+        populate_by_name=True,
+        from_attributes=True,
+    )
 
     class ModelFrom(ModelBaseAmount):
         """

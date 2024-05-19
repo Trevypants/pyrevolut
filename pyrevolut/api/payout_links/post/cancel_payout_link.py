@@ -12,7 +12,7 @@ class CancelPayoutLink:
     This feature is available in the UK and the EEA.
     """
 
-    ROUTE = "/payout-links/{payout_link_id}/cancel"
+    ROUTE = "/1.0/payout-links/{payout_link_id}/cancel"
 
     class Body(BaseModel):
         """

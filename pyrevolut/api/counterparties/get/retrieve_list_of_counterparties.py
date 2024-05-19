@@ -17,7 +17,7 @@ class RetrieveListOfCounterparties:
     created_at date of the last counterparty returned in the previous response.
     """
 
-    ROUTE = "/counterparties"
+    ROUTE = "/1.0/counterparties"
 
     class Params(BaseModel):
         """

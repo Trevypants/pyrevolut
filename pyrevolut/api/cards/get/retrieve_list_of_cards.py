@@ -12,7 +12,7 @@ class RetrieveListOfCards:
     The results are paginated and sorted by the created_at date in reverse chronological order.
     """
 
-    ROUTE = "/cards"
+    ROUTE = "/1.0/cards"
 
     class Params(BaseModel):
         """

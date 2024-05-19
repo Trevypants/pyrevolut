@@ -17,7 +17,7 @@ class SimulateAccountTopup:
     and need to add more.
     """
 
-    ROUTE = "/sandbox/topup"
+    ROUTE = "/1.0/sandbox/topup"
 
     class Body(BaseModel):
         """

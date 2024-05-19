@@ -2,7 +2,7 @@ from typing import Annotated
 from uuid import UUID
 from decimal import Decimal
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, model_validator, ConfigDict
 from pydantic_extra_types.currency_code import Currency
 
 from pyrevolut.utils import DateTime
@@ -24,12 +24,17 @@ class ExchangeMoney:
         Specify the amount in the to object.
     """
 
-    ROUTE = "/exchange"
+    ROUTE = "/1.0/exchange"
 
     class Body(BaseModel):
         """
         The request body for the endpoint.
         """
+
+        model_config = ConfigDict(
+            populate_by_name=True,
+            from_attributes=True,
+        )
 
         class ModelFrom(BaseModel):
             """The details of the currency to exchange from."""

@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel, Field
 from pydantic_extra_types.currency_code import Currency
-from pydantic_extra_types.country import CountryAlpha2
+from pydantic_extra_types.country import CountryAlpha2, CountryAlpha3
 from pydantic_extra_types.phone_numbers import PhoneNumber
 
 from pyrevolut.utils import DateTime, Date
@@ -23,7 +23,7 @@ class ResourceTransaction(BaseModel):
         city: Annotated[str, Field(description="The city of the merchant.")]
         category_code: Annotated[str, Field(description="The category code of the merchant.")]
         country: Annotated[
-            CountryAlpha2,
+            CountryAlpha2 | CountryAlpha3,
             Field(description="The country of the merchant as the 2-letter ISO 3166 code."),
         ]
 
@@ -157,7 +157,7 @@ class ResourceTransaction(BaseModel):
     merchant: Annotated[
         ModelMerchant | None,
         Field(description="The information about the merchant (only for card transfers)."),
-    ]
+    ] = None
     reference: Annotated[
         str | None,
         Field(description="The reference of the transaction."),

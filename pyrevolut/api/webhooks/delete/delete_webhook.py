@@ -8,7 +8,7 @@ class DeleteWebhook:
     A successful response does not get any content in return.
     """
 
-    ROUTE = "/webhooks/{webhook_id}"
+    ROUTE = "/2.0/webhooks/{webhook_id}"
 
     class Params(BaseModel):
         """

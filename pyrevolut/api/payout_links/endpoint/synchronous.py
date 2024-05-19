@@ -176,6 +176,8 @@ class EndpointPayoutLinksSync(BaseEndpointSync):
             A reference for the payment.
         payout_methods : list[EnumPayoutLinkPaymentMethod]
             The payout methods that the recipient can use to claim the payment.
+            If not provided, the default value is
+            [EnumPayoutLinkPaymentMethod.REVOLUT, EnumPayoutLinkPaymentMethod.BANK_ACCOUNT].
         save_counterparty : bool, optional
             Indicates whether to save the recipient as your counterparty upon link claim.
             If false then the counterparty will not show up on your counterparties list,

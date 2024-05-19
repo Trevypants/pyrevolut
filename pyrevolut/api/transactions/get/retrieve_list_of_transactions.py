@@ -1,7 +1,7 @@
 from typing import Annotated
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 from pyrevolut.utils import DateTime, Date
 from pyrevolut.api.common import EnumTransactionType
@@ -27,12 +27,17 @@ class RetrieveListOfTransactions:
     plans can only access information older than 90 days within 5 minutes of the first authorisation.
     """
 
-    ROUTE = "/transactions"
+    ROUTE = "/1.0/transactions"
 
     class Params(BaseModel):
         """
         The query parameters for the request.
         """
+
+        model_config = ConfigDict(
+            populate_by_name=True,
+            from_attributes=True,
+        )
 
         from_: Annotated[
             DateTime | Date | None,

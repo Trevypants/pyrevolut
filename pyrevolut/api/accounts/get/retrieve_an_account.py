@@ -8,7 +8,7 @@ class RetrieveAnAccount:
     Get the information about one of your accounts. Specify the account by its ID.
     """
 
-    ROUTE = "/accounts/{account_id}"
+    ROUTE = "/1.0/accounts/{account_id}"
 
     class Params(BaseModel):
         """

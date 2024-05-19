@@ -8,7 +8,7 @@ class RetrieveListOfWebhooks:
     Get the list of all your existing webhooks and their details.
     """
 
-    ROUTE = "/webhooks"
+    ROUTE = "/2.0/webhooks"
 
     class Params(BaseModel):
         """

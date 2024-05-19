@@ -33,3 +33,6 @@ class EnumTransferReasonCode(StrEnum):
     TRANSPORTATION = "transportation"
     TRAVEL = "travel"
     UTILITIES = "utilities"
+    DONATIONS = "donations"
+    FAMILY_SUPPORT = "family_support"
+    SALARY = "salary"

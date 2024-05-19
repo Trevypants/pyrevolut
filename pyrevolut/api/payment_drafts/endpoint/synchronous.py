@@ -47,7 +47,7 @@ class EndpointPaymentDraftsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json())
+        return endpoint.Response(**response.json()).model_dump()
 
     def get_payment_draft(
         self,
@@ -77,7 +77,7 @@ class EndpointPaymentDraftsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json())
+        return endpoint.Response(**response.json()).model_dump()
 
     def create_payment_draft(
         self,
@@ -176,7 +176,7 @@ class EndpointPaymentDraftsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json())
+        return endpoint.Response(**response.json()).model_dump()
 
     def delete_payment_draft(
         self,
@@ -207,4 +207,4 @@ class EndpointPaymentDraftsSync(BaseEndpointSync):
             **kwargs,
         )
 
-        return endpoint.Response(**response.json())
+        return endpoint.Response(**response.json()).model_dump()

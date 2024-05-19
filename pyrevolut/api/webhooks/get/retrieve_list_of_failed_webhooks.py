@@ -20,7 +20,7 @@ class RetrieveListOfFailedWebhooks:
     last event returned in the previous response.
     """
 
-    ROUTE = "/webhooks/{webhook_id}/failed-events"
+    ROUTE = "/2.0/webhooks/{webhook_id}/failed-events"
 
     class Params(BaseModel):
         """

@@ -2,7 +2,7 @@ from typing import Annotated
 import json
 
 import pendulum
-from pydantic import BaseModel, Field, SecretStr, field_serializer
+from pydantic import BaseModel, Field, SecretStr, field_serializer, ConfigDict
 
 from pyrevolut.utils.datetime import DateTime
 
@@ -10,8 +10,12 @@ from pyrevolut.utils.datetime import DateTime
 class ModelCreds(BaseModel):
     """The model that represents the credentials JSON file."""
 
+    model_config = ConfigDict(validate_assignment=True, extra="forbid")
+
     class ModelCertificate(BaseModel):
         """The model that represents the certificate information"""
+
+        model_config = ConfigDict(validate_assignment=True, extra="forbid")
 
         public: Annotated[
             SecretStr, Field(description="The public certificate in base64 encoded format")
@@ -31,6 +35,8 @@ class ModelCreds(BaseModel):
     class ModelClientAssertJWT(BaseModel):
         """The model that represents the client assertion JWT information"""
 
+        model_config = ConfigDict(validate_assignment=True, extra="forbid")
+
         jwt: Annotated[SecretStr, Field(description="The JWT assertion string")]
         expiration_dt: Annotated[DateTime, Field(description="The expiration datetime of the JWT")]
 
@@ -41,6 +47,8 @@ class ModelCreds(BaseModel):
 
     class ModelTokens(BaseModel):
         """The model that represents the tokens information"""
+
+        model_config = ConfigDict(validate_assignment=True, extra="forbid")
 
         access_token: Annotated[SecretStr, Field(description="The access token")]
         refresh_token: Annotated[SecretStr, Field(description="The refresh token")]

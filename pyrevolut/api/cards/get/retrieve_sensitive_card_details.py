@@ -11,7 +11,7 @@ class RetrieveSensitiveCardDetails:
     Requires the READ_SENSITIVE_CARD_DATA token scope.
     """
 
-    ROUTE = "/cards/{card_id}/sensitive-details"
+    ROUTE = "/1.0/cards/{card_id}/sensitive-details"
 
     class Params(BaseModel):
         """

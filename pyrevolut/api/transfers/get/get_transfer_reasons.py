@@ -18,7 +18,7 @@ class GetTransferReasons:
     field when making a transfer to a counterparty or creating a payout link.
     """
 
-    ROUTE = "/transfer-reasons"
+    ROUTE = "/1.0/transfer-reasons"
 
     class Params(BaseModel):
         """

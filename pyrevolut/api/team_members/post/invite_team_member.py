@@ -21,7 +21,7 @@ class InviteTeamMember:
     This feature is not available in Sandbox.
     """
 
-    ROUTE = "/team-members"
+    ROUTE = "/1.0/team-members"
 
     class Body(BaseModel):
         """

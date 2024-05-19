@@ -1,7 +1,7 @@
 from typing import Annotated
 from decimal import Decimal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from pydantic_extra_types.currency_code import Currency
 
 from pyrevolut.api.foreign_exchange.resources import ResourceForeignExchange
@@ -12,12 +12,17 @@ class GetExchangeRate:
     Get the sell exchange rate between two currencies.
     """
 
-    ROUTE = "/rate"
+    ROUTE = "/1.0/rate"
 
     class Params(BaseModel):
         """
         Query parameters for the endpoint.
         """
+
+        model_config = ConfigDict(
+            populate_by_name=True,
+            from_attributes=True,
+        )
 
         from_: Annotated[
             Currency,

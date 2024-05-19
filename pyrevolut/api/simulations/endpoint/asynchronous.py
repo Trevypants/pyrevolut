@@ -69,6 +69,7 @@ class EndpointSimulationsAsync(BaseEndpointAsync):
         dict
             The top-up transaction information.
         """
+        self.__check_sandbox()
         endpoint = SimulateAccountTopup
         path = endpoint.ROUTE
         body = endpoint.Body(
@@ -122,6 +123,7 @@ class EndpointSimulationsAsync(BaseEndpointAsync):
         dict
             The updated transfer information.
         """
+        self.__check_sandbox()
         endpoint = SimulateTransferStateUpdate
         path = endpoint.ROUTE.format(transfer_id=transfer_id, action=action)
         body = endpoint.Body()
@@ -133,3 +135,15 @@ class EndpointSimulationsAsync(BaseEndpointAsync):
         )
 
         return endpoint.Response(**response.json()).model_dump()
+
+    def __check_sandbox(self):
+        """
+        Check if the sandbox is enabled.
+
+        Raises
+        ------
+        ValueError
+            If the sandbox is enabled.
+        """
+        if not self.client.sandbox:
+            raise ValueError("This feature is only available in the Sandbox.")

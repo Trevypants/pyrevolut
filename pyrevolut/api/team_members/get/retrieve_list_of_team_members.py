@@ -20,7 +20,7 @@ class RetrieveListOfTeamMembers:
     This feature is not available in Sandbox.
     """
 
-    ROUTE = "/team-members"
+    ROUTE = "/1.0/team-members"
 
     class Params(BaseModel):
         """The parameters of the request."""
