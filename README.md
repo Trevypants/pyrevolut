@@ -1,6 +1,6 @@
-# Revolut Python SDK
+# Pyrevolut: A Revolut Business API Wrapper
 
-This is an un-official Python SDK for the [Revolut Business API](https://developer.revolut.com/docs/business/business-api).
+`pyrevolut` is an un-official wrapper around the [Revolut Business API](https://developer.revolut.com/docs/business/business-api).
 
 ## Installation
 
@@ -156,3 +156,9 @@ The SDK currently supports the following APIs:
 ## **Contributing**
 
 In order to facilitate a streamlined development process, we have a few guidelines that we would like to follow. Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file for more information.
+
+## **License**
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+**Disclaimer:** `pyrevolut` is an un-official API wrapper. It is in no way endorsed by or affiliated with Revolut or any associated organization. Make sure to read and understand the terms of service of the underlying API before using this package. The authors accept no responsiblity for any damage that might stem from use of this package.
