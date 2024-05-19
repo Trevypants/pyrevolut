@@ -95,7 +95,7 @@ Upon completion, you will have a `.json` file that you can use to authenticate y
 
 ## API Support Status
 
-The SDK currently supports the following APIs:
+The wrapper currently supports the following APIs:
 
 - [x] Accounts
   - [x] Retrieve all accounts
