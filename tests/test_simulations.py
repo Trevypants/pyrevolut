@@ -1,7 +1,6 @@
 import time
 import asyncio
 from uuid import uuid4
-from decimal import Decimal
 import pytest
 import random
 
@@ -38,7 +37,7 @@ def test_sync_simulate_account_topup(sync_client: Client):
     # Simulate a top-up of the GBP account
     response = sync_client.Simulations.simulate_account_topup(
         account_id=gbp_account["id"],
-        amount=Decimal("1.00"),
+        amount=1.0,
         currency="GBP",
         reference="Sugar Daddy <3",
         state=EnumTransactionState.COMPLETED,
@@ -49,12 +48,12 @@ def test_sync_simulate_account_topup(sync_client: Client):
     # Get the GBP account by ID
     account = sync_client.Accounts.get_account(account_id=gbp_account["id"])
     time.sleep(random.randint(1, 3))
-    assert account["balance"] == gbp_account["balance"] + Decimal("1.00")
+    assert account["balance"] == gbp_account["balance"] + 1.0
 
     # Simulate a top-up of the EUR account
     response = sync_client.Simulations.simulate_account_topup(
         account_id=eur_account["id"],
-        amount=Decimal("1.00"),
+        amount=1.0,
         currency="EUR",
         reference="Sugar Daddy <3",
         state=EnumTransactionState.COMPLETED,
@@ -64,7 +63,7 @@ def test_sync_simulate_account_topup(sync_client: Client):
     # Get the EUR account by ID
     account = sync_client.Accounts.get_account(account_id=eur_account["id"])
     time.sleep(random.randint(1, 3))
-    assert account["balance"] == eur_account["balance"] + Decimal("1.00")
+    assert account["balance"] == eur_account["balance"] + 1.0
 
 
 def test_sync_simulate_transfer_state_update(sync_client: Client):
@@ -85,10 +84,10 @@ def test_sync_simulate_transfer_state_update(sync_client: Client):
     eur_balance = eur_account["balance"]
 
     # If there is no EUR balance, simulate a top up
-    if eur_balance < Decimal("1"):
+    if eur_balance < 1.0:
         response = sync_client.Simulations.simulate_account_topup(
             account_id=eur_account["id"],
-            amount=Decimal("1"),
+            amount=1.0,
             currency="EUR",
             reference="PyRevolut Test",
             state=EnumTransactionState.COMPLETED,
@@ -120,7 +119,7 @@ def test_sync_simulate_transfer_state_update(sync_client: Client):
         request_id=str(uuid4()),
         account_id=eur_account["id"],
         counterparty_id=eur_counterparty["id"],
-        amount=Decimal("1"),
+        amount=1.0,
         currency="EUR",
         counterparty_account_id=eur_counterparty_account["id"],
         reference="PyRevolut Test",
@@ -132,7 +131,7 @@ def test_sync_simulate_transfer_state_update(sync_client: Client):
     # Check balance
     account = sync_client.Accounts.get_account(account_id=eur_account["id"])
     time.sleep(random.randint(1, 3))
-    assert account["balance"] == eur_balance - Decimal("1")
+    assert account["balance"] == eur_balance - 1.0
 
     # Decline the transfer
     response = sync_client.Simulations.simulate_transfer_state_update(
@@ -173,7 +172,7 @@ async def test_async_simulate_account_topup(async_client: Client):
     # Simulate a top-up of the GBP account
     response = await async_client.Simulations.simulate_account_topup(
         account_id=gbp_account["id"],
-        amount=Decimal("1.00"),
+        amount=1.0,
         currency="GBP",
         reference="Sugar Daddy <3",
         state=EnumTransactionState.COMPLETED,
@@ -184,12 +183,12 @@ async def test_async_simulate_account_topup(async_client: Client):
     # Get the GBP account by ID
     account = await async_client.Accounts.get_account(account_id=gbp_account["id"])
     await asyncio.sleep(random.randint(1, 3))
-    assert account["balance"] == gbp_account["balance"] + Decimal("1.00")
+    assert account["balance"] == gbp_account["balance"] + 1.0
 
     # Simulate a top-up of the EUR account
     response = await async_client.Simulations.simulate_account_topup(
         account_id=eur_account["id"],
-        amount=Decimal("1.00"),
+        amount=1.0,
         currency="EUR",
         reference="Sugar Daddy <3",
         state=EnumTransactionState.COMPLETED,
@@ -198,7 +197,7 @@ async def test_async_simulate_account_topup(async_client: Client):
     # Get the EUR account by ID
     account = await async_client.Accounts.get_account(account_id=eur_account["id"])
     await asyncio.sleep(random.randint(1, 3))
-    assert account["balance"] == eur_account["balance"] + Decimal("1.00")
+    assert account["balance"] == eur_account["balance"] + 1.0
 
 
 @pytest.mark.asyncio
@@ -220,10 +219,10 @@ async def test_async_simulate_transfer_state_update(async_client: Client):
     eur_balance = eur_account["balance"]
 
     # If there is no EUR balance, simulate a top up
-    if eur_balance < Decimal("1"):
+    if eur_balance < 1.0:
         response = await async_client.Simulations.simulate_account_topup(
             account_id=eur_account["id"],
-            amount=Decimal("1"),
+            amount=1.0,
             currency="EUR",
             reference="PyRevolut Test",
             state=EnumTransactionState.COMPLETED,
@@ -255,7 +254,7 @@ async def test_async_simulate_transfer_state_update(async_client: Client):
         request_id=str(uuid4()),
         account_id=eur_account["id"],
         counterparty_id=eur_counterparty["id"],
-        amount=Decimal("1"),
+        amount=1.0,
         currency="EUR",
         counterparty_account_id=eur_counterparty_account["id"],
         reference="PyRevolut Test",
@@ -267,7 +266,7 @@ async def test_async_simulate_transfer_state_update(async_client: Client):
     # Check balance
     account = await async_client.Accounts.get_account(account_id=eur_account["id"])
     await asyncio.sleep(random.randint(1, 3))
-    assert account["balance"] == eur_balance - Decimal("1")
+    assert account["balance"] == eur_balance - 1.0
 
     # Decline the transfer
     response = await async_client.Simulations.simulate_transfer_state_update(

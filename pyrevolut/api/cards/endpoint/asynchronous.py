@@ -1,6 +1,5 @@
 from typing import Literal, Type
 from uuid import UUID
-from decimal import Decimal
 from datetime import datetime
 
 from pydantic import BaseModel
@@ -139,19 +138,19 @@ class EndpointCardsAsync(BaseEndpointAsync):
         label: str | None = None,
         accounts: list[UUID] | None = None,
         categories: list[EnumMerchantCategory] | None = None,
-        single_limit_amount: Decimal | None = None,
+        single_limit_amount: float | None = None,
         single_limit_currency: str | None = None,
-        day_limit_amount: Decimal | None = None,
+        day_limit_amount: float | None = None,
         day_limit_currency: str | None = None,
-        week_limit_amount: Decimal | None = None,
+        week_limit_amount: float | None = None,
         week_limit_currency: str | None = None,
-        month_limit_amount: Decimal | None = None,
+        month_limit_amount: float | None = None,
         month_limit_currency: str | None = None,
-        quarter_limit_amount: Decimal | None = None,
+        quarter_limit_amount: float | None = None,
         quarter_limit_currency: str | None = None,
-        year_limit_amount: Decimal | None = None,
+        year_limit_amount: float | None = None,
         year_limit_currency: str | None = None,
-        all_time_limit_amount: Decimal | None = None,
+        all_time_limit_amount: float | None = None,
         all_time_limit_currency: str | None = None,
         **kwargs,
     ) -> dict | CreateCard.Response:
@@ -179,31 +178,31 @@ class EndpointCardsAsync(BaseEndpointAsync):
             The list of accounts to link to the card. If not specified, all accounts will be linked.
         categories : list[EnumMerchantCategory] | None
             The list of merchant categories to link to the card. If not specified, all categories will be linked.
-        single_limit_amount : Decimal | None
+        single_limit_amount : float | None
             The maximum amount for a single transaction.
         single_limit_currency : str | None
             The currency of the single transaction limit.
-        day_limit_amount : Decimal | None
+        day_limit_amount : float | None
             The maximum amount for transactions in a day.
         day_limit_currency : str | None
             The currency of the day limit.
-        week_limit_amount : Decimal | None
+        week_limit_amount : float | None
             The maximum amount for transactions in a week.
         week_limit_currency : str | None
             The currency of the week limit.
-        month_limit_amount : Decimal | None
+        month_limit_amount : float | None
             The maximum amount for transactions in a month.
         month_limit_currency : str | None
             The currency of the month limit.
-        quarter_limit_amount : Decimal | None
+        quarter_limit_amount : float | None
             The maximum amount for transactions in a quarter.
         quarter_limit_currency : str | None
             The currency of the quarter limit.
-        year_limit_amount : Decimal | None
+        year_limit_amount : float | None
             The maximum amount for transactions in a year.
         year_limit_currency : str | None
             The currency of the year limit.
-        all_time_limit_amount : Decimal | None
+        all_time_limit_amount : float | None
             The maximum amount for transactions in the card's lifetime.
         all_time_limit_currency : str | None
             The currency of the all-time limit.
@@ -381,19 +380,19 @@ class EndpointCardsAsync(BaseEndpointAsync):
         card_id: UUID,
         label: str | None = None,
         categories: list[EnumMerchantCategory] | Literal["null"] | None = None,
-        single_limit_amount: Decimal | Literal["null"] | None = None,
+        single_limit_amount: float | Literal["null"] | None = None,
         single_limit_currency: str | Literal["null"] | None = None,
-        day_limit_amount: Decimal | Literal["null"] | None = None,
+        day_limit_amount: float | Literal["null"] | None = None,
         day_limit_currency: str | Literal["null"] | None = None,
-        week_limit_amount: Decimal | Literal["null"] | None = None,
+        week_limit_amount: float | Literal["null"] | None = None,
         week_limit_currency: str | Literal["null"] | None = None,
-        month_limit_amount: Decimal | Literal["null"] | None = None,
+        month_limit_amount: float | Literal["null"] | None = None,
         month_limit_currency: str | Literal["null"] | None = None,
-        quarter_limit_amount: Decimal | Literal["null"] | None = None,
+        quarter_limit_amount: float | Literal["null"] | None = None,
         quarter_limit_currency: str | Literal["null"] | None = None,
-        year_limit_amount: Decimal | Literal["null"] | None = None,
+        year_limit_amount: float | Literal["null"] | None = None,
         year_limit_currency: str | Literal["null"] | None = None,
-        all_time_limit_amount: Decimal | Literal["null"] | None = None,
+        all_time_limit_amount: float | Literal["null"] | None = None,
         all_time_limit_currency: str | Literal["null"] | None = None,
         **kwargs,
     ) -> dict | UpdateCardDetails.Response:
@@ -410,43 +409,43 @@ class EndpointCardsAsync(BaseEndpointAsync):
         categories : list[EnumMerchantCategory] | Literal["null"] | None
             The list of merchant categories to link to the card.
             If set to 'null', all categories will be linked.
-        single_limit_amount : Decimal | Literal["null"] | None
+        single_limit_amount : float | Literal["null"] | None
             The maximum amount for a single transaction.
             If set to 'null', the limit will be removed.
         single_limit_currency : str | Literal["null"] | None
             The currency of the single transaction limit.
             If set to 'null', the limit will be removed.
-        day_limit_amount : Decimal | Literal["null"] | None
+        day_limit_amount : float | Literal["null"] | None
             The maximum amount for transactions in a day.
             If set to 'null', the limit will be removed.
         day_limit_currency : str | Literal["null"] | None
             The currency of the day limit.
             If set to 'null', the limit will be removed.
-        week_limit_amount : Decimal | Literal["null"] | None
+        week_limit_amount : float | Literal["null"] | None
             The maximum amount for transactions in a week.
             If set to 'null', the limit will be removed.
         week_limit_currency : str | Literal["null"] | None
             The currency of the week limit.
             If set to 'null', the limit will be removed.
-        month_limit_amount : Decimal | Literal["null"] | None
+        month_limit_amount : float | Literal["null"] | None
             The maximum amount for transactions in a month.
             If set to 'null', the limit will be removed.
         month_limit_currency : str | Literal["null"] | None
             The currency of the month limit.
             If set to 'null', the limit will be removed.
-        quarter_limit_amount : Decimal | Literal["null"] | None
+        quarter_limit_amount : float | Literal["null"] | None
             The maximum amount for transactions in a quarter.
             If set to 'null', the limit will be removed.
         quarter_limit_currency : str | Literal["null"] | None
             The currency of the quarter limit.
             If set to 'null', the limit will be removed.
-        year_limit_amount : Decimal | Literal["null"] | None
+        year_limit_amount : float | Literal["null"] | None
             The maximum amount for transactions in a year.
             If set to 'null', the limit will be removed.
         year_limit_currency : str | Literal["null"] | None
             The currency of the year limit.
             If set to 'null', the limit will be removed.
-        all_time_limit_amount : Decimal | Literal["null"] | None
+        all_time_limit_amount : float | Literal["null"] | None
             The maximum amount for transactions in the card's lifetime.
             If set to 'null', the limit will be removed.
         all_time_limit_currency : str | Literal["null"] | None
@@ -575,7 +574,7 @@ class EndpointCardsAsync(BaseEndpointAsync):
     def __process_limit_model(
         self,
         model: Type[BaseModel],
-        amount: Decimal | None,
+        amount: float | None,
         currency: str | None,
     ):
         """

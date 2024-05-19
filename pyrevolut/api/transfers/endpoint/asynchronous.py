@@ -1,5 +1,4 @@
 from uuid import UUID
-from decimal import Decimal
 
 from pyrevolut.api.common import (
     BaseEndpointAsync,
@@ -59,7 +58,7 @@ class EndpointTransfersAsync(BaseEndpointAsync):
         request_id: str,
         account_id: UUID,
         counterparty_id: UUID,
-        amount: Decimal,
+        amount: float,
         currency: str,
         counterparty_account_id: UUID | None = None,
         counterparty_card_id: UUID | None = None,
@@ -98,7 +97,7 @@ class EndpointTransfersAsync(BaseEndpointAsync):
             The ID of the account that you transfer the funds from.
         counterparty_id : UUID
             The ID of the receiving counterparty.
-        amount : Decimal
+        amount : float
             The amount of money to transfer.
         currency : str
             The currency of the transfer.
@@ -164,7 +163,7 @@ class EndpointTransfersAsync(BaseEndpointAsync):
         request_id: str,
         source_account_id: UUID,
         target_account_id: UUID,
-        amount: Decimal,
+        amount: float,
         currency: str,
         reference: str | None = None,
         **kwargs,
@@ -186,7 +185,7 @@ class EndpointTransfersAsync(BaseEndpointAsync):
             The ID of the source account that you transfer the funds from.
         target_account_id : UUID
             The ID of the target account that you transfer the funds to.
-        amount : Decimal
+        amount : float
             The amount of the funds to be transferred.
         currency : str
             The ISO 4217 currency of the funds to be transferred.

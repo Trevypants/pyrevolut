@@ -15,7 +15,11 @@ from pyrevolut.utils.auth import (
     save_creds,
     load_creds,
 )
-from pyrevolut.exceptions import PyRevolutAPIException, BadRequestException
+from pyrevolut.exceptions import (
+    PyRevolutAPIException,
+    BadRequestException,
+    InternalRevolutError,
+)
 
 
 BM = TypeVar("BM", bound=Type[BaseModel])
@@ -25,7 +29,7 @@ D = TypeVar("D", dict, list)  # TypeVar for dictionary or list
 class ModelError(BaseModel):
     """Model for the error response"""
 
-    code: Annotated[str, Field(description="The error code")]
+    code: Annotated[int, Field(description="The error code")]
     message: Annotated[str, Field(description="The error message")]
 
 
@@ -61,7 +65,7 @@ class BaseClient:
                 The raw response will be returned
             If "dict":
                 The response will be the dictionary representation of the Pydantic model.
-                So it will have Decimals, UUIDs, etc instead of the raw string values.
+                So it will have UUIDs, pendulum DateTimes, etc instead of the raw string values.
             If "model":
                 The response will be a Pydantic model containing all processed response data.
         error_response : Literal["raw", "raise", "dict", "model"], optional
@@ -121,7 +125,7 @@ class BaseClient:
                 The raw response will be returned
             If "dict":
                 The response will be the dictionary representation of the Pydantic model.
-                So it will have Decimals, UUIDs, etc instead of the raw string values.
+                So it will have UUIDs, pendulum DateTimes, etc instead of the raw string values.
             If "model":
                 The response will be a Pydantic model containing all processed response data.
             If None:
@@ -160,6 +164,8 @@ class BaseClient:
             if error_response == "raise":
                 if response.status_code == 400:
                     raise BadRequestException(response.text)
+                elif response.status_code // 100 == 5:
+                    raise InternalRevolutError(response.text)
                 raise PyRevolutAPIException(response.text)
             elif error_response == "raw":
                 return response.json()
@@ -205,7 +211,7 @@ class BaseClient:
         None
         """
         logging.info(
-            f"Request: {request.method} {request.url} - {request.headers} - {request.content.decode() if request.content else None}"
+            f"Request: {request.method} {request.url} - {request.headers} - {request.read().decode()}"
         )
 
     def log_response(self, response: Response):

@@ -1,5 +1,4 @@
 from uuid import UUID
-from decimal import Decimal
 
 from pyrevolut.exceptions import InvalidEnvironmentException
 from pyrevolut.api.common import (
@@ -24,7 +23,7 @@ class EndpointSimulationsSync(BaseEndpointSync):
     def simulate_account_topup(
         self,
         account_id: UUID,
-        amount: Decimal,
+        amount: float,
         currency: str,
         reference: str | None = None,
         state: EnumTransactionState | None = None,
@@ -40,7 +39,7 @@ class EndpointSimulationsSync(BaseEndpointSync):
         ----------
         account_id : UUID
             The ID of the account that you want to top up.
-        amount : Decimal
+        amount : float
             The amount with which you want to top up the account. Must be <= 10000
         currency : str
             The currency of the top-up amount. Must be a valid ISO 4217 currency code.

@@ -1,7 +1,6 @@
 import asyncio
 import time
 import random
-from decimal import Decimal
 
 import pytest
 import pytest_asyncio
@@ -90,10 +89,10 @@ def sync_client(base_sync_client: Client):
     accounts = base_sync_client.Accounts.get_all_accounts()
     time.sleep(random.randint(1, 3))
     for account in accounts:
-        if account["balance"] == Decimal("0"):
+        if account["balance"] == 0.0:
             base_sync_client.Simulations.simulate_account_topup(
                 account_id=account["id"],
-                amount=Decimal("100.00"),
+                amount=100.0,
                 currency=account["currency"],
                 reference="Sugar Daddy <3",
                 state=EnumTransactionState.COMPLETED,
@@ -128,10 +127,10 @@ async def async_client(base_async_client: AsyncClient):
     accounts = await base_async_client.Accounts.get_all_accounts()
     await asyncio.sleep(random.randint(1, 3))
     for account in accounts:
-        if account["balance"] == Decimal("0"):
+        if account["balance"] == 0.0:
             await base_async_client.Simulations.simulate_account_topup(
                 account_id=account["id"],
-                amount=Decimal("100.00"),
+                amount=100.0,
                 currency=account["currency"],
                 reference="Sugar Daddy <3",
                 state=EnumTransactionState.COMPLETED,

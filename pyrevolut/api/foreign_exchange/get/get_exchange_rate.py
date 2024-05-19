@@ -1,5 +1,4 @@
 from typing import Annotated
-from decimal import Decimal
 
 from pydantic import BaseModel, Field, ConfigDict
 from pydantic_extra_types.currency_code import Currency
@@ -36,7 +35,7 @@ class GetExchangeRate:
             Field(description="The currency that you exchange to in ISO 4217 format."),
         ]
         amount: Annotated[
-            Decimal | None,
+            float | None,
             Field(
                 description="The amount of the currency to exchange from. The default value is 1.00."
             ),

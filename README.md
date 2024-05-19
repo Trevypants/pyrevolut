@@ -117,9 +117,9 @@ The SDK currently supports the following APIs:
   - [x] Create a counterparty (Personal)
   - [x] Create a counterparty (Business)
   - [x] Validate an account name (CoP)
-- [ ] Foreign exchange
+- [x] Foreign exchange
   - [x] Get an exchange rate
-  - [ ] Exchange money
+  - [x] Exchange money
 - [ ] Payment drafts
   - [x] Retrieve all payments drafts
   - [ ] Create a payment draft

@@ -1,5 +1,4 @@
 from uuid import UUID
-from decimal import Decimal
 from datetime import datetime
 
 from pydantic_extra_types.pendulum_dt import Duration
@@ -135,7 +134,7 @@ class EndpointPayoutLinksSync(BaseEndpointSync):
         counterparty_name: str,
         request_id: str,
         account_id: UUID,
-        amount: Decimal,
+        amount: float,
         currency: str,
         reference: str,
         payout_methods: list[EnumPayoutLinkPaymentMethod],
@@ -166,7 +165,7 @@ class EndpointPayoutLinksSync(BaseEndpointSync):
             requests related to the same link.
         account_id : UUID
             The ID of the sender's account.
-        amount : Decimal
+        amount : float
             The amount of money to be sent.
         currency : str
             The currency of the amount to be sent.

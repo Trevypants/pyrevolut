@@ -1,5 +1,4 @@
 from typing import Annotated
-from decimal import Decimal
 
 from pydantic import BaseModel, Field, ConfigDict
 
@@ -40,7 +39,7 @@ class ResourceForeignExchange(BaseModel):
 
     from_: Annotated[ModelFrom, Field(alias="from", description="The money to sell.")]
     to: Annotated[ModelTo, Field(description="The money to receive.")]
-    rate: Annotated[Decimal, Field(description="The proposed exchange rate.")]
+    rate: Annotated[float, Field(description="The proposed exchange rate.")]
     fee: Annotated[ModelFee, Field(description="The expected fee for the transaction.")]
     rate_date: Annotated[
         DateTime,
