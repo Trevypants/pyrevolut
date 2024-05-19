@@ -25,6 +25,10 @@ class RetrieveSensitiveCardDetails:
         Response model for the endpoint.
         """
 
-        pan: Annotated[str, Field(description="The PAN (Primary Account Number) of the card.")]
-        cvv: Annotated[str, Field(description="The CVV (Card Verification Value) of the card.")]
+        pan: Annotated[
+            str, Field(description="The PAN (Primary Account Number) of the card.")
+        ]
+        cvv: Annotated[
+            str, Field(description="The CVV (Card Verification Value) of the card.")
+        ]
         expiry: Annotated[Date, Field(description="The card expiration date.")]

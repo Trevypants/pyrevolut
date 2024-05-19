@@ -44,7 +44,9 @@ def test_sync_get_transaction(sync_client: Client):
     # Get the transactions by id
     for transaction in transactions:
         transaction_id = transaction["id"]
-        transaction = sync_client.Transactions.get_transaction(transaction_id=transaction_id)
+        transaction = sync_client.Transactions.get_transaction(
+            transaction_id=transaction_id
+        )
         time.sleep(random.randint(1, 3))
         assert isinstance(transaction, dict)
         assert transaction["id"] == transaction_id
@@ -95,7 +97,9 @@ async def test_async_get_transaction(async_client: Client):
     # Get the transactions by id
     for transaction in transactions:
         transaction_id = transaction["id"]
-        transaction = await async_client.Transactions.get_transaction(transaction_id=transaction_id)
+        transaction = await async_client.Transactions.get_transaction(
+            transaction_id=transaction_id
+        )
         await asyncio.sleep(random.randint(1, 3))
         assert isinstance(transaction, dict)
         assert transaction["id"] == transaction_id
@@ -103,7 +107,9 @@ async def test_async_get_transaction(async_client: Client):
     # Get the transactions by request id
     for transaction in transactions:
         request_id = transaction["request_id"]
-        transaction = await async_client.Transactions.get_transaction(request_id=request_id)
+        transaction = await async_client.Transactions.get_transaction(
+            request_id=request_id
+        )
         await asyncio.sleep(random.randint(1, 3))
         assert isinstance(transaction, dict)
         assert transaction["request_id"] == request_id

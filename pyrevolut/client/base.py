@@ -567,12 +567,16 @@ class BaseClient:
         - If the access token is expired, refresh it.
 
         """
-        solution_msg = "\n\nPlease reauthenticate using the `pyrevolut auth-manual` command."
+        solution_msg = (
+            "\n\nPlease reauthenticate using the `pyrevolut auth-manual` command."
+        )
 
         try:
             self.credentials = load_creds(location=self.creds_loc)
         except FileNotFoundError as exc:
-            raise ValueError(f"Credentials file not found: {exc}. {solution_msg}") from exc
+            raise ValueError(
+                f"Credentials file not found: {exc}. {solution_msg}"
+            ) from exc
         except Exception as exc:
             raise ValueError(f"Error loading credentials: {exc}.") from exc
 
@@ -611,9 +615,9 @@ class BaseClient:
             )
             self.credentials.tokens.access_token = resp.access_token.get_secret_value()
             self.credentials.tokens.token_type = resp.token_type
-            self.credentials.tokens.access_token_expiration_dt = pendulum.now(tz="UTC").add(
-                seconds=resp.expires_in
-            )
+            self.credentials.tokens.access_token_expiration_dt = pendulum.now(
+                tz="UTC"
+            ).add(seconds=resp.expires_in)
             save_creds(creds=self.credentials, location=self.creds_loc, indent=4)
         except Exception as exc:
             raise ValueError(f"Error refreshing access token: {exc}.") from exc

@@ -30,7 +30,9 @@ def test_sync_get_payment_draft(sync_client: Client):
         draft_id = draft["id"]
 
         # Get the payment draft by ID
-        response = sync_client.PaymentDrafts.get_payment_draft(payment_draft_id=draft_id)
+        response = sync_client.PaymentDrafts.get_payment_draft(
+            payment_draft_id=draft_id
+        )
         time.sleep(random.randint(1, 3))
         assert isinstance(response, dict)
         assert response["id"] == draft_id
@@ -56,7 +58,9 @@ def test_sync_create_delete_payment_draft(sync_client: Client):
     time.sleep(random.randint(1, 3))
 
     # Get the first recipient in the UK (GB)
-    recipient = next(recipient for recipient in recipients if recipient["country"] == "GB")
+    recipient = next(
+        recipient for recipient in recipients if recipient["country"] == "GB"
+    )
 
     with pytest.raises(
         PyRevolutAPIException,
@@ -104,7 +108,9 @@ async def test_async_get_payment_draft(async_client: Client):
         draft_id = draft["id"]
 
         # Get the payment draft by ID
-        response = await async_client.PaymentDrafts.get_payment_draft(payment_draft_id=draft_id)
+        response = await async_client.PaymentDrafts.get_payment_draft(
+            payment_draft_id=draft_id
+        )
         await asyncio.sleep(random.randint(1, 3))
         assert isinstance(response, dict)
         assert response["id"] == draft_id
@@ -131,7 +137,9 @@ async def test_async_create_delete_payment_draft(async_client: Client):
     await asyncio.sleep(random.randint(1, 3))
 
     # Get the first recipient in the UK (GB)
-    recipient = next(recipient for recipient in recipients if recipient["country"] == "GB")
+    recipient = next(
+        recipient for recipient in recipients if recipient["country"] == "GB"
+    )
 
     with pytest.raises(
         PyRevolutAPIException,
@@ -152,5 +160,7 @@ async def test_async_create_delete_payment_draft(async_client: Client):
         await asyncio.sleep(random.randint(1, 3))
 
         # Delete the payment draft
-        await async_client.PaymentDrafts.delete_payment_draft(payment_draft_id=response["id"])
+        await async_client.PaymentDrafts.delete_payment_draft(
+            payment_draft_id=response["id"]
+        )
         await asyncio.sleep(random.randint(1, 3))

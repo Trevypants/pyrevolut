@@ -19,6 +19,13 @@ setup:
 	$(MAKE) setup-deps
 	$(MAKE) setup-dev
 
+### Commands to format the code ###
+format:
+	@echo "Formatting code..."
+	@poetry run ruff format pyrevolut tests
+	@poetry run black pyrevolut tests
+	@echo "Code formatted!"
+
 ### Commands to run the tests ###
 # base64 encode the credentials: base64 -i tests/test_creds.json
 test-gen-creds:
@@ -26,23 +33,18 @@ test-gen-creds:
 
 test-lint:
 	@echo "Running lint tests..."
-	@poetry run ruff check
+	@poetry run black pyrevolut tests
+	@poetry run ruff check pyrevolut/ tests/ --fix
 	@echo "Lint tests complete!"
-
-test-type:
-	@echo "Running type tests..."
-	@poetry run pyright --warnings --stats
-	@echo "Type tests complete!"
 
 test-integration:
 	@echo "Running integration tests..."
-	@poetry run pytest -n 1
+	@poetry run pytest -n 1 --dist=loadfile --cov-report term-missing --cov-report=xml:coverage.xml --cov=pyrevolut tests
 	@echo "Integration tests complete!"
 
 test:
 	@echo "Running tests..."
 	$(MAKE) test-lint
-	# $(MAKE) test-type
 	$(MAKE) test-integration
 	@echo "Tests complete!"
 
@@ -61,3 +63,9 @@ push:
 	@echo "Pushing changes..."
 	@git push
 	@echo "Changes pushed!"
+
+### Commands to publish the package ###
+publish:
+	@echo "Publishing package..."
+	@/bin/bash -c "scripts/publish.sh"
+	@echo "Package published!"

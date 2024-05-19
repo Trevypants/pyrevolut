@@ -99,7 +99,9 @@ class CreatePaymentDraft:
         ] = None
         schedule_for: Annotated[
             Date | None,
-            Field(description="The scheduled date of the payment draft in ISO 8601 format."),
+            Field(
+                description="The scheduled date of the payment draft in ISO 8601 format."
+            ),
         ] = None
         payments: Annotated[
             list[ModelPayment],

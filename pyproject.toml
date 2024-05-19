@@ -32,6 +32,7 @@ pytest = "^7.3.1"
 pytest-xdist = { extras = ["psutil"], version = "^3.3.1" }
 pytest-cov = "^4.1.0"
 ruff = "*"
+black = "^24.4.2"
 pytest-sugar = "^0.9.7"
 pytest-instafail = "^0.5.0"
 pytest-profiling = "^1.7.0"
@@ -44,7 +45,6 @@ pytest-split = "^0.8.1"
 pytest-env = "^1.1.3"
 locust = "^2.18.1"
 requests-toolbelt = "^1.0.0"
-pyright = "^1.1.356"
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
@@ -57,24 +57,58 @@ log_cli_level = "INFO"
 log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
 log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+    # Have to re-enable the standard pragma
+    'pragma: no cover',
+
+    # Don't complain about missing debug-only code:
+    'def __repr__',
+    'if self\.debug',
+
+    # Don't complain if tests don't hit defensive assertion code:
+    'raise AssertionError',
+    'raise NotImplementedError',
+
+    # Don't complain if non-runnable code isn't run:
+    'if 0:',
+    'if __name__ == .__main__.:',
+    'if TYPE_CHECKING:',
+]
+omit = [
+    'env/*',
+    'venv/*',
+    '.venv/*',
+    '*/virtualenv/*',
+    '*/virtualenvs/*',
+    '*/tests/*',
+]
+
 [tool.coverage.run]
 omit = [".*", "*/site-packages/*", "tests/*"]
-
-[tool.coverage.report]
-fail_under = 10
 
 [tool.coverage.json]
 pretty_print = true
 
-[tool.pyright]
-include = ["**/*.py"]
+[tool.mypy]
+files = "pyrevolut"
+disallow_untyped_decorators = true
+disallow_subclassing_any = true
+warn_return_any = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_unused_configs = true
 
 [tool.ruff]
-line-length = 100
+line-length = 88
 
 [tool.ruff.format]
 quote-style = "double"
 docstring-code-format = true
+
+[tool.ruff.lint.isort]
+known-first-party = ["pyrevolut", "tests"]
 
 [tool.commitizen]
 name = "cz_conventional_commits"

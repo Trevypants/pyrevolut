@@ -8,7 +8,10 @@ from pyrevolut.api.common import (
 )
 
 from pyrevolut.api.transfers.get import GetTransferReasons
-from pyrevolut.api.transfers.post import CreateTransferToAnotherAccount, MoveMoneyBetweenAccounts
+from pyrevolut.api.transfers.post import (
+    CreateTransferToAnotherAccount,
+    MoveMoneyBetweenAccounts,
+)
 
 
 class EndpointTransfersSync(BaseEndpointSync):

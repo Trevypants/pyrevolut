@@ -46,7 +46,9 @@ class RetrieveFullBankDetails:
             ] = None
             country: Annotated[
                 CountryAlpha2,
-                Field(description="The country of the counterparty as the 2-letter ISO 3166 code."),
+                Field(
+                    description="The country of the counterparty as the 2-letter ISO 3166 code."
+                ),
             ]
             postcode: Annotated[
                 str,
@@ -60,7 +62,9 @@ class RetrieveFullBankDetails:
 
             unit: Annotated[
                 EnumTimeUnit,
-                Field(description="The estimated time unit of the inbound transfer of the funds."),
+                Field(
+                    description="The estimated time unit of the inbound transfer of the funds."
+                ),
             ]
             min: Annotated[
                 int | None,
@@ -105,7 +109,9 @@ class RetrieveFullBankDetails:
         ] = None
         pooled: Annotated[
             bool | None,
-            Field(description="Indicates whether the account address is pooled or unique."),
+            Field(
+                description="Indicates whether the account address is pooled or unique."
+            ),
         ] = None
         unique_reference: Annotated[
             str | None,
@@ -113,7 +119,9 @@ class RetrieveFullBankDetails:
         ] = None
         schemes: Annotated[
             list[EnumPaymentScheme],
-            Field(description="The schemes that are available for this currency account."),
+            Field(
+                description="The schemes that are available for this currency account."
+            ),
         ]
         estimated_time: Annotated[
             ModelEstimatedTime,

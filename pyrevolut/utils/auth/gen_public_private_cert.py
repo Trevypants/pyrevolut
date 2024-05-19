@@ -74,7 +74,9 @@ def gen_public_private_cert(
     if organization is not None:
         names.append(x509.NameAttribute(NameOID.ORGANIZATION_NAME, organization))
     if organization_unit is not None:
-        names.append(x509.NameAttribute(NameOID.ORGANIZATIONAL_UNIT_NAME, organization_unit))
+        names.append(
+            x509.NameAttribute(NameOID.ORGANIZATIONAL_UNIT_NAME, organization_unit)
+        )
     subject = issuer = x509.Name(names)
 
     # Create a self-signed certificate

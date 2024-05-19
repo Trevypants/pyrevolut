@@ -219,48 +219,64 @@ class EndpointCardsSync(BaseEndpointSync):
 
         # Create the SpendingLimits model (if applicable)
         spending_limits = endpoint.Body.ModelSpendingLimits(
-            single=endpoint.Body.ModelSpendingLimits.ModelSingle(
-                amount=single_limit_amount,
-                currency=single_limit_currency,
-            )
-            if single_limit_amount is not None and single_limit_currency is not None
-            else None,
-            day=endpoint.Body.ModelSpendingLimits.ModelDay(
-                amount=day_limit_amount,
-                currency=day_limit_currency,
-            )
-            if day_limit_amount is not None and day_limit_currency is not None
-            else None,
-            week=endpoint.Body.ModelSpendingLimits.ModelWeek(
-                amount=week_limit_amount,
-                currency=week_limit_currency,
-            )
-            if week_limit_amount is not None and week_limit_currency is not None
-            else None,
-            month=endpoint.Body.ModelSpendingLimits.ModelMonth(
-                amount=month_limit_amount,
-                currency=month_limit_currency,
-            )
-            if month_limit_amount is not None and month_limit_currency is not None
-            else None,
-            quarter=endpoint.Body.ModelSpendingLimits.ModelQuarter(
-                amount=quarter_limit_amount,
-                currency=quarter_limit_currency,
-            )
-            if quarter_limit_amount is not None and quarter_limit_currency is not None
-            else None,
-            year=endpoint.Body.ModelSpendingLimits.ModelYear(
-                amount=year_limit_amount,
-                currency=year_limit_currency,
-            )
-            if year_limit_amount is not None and year_limit_currency is not None
-            else None,
-            all_time=endpoint.Body.ModelSpendingLimits.ModelAllTime(
-                amount=all_time_limit_amount,
-                currency=all_time_limit_currency,
-            )
-            if all_time_limit_amount is not None and all_time_limit_currency is not None
-            else None,
+            single=(
+                endpoint.Body.ModelSpendingLimits.ModelSingle(
+                    amount=single_limit_amount,
+                    currency=single_limit_currency,
+                )
+                if single_limit_amount is not None and single_limit_currency is not None
+                else None
+            ),
+            day=(
+                endpoint.Body.ModelSpendingLimits.ModelDay(
+                    amount=day_limit_amount,
+                    currency=day_limit_currency,
+                )
+                if day_limit_amount is not None and day_limit_currency is not None
+                else None
+            ),
+            week=(
+                endpoint.Body.ModelSpendingLimits.ModelWeek(
+                    amount=week_limit_amount,
+                    currency=week_limit_currency,
+                )
+                if week_limit_amount is not None and week_limit_currency is not None
+                else None
+            ),
+            month=(
+                endpoint.Body.ModelSpendingLimits.ModelMonth(
+                    amount=month_limit_amount,
+                    currency=month_limit_currency,
+                )
+                if month_limit_amount is not None and month_limit_currency is not None
+                else None
+            ),
+            quarter=(
+                endpoint.Body.ModelSpendingLimits.ModelQuarter(
+                    amount=quarter_limit_amount,
+                    currency=quarter_limit_currency,
+                )
+                if quarter_limit_amount is not None
+                and quarter_limit_currency is not None
+                else None
+            ),
+            year=(
+                endpoint.Body.ModelSpendingLimits.ModelYear(
+                    amount=year_limit_amount,
+                    currency=year_limit_currency,
+                )
+                if year_limit_amount is not None and year_limit_currency is not None
+                else None
+            ),
+            all_time=(
+                endpoint.Body.ModelSpendingLimits.ModelAllTime(
+                    amount=all_time_limit_amount,
+                    currency=all_time_limit_currency,
+                )
+                if all_time_limit_amount is not None
+                and all_time_limit_currency is not None
+                else None
+            ),
         )
         if not any(
             [
@@ -584,4 +600,6 @@ class EndpointCardsSync(BaseEndpointSync):
             If the sandbox is enabled.
         """
         if self.client.sandbox:
-            raise InvalidEnvironmentException("This feature is not available in Sandbox.")
+            raise InvalidEnvironmentException(
+                "This feature is not available in Sandbox."
+            )

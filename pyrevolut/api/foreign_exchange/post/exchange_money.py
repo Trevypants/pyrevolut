@@ -57,7 +57,10 @@ class ExchangeMoney:
             """The details of the currency to exchange to."""
 
             account_id: Annotated[
-                UUID, Field(description="The ID of the account to receive exchanged currency into.")
+                UUID,
+                Field(
+                    description="The ID of the account to receive exchanged currency into."
+                ),
             ]
             currency: Annotated[
                 Currency,
@@ -72,7 +75,10 @@ class ExchangeMoney:
 
         from_: Annotated[
             ModelFrom,
-            Field(alias="from", description="The details of the currency to exchange from."),
+            Field(
+                alias="from",
+                description="The details of the currency to exchange from.",
+            ),
         ]
         to: Annotated[
             ModelTo,
@@ -106,7 +112,9 @@ class ExchangeMoney:
         def check_inputs(self) -> "ExchangeMoney.Body":
             """Check if the amount is specified in either the from or to object."""
             if self.from_.amount is None and self.to.amount is None:
-                raise ValueError("Either the amount in the from or to object must be specified.")
+                raise ValueError(
+                    "Either the amount in the from or to object must be specified."
+                )
             if self.from_.amount is not None and self.to.amount is not None:
                 raise ValueError(
                     "Only the amount in either the from or to object must be specified."
@@ -118,10 +126,14 @@ class ExchangeMoney:
         Response model for the endpoint.
         """
 
-        id: Annotated[UUID | None, Field(description="The ID of the created transaction.")] = None
+        id: Annotated[
+            UUID | None, Field(description="The ID of the created transaction.")
+        ] = None
         type: Annotated[
             EnumTransactionType,
-            Field(description="The type of the transaction. For money exchange, it is 'exchange'."),
+            Field(
+                description="The type of the transaction. For money exchange, it is 'exchange'."
+            ),
         ] = EnumTransactionType.EXCHANGE
         reason_code: Annotated[
             str | None,
@@ -131,7 +143,9 @@ class ExchangeMoney:
         ] = None
         created_at: Annotated[
             DateTime,
-            Field(description="The date and time the transaction was created in ISO 8601 format."),
+            Field(
+                description="The date and time the transaction was created in ISO 8601 format."
+            ),
         ]
         completed_at: Annotated[
             DateTime | None,

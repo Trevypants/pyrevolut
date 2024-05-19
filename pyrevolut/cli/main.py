@@ -80,5 +80,7 @@ def auth_manual(
 
     # Run the manual authorization flow
     auth_manual_flow(
-        credentials_json=params.credentials_json, sandbox=params.sandbox, scopes=params.scopes
+        credentials_json=params.credentials_json,
+        sandbox=params.sandbox,
+        scopes=params.scopes,
     )

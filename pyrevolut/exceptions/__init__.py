@@ -1,4 +1,5 @@
 """This module contains the exceptions that are raised by the pyrevolut package."""
+
 # flake8: noqa: F401
 
 from .common import PyRevolutAPIException

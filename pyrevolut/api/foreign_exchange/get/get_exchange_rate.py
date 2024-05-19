@@ -27,7 +27,8 @@ class GetExchangeRate:
         from_: Annotated[
             Currency,
             Field(
-                alias="from", description="The currency that you exchange from in ISO 4217 format."
+                alias="from",
+                description="The currency that you exchange from in ISO 4217 format.",
             ),
         ]
         to: Annotated[

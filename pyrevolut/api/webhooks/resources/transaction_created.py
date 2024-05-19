@@ -6,7 +6,11 @@ from pydantic import BaseModel, Field
 from pydantic_extra_types.currency_code import Currency
 
 from pyrevolut.utils import DateTime, Date
-from pyrevolut.api.common import EnumTransactionType, EnumTransactionState, EnumAccountType
+from pyrevolut.api.common import (
+    EnumTransactionType,
+    EnumTransactionState,
+    EnumAccountType,
+)
 
 
 class ResourceTransactionCreated(BaseModel):
@@ -44,7 +48,9 @@ class ResourceTransactionCreated(BaseModel):
         leg_id: Annotated[UUID, Field(description="The ID of the leg.")]
         account_id: Annotated[
             UUID,
-            Field(description="The ID of the account that the transaction leg is associated with."),
+            Field(
+                description="The ID of the account that the transaction leg is associated with."
+            ),
         ]
         counterparty: Annotated[
             ModelCounterparty | None,
@@ -82,23 +88,35 @@ class ResourceTransactionCreated(BaseModel):
         ] = None
 
     id: Annotated[UUID, Field(description="The ID of the transaction.")]
-    type: Annotated[EnumTransactionType, Field(description="Indicates the transaction type.")]
-    state: Annotated[EnumTransactionState, Field(description="Indicates the transaction state.")]
+    type: Annotated[
+        EnumTransactionType, Field(description="Indicates the transaction type.")
+    ]
+    state: Annotated[
+        EnumTransactionState, Field(description="Indicates the transaction state.")
+    ]
     request_id: Annotated[
         str | None,
-        Field(description="The request ID that you provided previously.", max_length=40),
+        Field(
+            description="The request ID that you provided previously.", max_length=40
+        ),
     ] = None
     reason_code: Annotated[
         str | None,
-        Field(description="The reason code when the transaction state is declined or failed."),
+        Field(
+            description="The reason code when the transaction state is declined or failed."
+        ),
     ] = None
     created_at: Annotated[
         DateTime,
-        Field(description="The date and time the transaction was created in ISO 8601 format."),
+        Field(
+            description="The date and time the transaction was created in ISO 8601 format."
+        ),
     ]
     updated_at: Annotated[
         DateTime,
-        Field(description="The date and time the transaction was last updated in ISO 8601 format."),
+        Field(
+            description="The date and time the transaction was last updated in ISO 8601 format."
+        ),
     ]
     completed_at: Annotated[
         DateTime | None,

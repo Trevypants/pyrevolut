@@ -43,5 +43,6 @@ class ResourceForeignExchange(BaseModel):
     rate: Annotated[Decimal, Field(description="The proposed exchange rate.")]
     fee: Annotated[ModelFee, Field(description="The expected fee for the transaction.")]
     rate_date: Annotated[
-        DateTime, Field(description="The date of the proposed exchange rate in ISO 8601 format.")
+        DateTime,
+        Field(description="The date of the proposed exchange rate in ISO 8601 format."),
     ]

@@ -114,12 +114,14 @@ def test_sync_exchange_money(sync_client: Client):
         gbp_balance3 = next(
             account["balance"]
             for account in accounts
-            if account["currency"] == "GBP" and account["state"] == EnumAccountState.ACTIVE
+            if account["currency"] == "GBP"
+            and account["state"] == EnumAccountState.ACTIVE
         )
         eur_balance3 = next(
             account["balance"]
             for account in accounts
-            if account["currency"] == "EUR" and account["state"] == EnumAccountState.ACTIVE
+            if account["currency"] == "EUR"
+            and account["state"] == EnumAccountState.ACTIVE
         )
         assert gbp_balance3 < gbp_balance2
         assert eur_balance3 == eur_balance
@@ -232,12 +234,14 @@ async def test_async_exchange_money(async_client: AsyncClient):
         gbp_balance3 = next(
             account["balance"]
             for account in accounts
-            if account["currency"] == "GBP" and account["state"] == EnumAccountState.ACTIVE
+            if account["currency"] == "GBP"
+            and account["state"] == EnumAccountState.ACTIVE
         )
         eur_balance3 = next(
             account["balance"]
             for account in accounts
-            if account["currency"] == "EUR" and account["state"] == EnumAccountState.ACTIVE
+            if account["currency"] == "EUR"
+            and account["state"] == EnumAccountState.ACTIVE
         )
         assert gbp_balance3 < gbp_balance2
         assert eur_balance3 == eur_balance

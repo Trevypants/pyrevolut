@@ -7,7 +7,10 @@ from pyrevolut.api.common import (
     EnumTransactionType,
 )
 
-from pyrevolut.api.transactions.get import RetrieveListOfTransactions, RetrieveTransaction
+from pyrevolut.api.transactions.get import (
+    RetrieveListOfTransactions,
+    RetrieveTransaction,
+)
 
 
 class EndpointTransactionsSync(BaseEndpointSync):
@@ -135,7 +138,9 @@ class EndpointTransactionsSync(BaseEndpointSync):
         dict | RetrieveTransaction.Response
             The details of the transaction.
         """
-        assert transaction_id or request_id, "Either transaction_id or request_id must be provided."
+        assert (
+            transaction_id or request_id
+        ), "Either transaction_id or request_id must be provided."
         assert not (
             transaction_id and request_id
         ), "Either transaction_id or request_id must be provided, not both."

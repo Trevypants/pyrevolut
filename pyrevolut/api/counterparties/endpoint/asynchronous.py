@@ -4,7 +4,10 @@ from datetime import datetime
 from pyrevolut.api.common import BaseEndpointAsync, EnumProfileType
 from pyrevolut.utils import DateTime
 
-from pyrevolut.api.counterparties.get import RetrieveListOfCounterparties, RetrieveCounterparty
+from pyrevolut.api.counterparties.get import (
+    RetrieveListOfCounterparties,
+    RetrieveCounterparty,
+)
 from pyrevolut.api.counterparties.post import CreateCounterparty, ValidateAccountName
 from pyrevolut.api.counterparties.delete import DeleteCounterparty
 
@@ -228,12 +231,14 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             company_name=company_name,
             profile_type=profile_type,
             name=name,
-            individual_name=endpoint.Body.ModelIndividualName(
-                first_name=individual_first_name,
-                last_name=individual_last_name,
-            )
-            if individual_first_name is not None or individual_last_name is not None
-            else None,
+            individual_name=(
+                endpoint.Body.ModelIndividualName(
+                    first_name=individual_first_name,
+                    last_name=individual_last_name,
+                )
+                if individual_first_name is not None or individual_last_name is not None
+                else None
+            ),
             bank_country=bank_country,
             currency=currency,
             revtag=revtag,
@@ -245,16 +250,18 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             clabe=clabe,
             isfc=isfc,
             bsb_code=bsb_code,
-            address=endpoint.Body.ModelAddress(
-                street_line1=address_street_line1,
-                street_line2=address_street_line2,
-                region=address_region,
-                city=address_city,
-                country=address_country,
-                postcode=address_postcode,
-            )
-            if address_country is not None and address_postcode is not None
-            else None,
+            address=(
+                endpoint.Body.ModelAddress(
+                    street_line1=address_street_line1,
+                    street_line2=address_street_line2,
+                    region=address_region,
+                    city=address_city,
+                    country=address_country,
+                    postcode=address_postcode,
+                )
+                if address_country is not None and address_postcode is not None
+                else None
+            ),
         )
 
         return await self.client.post(
@@ -319,12 +326,14 @@ class EndpointCounterpartiesAsync(BaseEndpointAsync):
             account_no=account_no,
             sort_code=sort_code,
             company_name=company_name,
-            individual_name=endpoint.Body.ModelIndividualName(
-                first_name=individual_first_name,
-                last_name=individual_last_name,
-            )
-            if individual_first_name is not None or individual_last_name is not None
-            else None,
+            individual_name=(
+                endpoint.Body.ModelIndividualName(
+                    first_name=individual_first_name,
+                    last_name=individual_last_name,
+                )
+                if individual_first_name is not None or individual_last_name is not None
+                else None
+            ),
         )
 
         return await self.client.post(

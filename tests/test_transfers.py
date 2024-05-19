@@ -66,10 +66,14 @@ def test_sync_move_money_between_accounts(sync_client: Client):
     accounts = sync_client.Accounts.get_all_accounts()
     time.sleep(random.randint(1, 3))
     gbp_balance1_new = next(
-        account["balance"] for account in accounts if account["id"] == gbp_account1["id"]
+        account["balance"]
+        for account in accounts
+        if account["id"] == gbp_account1["id"]
     )
     gbp_balance2_new = next(
-        account["balance"] for account in accounts if account["id"] == gbp_account2["id"]
+        account["balance"]
+        for account in accounts
+        if account["id"] == gbp_account2["id"]
     )
     assert gbp_balance2_new == gbp_balance2 + Decimal("1")
     assert gbp_balance1_new == gbp_balance1 - Decimal("1")
@@ -90,10 +94,14 @@ def test_sync_move_money_between_accounts(sync_client: Client):
     accounts = sync_client.Accounts.get_all_accounts()
     time.sleep(random.randint(1, 3))
     gbp_balance1_new = next(
-        account["balance"] for account in accounts if account["id"] == gbp_account1["id"]
+        account["balance"]
+        for account in accounts
+        if account["id"] == gbp_account1["id"]
     )
     gbp_balance2_new = next(
-        account["balance"] for account in accounts if account["id"] == gbp_account2["id"]
+        account["balance"]
+        for account in accounts
+        if account["id"] == gbp_account2["id"]
     )
     assert gbp_balance2_new == gbp_balance2
     assert gbp_balance1_new == gbp_balance1
@@ -228,10 +236,14 @@ async def test_async_move_money_between_accounts(async_client: Client):
     accounts = await async_client.Accounts.get_all_accounts()
     await asyncio.sleep(random.randint(1, 3))
     gbp_balance1_new = next(
-        account["balance"] for account in accounts if account["id"] == gbp_account1["id"]
+        account["balance"]
+        for account in accounts
+        if account["id"] == gbp_account1["id"]
     )
     gbp_balance2_new = next(
-        account["balance"] for account in accounts if account["id"] == gbp_account2["id"]
+        account["balance"]
+        for account in accounts
+        if account["id"] == gbp_account2["id"]
     )
     assert gbp_balance2_new == gbp_balance2 + Decimal("1")
     assert gbp_balance1_new == gbp_balance1 - Decimal("1")
@@ -252,10 +264,14 @@ async def test_async_move_money_between_accounts(async_client: Client):
     accounts = await async_client.Accounts.get_all_accounts()
     await asyncio.sleep(random.randint(1, 3))
     gbp_balance1_new = next(
-        account["balance"] for account in accounts if account["id"] == gbp_account1["id"]
+        account["balance"]
+        for account in accounts
+        if account["id"] == gbp_account1["id"]
     )
     gbp_balance2_new = next(
-        account["balance"] for account in accounts if account["id"] == gbp_account2["id"]
+        account["balance"]
+        for account in accounts
+        if account["id"] == gbp_account2["id"]
     )
     assert gbp_balance2_new == gbp_balance2
     assert gbp_balance1_new == gbp_balance1

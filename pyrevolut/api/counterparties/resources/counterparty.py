@@ -49,31 +49,45 @@ class ResourceCounterparty(BaseModel):
         ] = None
         iban: Annotated[
             str | None,
-            Field(description="The IBAN number of the counterparty's account if applicable."),
+            Field(
+                description="The IBAN number of the counterparty's account if applicable."
+            ),
         ] = None
         sort_code: Annotated[
             str | None,
-            Field(description="The sort code of the counterparty's account if applicable."),
+            Field(
+                description="The sort code of the counterparty's account if applicable."
+            ),
         ] = None
         routing_number: Annotated[
             str | None,
-            Field(description="The routing number of the counterparty's account if applicable."),
+            Field(
+                description="The routing number of the counterparty's account if applicable."
+            ),
         ] = None
         bic: Annotated[
             str | None,
-            Field(description="The BIC number of the counterparty's account if applicable."),
+            Field(
+                description="The BIC number of the counterparty's account if applicable."
+            ),
         ] = None
         clabe: Annotated[
             str | None,
-            Field(description="The CLABE number of the counterparty's account if applicable."),
+            Field(
+                description="The CLABE number of the counterparty's account if applicable."
+            ),
         ] = None
         ifsc: Annotated[
             str | None,
-            Field(description="The IFSC number of the counterparty's account if applicable."),
+            Field(
+                description="The IFSC number of the counterparty's account if applicable."
+            ),
         ] = None
         bsb_code: Annotated[
             str | None,
-            Field(description="The BSB code of the counterparty's account if applicable."),
+            Field(
+                description="The BSB code of the counterparty's account if applicable."
+            ),
         ] = None
         recipient_charges: Annotated[
             EnumRecipientCharges | None,
@@ -101,7 +115,9 @@ class ResourceCounterparty(BaseModel):
         ]
         country: Annotated[
             CountryAlpha2,
-            Field(description="The country of the card issuer as the 2-letter ISO 3166 code."),
+            Field(
+                description="The country of the card issuer as the 2-letter ISO 3166 code."
+            ),
         ]
         currency: Annotated[
             Currency,
@@ -128,7 +144,9 @@ class ResourceCounterparty(BaseModel):
     ] = None
     country: Annotated[
         CountryAlpha2 | None,
-        Field(description="The bank country of the counterparty as the 2-letter ISO 3166 code."),
+        Field(
+            description="The bank country of the counterparty as the 2-letter ISO 3166 code."
+        ),
     ] = None
     state: Annotated[
         EnumProfileState,
@@ -136,7 +154,9 @@ class ResourceCounterparty(BaseModel):
     ]
     created_at: Annotated[
         DateTime,
-        Field(description="The date and time the counterparty was created in ISO 8601 format."),
+        Field(
+            description="The date and time the counterparty was created in ISO 8601 format."
+        ),
     ]
     updated_at: Annotated[
         DateTime,
@@ -146,7 +166,9 @@ class ResourceCounterparty(BaseModel):
     ]
     accounts: Annotated[
         list[ModelAccount] | None,
-        Field(description="The list of public accounts associated with this counterparty."),
+        Field(
+            description="The list of public accounts associated with this counterparty."
+        ),
     ] = None
     cards: Annotated[
         list[ModelCard] | None,

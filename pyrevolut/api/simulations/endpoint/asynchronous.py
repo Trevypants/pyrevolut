@@ -7,7 +7,10 @@ from pyrevolut.api.common import (
     EnumTransactionState,
     EnumSimulateTransferStateAction,
 )
-from pyrevolut.api.simulations.post import SimulateAccountTopup, SimulateTransferStateUpdate
+from pyrevolut.api.simulations.post import (
+    SimulateAccountTopup,
+    SimulateTransferStateUpdate,
+)
 
 
 class EndpointSimulationsAsync(BaseEndpointAsync):
@@ -144,4 +147,6 @@ class EndpointSimulationsAsync(BaseEndpointAsync):
             If the sandbox is enabled.
         """
         if not self.client.sandbox:
-            raise InvalidEnvironmentException("This feature is only available in the Sandbox.")
+            raise InvalidEnvironmentException(
+                "This feature is only available in the Sandbox."
+            )

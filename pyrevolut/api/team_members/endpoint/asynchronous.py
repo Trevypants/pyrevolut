@@ -174,4 +174,6 @@ class EndpointTeamMembersAsync(BaseEndpointAsync):
             If the sandbox is enabled.
         """
         if self.client.sandbox:
-            raise InvalidEnvironmentException("This feature is not available in Sandbox.")
+            raise InvalidEnvironmentException(
+                "This feature is not available in Sandbox."
+            )

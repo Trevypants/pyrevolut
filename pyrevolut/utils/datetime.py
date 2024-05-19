@@ -36,7 +36,9 @@ class DateTime(_DateTime):
         )
 
     @classmethod
-    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
+    def _validate(
+        cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler
+    ) -> Any:
         """
         Validate the datetime object and return it.
 
@@ -59,7 +61,9 @@ class DateTime(_DateTime):
         return handler(data)
 
 
-def to_datetime(dt: datetime.datetime | _DateTime | str | int | float, timestamp_unit: str = "ms"):
+def to_datetime(
+    dt: datetime.datetime | _DateTime | str | int | float, timestamp_unit: str = "ms"
+):
     """
     Converts a datetime object or string to a pendulum DateTime object.
 

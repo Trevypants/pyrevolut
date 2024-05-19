@@ -55,11 +55,18 @@ class RetrieveListOfTeamMembers:
         """The response model."""
 
         id: Annotated[UUID, Field(description="The ID of the team member.")]
-        email: Annotated[EmailStr, Field(description="The email address of the team member.")]
-        first_name: Annotated[str | None, Field(description="The team member's first name.")] = None
-        last_name: Annotated[str | None, Field(description="The team member's last name.")] = None
+        email: Annotated[
+            EmailStr, Field(description="The email address of the team member.")
+        ]
+        first_name: Annotated[
+            str | None, Field(description="The team member's first name.")
+        ] = None
+        last_name: Annotated[
+            str | None, Field(description="The team member's last name.")
+        ] = None
         state: Annotated[
-            EnumTeamMemberState, Field(description="The state that the team member is in.")
+            EnumTeamMemberState,
+            Field(description="The state that the team member is in."),
         ]
         role_id: Annotated[
             UUID | str,
@@ -69,7 +76,9 @@ class RetrieveListOfTeamMembers:
         ]
         created_at: Annotated[
             DateTime,
-            Field(description="The date and time the team member was created in ISO 8601 format."),
+            Field(
+                description="The date and time the team member was created in ISO 8601 format."
+            ),
         ]
         updated_at: Annotated[
             DateTime,

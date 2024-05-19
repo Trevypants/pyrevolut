@@ -101,7 +101,9 @@ class ResourceCard(BaseModel):
     ]
     virtual: Annotated[
         bool,
-        Field(description="Specifies whether the card is virtual (true) or physical (false)."),
+        Field(
+            description="Specifies whether the card is virtual (true) or physical (false)."
+        ),
     ]
     accounts: Annotated[
         list[UUID],
@@ -135,5 +137,7 @@ class ResourceCard(BaseModel):
     ]
     updated_at: Annotated[
         DateTime,
-        Field(description="The date and time the card was last updated in ISO 8601 format."),
+        Field(
+            description="The date and time the card was last updated in ISO 8601 format."
+        ),
     ]

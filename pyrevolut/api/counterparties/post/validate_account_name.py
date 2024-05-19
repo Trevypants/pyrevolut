@@ -81,7 +81,9 @@ class ValidateAccountName:
             Ensure that either the individual_name or company_name is provided.
             """
             if not self.company_name and not self.individual_name:
-                raise ValueError("You must provide either the company_name or individual_name.")
+                raise ValueError(
+                    "You must provide either the company_name or individual_name."
+                )
             if self.company_name and self.individual_name:
                 raise ValueError(
                     "You must provide either the company_name or individual_name, not both."

@@ -31,7 +31,9 @@ class SimulateTransferStateUpdate:
         The response model.
         """
 
-        id: Annotated[UUID, Field(description="The ID of the transfer whose state was updated.")]
+        id: Annotated[
+            UUID, Field(description="The ID of the transfer whose state was updated.")
+        ]
         state: Annotated[
             EnumTransactionState,
             Field(
@@ -55,9 +57,13 @@ class SimulateTransferStateUpdate:
         ]
         created_at: Annotated[
             DateTime,
-            Field(description="The date and time the transfer was created in ISO 8601 format."),
+            Field(
+                description="The date and time the transfer was created in ISO 8601 format."
+            ),
         ]
         completed_at: Annotated[
             DateTime | None,
-            Field(description="The date and time the transfer was completed in ISO 8601 format."),
+            Field(
+                description="The date and time the transfer was completed in ISO 8601 format."
+            ),
         ] = None

@@ -32,7 +32,9 @@ class Date(_Date):
         )
 
     @classmethod
-    def _validate(cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler) -> Any:
+    def _validate(
+        cls, value: Any, handler: core_schema.ValidatorFunctionWrapHandler
+    ) -> Any:
         """
         Validate the date object and return it.
 
@@ -73,7 +75,9 @@ def to_date(dt: datetime.date | _Date | str) -> Date:
     elif isinstance(dt, str):
         return string_to_date(dt)
     else:
-        raise ValueError(f"Unsupported type for conversion to pendulum Date: {type(dt)}")
+        raise ValueError(
+            f"Unsupported type for conversion to pendulum Date: {type(dt)}"
+        )
 
 
 def string_to_date(string: str) -> Date:
