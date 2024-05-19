@@ -5,7 +5,7 @@
 ## Installation
 
 ```bash
-pip install TO-BE-DEFINED
+pip install pyrevolut
 ```
 
 ## Usage
