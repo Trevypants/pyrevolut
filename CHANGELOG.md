@@ -1,3 +1,9 @@
+## v0.5.1 (2024-05-19)
+
+### Refactor
+
+- fixed payout links test file name
+
 ## v0.5.0 (2024-05-18)
 
 ### Feat
