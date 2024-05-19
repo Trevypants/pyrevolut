@@ -65,7 +65,7 @@ class BaseClient:
                 The raw response will be returned
             If "dict":
                 The response will be the dictionary representation of the Pydantic model.
-                So it will have Decimals, UUIDs, etc instead of the raw string values.
+                So it will have UUIDs, pendulum DateTimes, etc instead of the raw string values.
             If "model":
                 The response will be a Pydantic model containing all processed response data.
         error_response : Literal["raw", "raise", "dict", "model"], optional
@@ -125,7 +125,7 @@ class BaseClient:
                 The raw response will be returned
             If "dict":
                 The response will be the dictionary representation of the Pydantic model.
-                So it will have Decimals, UUIDs, etc instead of the raw string values.
+                So it will have UUIDs, pendulum DateTimes, etc instead of the raw string values.
             If "model":
                 The response will be a Pydantic model containing all processed response data.
             If None:

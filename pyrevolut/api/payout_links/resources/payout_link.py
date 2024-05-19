@@ -1,6 +1,5 @@
 from typing import Annotated
 from uuid import UUID
-from decimal import Decimal
 
 from pydantic import BaseModel, Field, HttpUrl
 from pydantic_extra_types.currency_code import Currency
@@ -116,7 +115,7 @@ class ResourcePayoutLink(BaseModel):
     ]
     account_id: Annotated[UUID, Field(description="The ID of the sender's account.")]
     amount: Annotated[
-        Decimal,
+        float,
         Field(
             description="""
             The amount of money to be transferred.

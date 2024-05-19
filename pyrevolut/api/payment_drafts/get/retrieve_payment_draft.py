@@ -1,6 +1,5 @@
 from typing import Annotated
 from uuid import UUID
-from decimal import Decimal
 
 from pydantic import BaseModel, Field, ConfigDict
 from pydantic_extra_types.currency_code import Currency
@@ -104,7 +103,7 @@ class RetrievePaymentDraft:
                     Field(description="The target of the conversion."),
                 ]
                 rate: Annotated[
-                    Decimal | None,
+                    float | None,
                     Field(description="The exchange rate used for the conversion."),
                 ] = None
                 fee: Annotated[

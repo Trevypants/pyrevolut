@@ -1,6 +1,5 @@
 import time
 import asyncio
-from decimal import Decimal
 import pytest
 import random
 
@@ -50,7 +49,7 @@ def test_sync_create_delete_payment_draft(sync_client: Client):
         for account in accounts
         if account["currency"] == "GBP"
         and account["state"] == EnumAccountState.ACTIVE
-        and account["balance"] > Decimal("0")
+        and account["balance"] > 0.0
     )
 
     # Get recipients
@@ -72,7 +71,7 @@ def test_sync_create_delete_payment_draft(sync_client: Client):
             counterparty_ids=[recipient["id"]],
             counterparty_account_ids=[None],
             counterparty_card_ids=[None],
-            amounts=[Decimal("1.00")],
+            amounts=[1.0],
             currencies=["GBP"],
             references=["test"],
             title="Test payment draft",
@@ -129,7 +128,7 @@ async def test_async_create_delete_payment_draft(async_client: Client):
         for account in accounts
         if account["currency"] == "GBP"
         and account["state"] == EnumAccountState.ACTIVE
-        and account["balance"] > Decimal("0")
+        and account["balance"] > 0.0
     )
 
     # Get recipients
@@ -151,7 +150,7 @@ async def test_async_create_delete_payment_draft(async_client: Client):
             counterparty_ids=[recipient["id"]],
             counterparty_account_ids=[None],
             counterparty_card_ids=[None],
-            amounts=[Decimal("1.00")],
+            amounts=[1.0],
             currencies=["GBP"],
             references=["test"],
             title="Test payment draft",

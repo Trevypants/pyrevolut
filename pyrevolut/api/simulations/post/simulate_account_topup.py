@@ -1,6 +1,5 @@
 from typing import Annotated
 from uuid import UUID
-from decimal import Decimal
 
 from pydantic import BaseModel, Field, model_validator
 from pydantic_extra_types.currency_code import Currency
@@ -29,7 +28,7 @@ class SimulateAccountTopup:
             Field(description="The ID of the account that you want to top up."),
         ]
         amount: Annotated[
-            Decimal,
+            float,
             Field(
                 description="The amount with which you want to top up the account. Must be <= 10000",
                 gt=0,

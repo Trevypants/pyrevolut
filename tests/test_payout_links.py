@@ -1,6 +1,5 @@
 import time
 import asyncio
-from decimal import Decimal
 from uuid import uuid4
 import pytest
 import random
@@ -63,7 +62,7 @@ def test_sync_create_cancel_payout_link(sync_client: Client):
         for account in accounts
         if account["currency"] == "GBP"
         and account["state"] == EnumAccountState.ACTIVE
-        and account["balance"] > Decimal("0")
+        and account["balance"] > 0.0
     )
 
     # Create a payout link
@@ -71,7 +70,7 @@ def test_sync_create_cancel_payout_link(sync_client: Client):
         counterparty_name="John Doe",
         request_id=str(uuid4()),
         account_id=gbp_account["id"],
-        amount=Decimal("1.00"),
+        amount=1.0,
         currency="GBP",
         reference="test payout link",
         payout_methods=[
@@ -158,7 +157,7 @@ async def test_async_create_cancel_payout_link(async_client: Client):
         for account in accounts
         if account["currency"] == "GBP"
         and account["state"] == EnumAccountState.ACTIVE
-        and account["balance"] > Decimal("0")
+        and account["balance"] > 0.0
     )
 
     # Create a payout link
@@ -166,7 +165,7 @@ async def test_async_create_cancel_payout_link(async_client: Client):
         counterparty_name="John Doe",
         request_id=str(uuid4()),
         account_id=gbp_account["id"],
-        amount=Decimal("1.00"),
+        amount=1.0,
         currency="GBP",
         reference="test payout link",
         payout_methods=[

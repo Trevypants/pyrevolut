@@ -3,6 +3,8 @@ name = "pyrevolut"
 version = "0.6.0"
 description = "An unofficial Python API Wrapper for the Revolut Business API"
 authors = ["Trevor Visser <trevor.visser@gmail.com>"]
+license = "MIT"
+homepage = "https://github.com/Trevypants/pyrevolut"
 readme = "README.md"
 
 [tool.poetry.scripts]

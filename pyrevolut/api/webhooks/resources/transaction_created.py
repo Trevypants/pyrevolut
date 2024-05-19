@@ -1,6 +1,5 @@
 from typing import Annotated
 from uuid import UUID
-from decimal import Decimal
 
 from pydantic import BaseModel, Field
 from pydantic_extra_types.currency_code import Currency
@@ -57,11 +56,11 @@ class ResourceTransactionCreated(BaseModel):
             Field(description="The counterparty of the transaction leg."),
         ] = None
         amount: Annotated[
-            Decimal,
+            float,
             Field(description="The amount of the transaction leg."),
         ]
         fee: Annotated[
-            Decimal | None,
+            float | None,
             Field(description="The amount of the transaction leg fee."),
         ] = None
         currency: Annotated[
@@ -69,7 +68,7 @@ class ResourceTransactionCreated(BaseModel):
             Field(description="ISO 4217 currency code in upper case."),
         ]
         bill_amount: Annotated[
-            Decimal | None,
+            float | None,
             Field(description="The billing amount for cross-currency payments."),
         ] = None
         bill_currency: Annotated[
@@ -81,7 +80,7 @@ class ResourceTransactionCreated(BaseModel):
             Field(description="The transaction leg purpose."),
         ] = None
         balance: Annotated[
-            Decimal | None,
+            float | None,
             Field(
                 description="The total balance of the account that the transaction is associated with."
             ),

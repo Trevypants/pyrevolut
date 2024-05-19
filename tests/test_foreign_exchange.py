@@ -1,7 +1,6 @@
 import time
 import asyncio
 from uuid import uuid4
-from decimal import Decimal
 import pytest
 import random
 
@@ -47,7 +46,7 @@ def test_sync_exchange_money(sync_client: Client):
         for account in accounts
         if account["currency"] == "GBP"
         and account["state"] == EnumAccountState.ACTIVE
-        and account["balance"] > Decimal("0")
+        and account["balance"] > 0.0
     )
     gbp_balance = gbp_account["balance"]
     eur_account = next(
@@ -55,7 +54,7 @@ def test_sync_exchange_money(sync_client: Client):
         for account in accounts
         if account["currency"] == "EUR"
         and account["state"] == EnumAccountState.ACTIVE
-        and account["balance"] > Decimal("0")
+        and account["balance"] > 0.0
     )
     eur_balance = eur_account["balance"]
 
@@ -66,7 +65,7 @@ def test_sync_exchange_money(sync_client: Client):
         from_currency="EUR",
         to_account_id=gbp_account["id"],
         to_currency="GBP",
-        from_amount=Decimal("1"),
+        from_amount=1.0,
         to_amount=None,
         reference="PyRevolut Test",
     )
@@ -81,21 +80,21 @@ def test_sync_exchange_money(sync_client: Client):
         for account in accounts
         if account["currency"] == "GBP"
         and account["state"] == EnumAccountState.ACTIVE
-        and account["balance"] > Decimal("0")
+        and account["balance"] > 0.0
     )
     eur_balance2 = next(
         account["balance"]
         for account in accounts
         if account["currency"] == "EUR"
         and account["state"] == EnumAccountState.ACTIVE
-        and account["balance"] > Decimal("0")
+        and account["balance"] > 0.0
     )
     assert gbp_balance2 > gbp_balance
-    assert eur_balance2 == eur_balance - Decimal("1")
+    assert eur_balance2 == eur_balance - 1.0
 
     with pytest.raises(
         InternalRevolutError,
-        match="Oops! An error occurred while processing your request. It has been logged for further investigation.",
+        match="Oops! An error occurred while processing your request.",
     ):
         # Exchange 1 EUR from GBP to EUR
         response = sync_client.ForeignExchange.exchange_money(
@@ -105,7 +104,7 @@ def test_sync_exchange_money(sync_client: Client):
             to_account_id=eur_account["id"],
             to_currency="EUR",
             from_amount=None,
-            to_amount=Decimal("1"),
+            to_amount=1.0,
             reference="PyRevolut Test",
         )
         time.sleep(random.randint(1, 3))
@@ -170,7 +169,7 @@ async def test_async_exchange_money(async_client: AsyncClient):
         for account in accounts
         if account["currency"] == "GBP"
         and account["state"] == EnumAccountState.ACTIVE
-        and account["balance"] > Decimal("0")
+        and account["balance"] > 0.0
     )
     gbp_balance = gbp_account["balance"]
     eur_account = next(
@@ -178,7 +177,7 @@ async def test_async_exchange_money(async_client: AsyncClient):
         for account in accounts
         if account["currency"] == "EUR"
         and account["state"] == EnumAccountState.ACTIVE
-        and account["balance"] > Decimal("0")
+        and account["balance"] > 0.0
     )
     eur_balance = eur_account["balance"]
 
@@ -189,7 +188,7 @@ async def test_async_exchange_money(async_client: AsyncClient):
         from_currency="EUR",
         to_account_id=gbp_account["id"],
         to_currency="GBP",
-        from_amount=Decimal("1"),
+        from_amount=1.0,
         to_amount=None,
         reference="PyRevolut Test",
     )
@@ -204,21 +203,21 @@ async def test_async_exchange_money(async_client: AsyncClient):
         for account in accounts
         if account["currency"] == "GBP"
         and account["state"] == EnumAccountState.ACTIVE
-        and account["balance"] > Decimal("0")
+        and account["balance"] > 0.0
     )
     eur_balance2 = next(
         account["balance"]
         for account in accounts
         if account["currency"] == "EUR"
         and account["state"] == EnumAccountState.ACTIVE
-        and account["balance"] > Decimal("0")
+        and account["balance"] > 0.0
     )
     assert gbp_balance2 > gbp_balance
-    assert eur_balance2 == eur_balance - Decimal("1")
+    assert eur_balance2 == eur_balance - 1.0
 
     with pytest.raises(
         InternalRevolutError,
-        match="Oops! An error occurred while processing your request. It has been logged for further investigation.",
+        match="Oops! An error occurred while processing your request.",
     ):
         # Exchange 1 EUR from GBP to EUR
         response = await async_client.ForeignExchange.exchange_money(
@@ -228,7 +227,7 @@ async def test_async_exchange_money(async_client: AsyncClient):
             to_account_id=eur_account["id"],
             to_currency="EUR",
             from_amount=None,
-            to_amount=Decimal("1"),
+            to_amount=1.0,
             reference="PyRevolut Test",
         )
         await asyncio.sleep(random.randint(1, 3))

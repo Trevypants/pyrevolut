@@ -1,5 +1,4 @@
 from uuid import UUID
-from decimal import Decimal
 
 from pyrevolut.api.common import BaseEndpointSync
 
@@ -17,7 +16,7 @@ class EndpointForeignExchangeSync(BaseEndpointSync):
         self,
         from_currency: str,
         to_currency: str,
-        amount: Decimal | None = None,
+        amount: float | None = None,
         **kwargs,
     ) -> dict | GetExchangeRate.Response:
         """
@@ -29,7 +28,7 @@ class EndpointForeignExchangeSync(BaseEndpointSync):
             The currency that you exchange from in ISO 4217 format.
         to_currency : str
             The currency that you exchange to in ISO 4217 format.
-        amount : Decimal | None
+        amount : float | None
             The amount of the currency to exchange from.
             The default value is 1.00 if not provided.
 
@@ -60,8 +59,8 @@ class EndpointForeignExchangeSync(BaseEndpointSync):
         from_currency: str,
         to_account_id: UUID,
         to_currency: str,
-        from_amount: Decimal | None = None,
-        to_amount: Decimal | None = None,
+        from_amount: float | None = None,
+        to_amount: float | None = None,
         reference: str | None = None,
         **kwargs,
     ) -> dict | ExchangeMoney.Response:
@@ -95,9 +94,9 @@ class EndpointForeignExchangeSync(BaseEndpointSync):
             The ID of the account to receive exchanged currency into.
         to_currency : str
             The currency to buy in ISO 4217 format.
-        from_amount : Decimal | None
+        from_amount : float | None
             The amount of currency. Specify ONLY if you want to sell currency.
-        to_amount : Decimal | None
+        to_amount : float | None
             The amount of currency. Specify ONLY if you want to buy currency.
         reference : str | None
             The reference for the exchange transaction, provided by you.

@@ -1,5 +1,4 @@
 from uuid import UUID
-from decimal import Decimal
 from datetime import date
 
 from pyrevolut.utils import Date
@@ -86,7 +85,7 @@ class EndpointPaymentDraftsSync(BaseEndpointSync):
         counterparty_ids: list[UUID] = [],
         counterparty_account_ids: list[UUID | None] = [],
         counterparty_card_ids: list[UUID | None] = [],
-        amounts: list[Decimal] = [],
+        amounts: list[float] = [],
         currencies: list[str] = [],
         references: list[str] = [],
         title: str | None = None,
@@ -110,7 +109,7 @@ class EndpointPaymentDraftsSync(BaseEndpointSync):
             The IDs of the counterparty cards. Each ID corresponds to a payment.
             If the counterparty has multiple payment methods available, use it to
             specify the card to which you want to send the money. Otherwise, use None.
-        amounts : list[Decimal]
+        amounts : list[float]
             The amounts of the payments.
         currencies : list[str]
             The ISO 4217 currency codes in upper case.

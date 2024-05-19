@@ -1,6 +1,5 @@
 from typing import Annotated
 from uuid import UUID
-from decimal import Decimal
 
 from pydantic import BaseModel, Field
 from pydantic_extra_types.currency_code import Currency
@@ -23,7 +22,7 @@ class ResourceAccount(BaseModel):
         Field(description="The account name."),
     ] = None
     balance: Annotated[
-        Decimal,
+        float,
         Field(description="The current balance on the account."),
     ]
     currency: Annotated[

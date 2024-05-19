@@ -1,6 +1,5 @@
 from typing import Annotated
 from uuid import UUID
-from decimal import Decimal
 
 from pydantic import BaseModel, Field
 from pydantic_extra_types.currency_code import Currency
@@ -103,7 +102,7 @@ class CreateTransferToAnotherAccount:
             ),
         ]
         amount: Annotated[
-            Decimal,
+            float,
             Field(
                 description="The amount of the funds to be transferred.",
                 gt=0,
