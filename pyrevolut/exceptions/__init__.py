@@ -4,4 +4,5 @@
 
 from .common import PyRevolutAPIException
 from .bad_request import BadRequestException
+from .internal_revolut_error import InternalRevolutError
 from .invalid_environment import InvalidEnvironmentException

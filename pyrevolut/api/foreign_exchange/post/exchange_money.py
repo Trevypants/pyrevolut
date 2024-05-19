@@ -1,6 +1,6 @@
 from typing import Annotated
 from uuid import UUID
-from decimal import Decimal
+# from decimal import Decimal
 
 from pydantic import BaseModel, Field, model_validator, ConfigDict
 from pydantic_extra_types.currency_code import Currency
@@ -46,8 +46,10 @@ class ExchangeMoney:
                 Currency,
                 Field(description="The currency to sell in ISO 4217 format."),
             ]
+            # Originally Decimal | None but Revolut API fails when Decimal -> str is used
+            # So, we use float | None instead
             amount: Annotated[
-                Decimal | None,
+                float | None,
                 Field(
                     description="The amount of currency. Specify ONLY if you want to sell currency."
                 ),
@@ -66,8 +68,10 @@ class ExchangeMoney:
                 Currency,
                 Field(description="The currency to buy in ISO 4217 format."),
             ]
+            # Originally Decimal | None but Revolut API fails when Decimal -> str is used
+            # So, we use float | None instead
             amount: Annotated[
-                Decimal | None,
+                float | None,
                 Field(
                     description="The amount of currency. Specify ONLY if you want to buy currency."
                 ),
