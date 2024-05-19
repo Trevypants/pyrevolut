@@ -83,3 +83,15 @@ jobs:
           source $VENV
           echo $CREDENTIALS_JSON | base64 -d > ./tests/test_creds.json
           make test
+
+      #----------------------------------------------
+      #   ------------  upload coverage  -----------
+      #----------------------------------------------
+      - name: 📊 Upload coverage
+        if: runner.os == 'Linux'
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
