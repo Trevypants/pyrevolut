@@ -14,13 +14,9 @@ on:
 jobs:
   test:
     strategy:
-      max-parallel: 1
+      max-parallel: 3
       matrix:
-        os: [
-          ubuntu-latest,
-          windows-latest,
-          macos-latest,
-        ]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: [3.11]
     defaults:
       run:
@@ -70,13 +66,24 @@ jobs:
         run: |
           poetry install --no-interaction
 
+      #------------------------------------------------------
+      #   ------------  setup creds based on os  ------------
+      #------------------------------------------------------
+      - name: Setup creds based on os
+        run: |
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            echo "CREDENTIALS_JSON=${{ secrets.PYTEST_CREDENTIALS_WIN }}" >> $GITHUB_ENV
+          elif [[ "${{ runner.os }}" == "macOs" ]]; then
+            echo "CREDENTIALS_JSON=${{ secrets.PYTEST_CREDENTIALS_MAX }}" >> $GITHUB_ENV
+          else
+            echo "CREDENTIALS_JSON=${{ secrets.PYTEST_CREDENTIALS_LINUX }}" >> $GITHUB_ENV
+          fi
+
       #-----------------------------------------------
       #   ------------- run test suite ------------
       #-----------------------------------------------
       - name: 🧪 Run tests
         if: always()
-        env:
-          CREDENTIALS_JSON: ${{ secrets.PYTEST_CREDENTIALS }}
         run: |
           source $VENV
           echo $CREDENTIALS_JSON | base64 -d > ./tests/test_creds.json

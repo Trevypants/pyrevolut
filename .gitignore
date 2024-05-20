@@ -11,5 +11,5 @@ test_init.py
 .mypy_cache
 .pytest_cache
 .ruff_cache
-.coverage
+.coverage*
 coverage.xml
