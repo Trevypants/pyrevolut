@@ -1,0 +1,76 @@
+name: Publish Docs to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    strategy:
+      matrix:
+        python-version: [3.11]
+    defaults:
+      run:
+        shell: bash
+    environment: ${{ github.base_ref }}
+    runs-on: ubuntu-latest
+    steps:
+      #----------------------------------------------
+      #   ----------- check-out repo  ------------
+      #----------------------------------------------
+      - uses: actions/checkout@v4
+
+      #----------------------------------------------
+      #   ------------  setup python  -----------
+      #----------------------------------------------
+      - name: 🔧 Setup Python
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      #----------------------------------------------
+      #  -----  install & configure poetry  -----
+      #----------------------------------------------
+      - name: 📜 Install Poetry
+        run: |
+          python -m pip install -U pip poetry
+          poetry --version
+
+      #----------------------------------
+      #  -----  load cached venv  -----
+      #----------------------------------
+      - name: Load cached venv
+        id: cached-pip-wheels
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      #----------------------------------------------
+      #   ------------  install deps  ------------
+      #----------------------------------------------
+      - name: Install dependencies
+        run: |
+          poetry install --no-interaction
+
+      #-----------------------------------------------------
+      #   ------------  configure mkdocs cache  ------------
+      #-----------------------------------------------------
+      - name: Set mkdocs cache_id
+        run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+      - name: Load cached mkdocs
+        id: cached-mkdocs
+        uses: actions/cache@v4
+        with:
+          key: mkdocs-metrial-${{ env.cache_id }}
+          path: .cache
+          restore-keys: |
+            mkdocs-metrial-
+        
+      #------------------------------------------------
+      #   ------------  build and publish  ------------
+      #------------------------------------------------
+      - name: Build and publish docs
+        run: make publish-docs

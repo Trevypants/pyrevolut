@@ -13,3 +13,4 @@ test_init.py
 .ruff_cache
 .coverage*
 coverage.xml
+site
