@@ -74,7 +74,7 @@ jobs:
           if [[ "${{ runner.os }}" == "Windows" ]]; then
             echo "CREDENTIALS_JSON=${{ secrets.PYTEST_CREDENTIALS_WIN }}" >> $GITHUB_ENV
           elif [[ "${{ runner.os }}" == "macOs" ]]; then
-            echo "CREDENTIALS_JSON=${{ secrets.PYTEST_CREDENTIALS_MAX }}" >> $GITHUB_ENV
+            echo "CREDENTIALS_JSON=${{ secrets.PYTEST_CREDENTIALS_MAC }}" >> $GITHUB_ENV
           else
             echo "CREDENTIALS_JSON=${{ secrets.PYTEST_CREDENTIALS_LINUX }}" >> $GITHUB_ENV
           fi
@@ -85,8 +85,7 @@ jobs:
       - name: 🧪 Run tests
         if: always()
         run: |
-          source $VENV
-          echo $CREDENTIALS_JSON | base64 -d > ./tests/test_creds.json
+          echo $CREDENTIALS_JSON | base64 -d > ./tests/credentials/test_creds.json
           make test
 
       #----------------------------------------------
