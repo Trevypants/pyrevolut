@@ -27,6 +27,7 @@ typer = "0.*"
 pre-commit = "3.*"
 ipykernel = "6.*"
 commitizen = "3.*"
+mkdocs = "^1.6.0"
 
 [tool.poetry.group.test.dependencies]
 pytest-asyncio = "0.*"
