@@ -1,4 +1,4 @@
-# Pyrevolut: A Revolut Business API Wrapper
+# PyRevolut: A Revolut Business API Wrapper
 
 [![codecov](https://codecov.io/gh/Trevypants/pyrevolut/graph/badge.svg?token=55UY8J1YZM)](https://codecov.io/gh/Trevypants/pyrevolut)
 [![PyPI Package latest release](https://img.shields.io/pypi/v/pyrevolut.svg?color=%2334D058&label=pypi%20package)](https://pypi.org/project/pyrevolut/)
