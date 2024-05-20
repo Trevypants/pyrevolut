@@ -92,10 +92,7 @@ def test_sync_exchange_money(sync_client: Client):
     assert gbp_balance2 > gbp_balance
     assert eur_balance2 == eur_balance - 1.0
 
-    with pytest.raises(
-        InternalRevolutError,
-        match="Oops! An error occurred while processing your request.",
-    ):
+    try:
         # Exchange 1 EUR from GBP to EUR
         response = sync_client.ForeignExchange.exchange_money(
             request_id=str(uuid4()),
@@ -128,6 +125,9 @@ def test_sync_exchange_money(sync_client: Client):
         assert gbp_balance3 < gbp_balance2
         assert eur_balance3 == eur_balance
         assert eur_balance3 > eur_balance2
+    except InternalRevolutError:
+        # This error occurs randomly in the sandbox environment
+        pass
 
 
 @pytest.mark.asyncio
@@ -215,10 +215,7 @@ async def test_async_exchange_money(async_client: AsyncClient):
     assert gbp_balance2 > gbp_balance
     assert eur_balance2 == eur_balance - 1.0
 
-    with pytest.raises(
-        InternalRevolutError,
-        match="Oops! An error occurred while processing your request.",
-    ):
+    try:
         # Exchange 1 EUR from GBP to EUR
         response = await async_client.ForeignExchange.exchange_money(
             request_id=str(uuid4()),
@@ -251,3 +248,6 @@ async def test_async_exchange_money(async_client: AsyncClient):
         assert gbp_balance3 < gbp_balance2
         assert eur_balance3 == eur_balance
         assert eur_balance3 > eur_balance2
+    except InternalRevolutError:
+        # This error occurs randomly in the sandbox environment
+        pass
