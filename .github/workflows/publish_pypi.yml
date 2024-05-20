@@ -38,23 +38,6 @@ jobs:
           python -m pip install -U pip poetry
           poetry --version
 
-      #----------------------------------
-      #  -----  load cached venv  -----
-      #----------------------------------
-      - name: Load cached venv
-        id: cached-pip-wheels
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-
-      #----------------------------------------------
-      #   ------------  install deps  ------------
-      #----------------------------------------------
-      - name: Install dependencies
-        run: |
-          poetry install --no-interaction
-
       #------------------------------------------------
       #   ------------  build and publish  ------------
       #------------------------------------------------
