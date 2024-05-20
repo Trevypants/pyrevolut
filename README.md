@@ -5,6 +5,8 @@
 [![Supported versions](https://img.shields.io/pypi/pyversions/pyrevolut)](https://pypi.org/project/pyrevolut/)
 [![License](https://img.shields.io/pypi/l/pyrevolut)](LICENSE)
 [![PyPI Package download count (per month)](https://img.shields.io/pypi/dm/pyrevolut)](https://pypi.org/project/pyrevolut/)
+[![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Ruff code quality](https://img.shields.io/badge/code%20quality-Ruff-000000.svg)](https://docs.astral.sh/ruff/)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Trevypants/pyrevolut/test_integration.yml?branch=develop)](https://github.com/Trevypants/pyrevolut/actions)
 
 `pyrevolut` is an un-official wrapper around the [Revolut Business API](https://developer.revolut.com/docs/business/business-api).
