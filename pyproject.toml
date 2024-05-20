@@ -27,7 +27,6 @@ typer = "0.*"
 pre-commit = "3.*"
 ipykernel = "6.*"
 commitizen = "3.*"
-mkdocs-material = "9.*"
 
 [tool.poetry.group.test.dependencies]
 pytest-asyncio = "0.*"
@@ -44,13 +43,16 @@ pytest-clarity = "1.*"
 pytest-split = "0.*"
 pytest-env = "1.*"
 
+[tool.poetry.group.docs.dependencies]
+mkdocs-material = "9.*"
+
 [tool.pytest.ini_options]
 pythonpath = ["."]
 filterwarnings = []
 addopts = "--instafail -vv"
 env = ["TEST_MODE=True"]
 asyncio_mode = "auto"
-log_cli = true
+log_cli = false
 log_cli_level = "INFO"
 log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
 log_cli_date_format = "%Y-%m-%d %H:%M:%S"
