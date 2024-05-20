@@ -64,8 +64,13 @@ push:
 	@git push
 	@echo "Changes pushed!"
 
-### Commands to publish the package ###
-publish:
-	@echo "Publishing package..."
-	@/bin/bash -c "scripts/publish.sh"
+### Commands to publish the project components ###
+publish-pypi:
+	@echo "Publishing package to PyPi..."
+	@/bin/bash -c "scripts/publish_pkg.sh"
 	@echo "Package published!"
+
+publish-docs:
+	@echo "Publishing documentation..."
+	@/bin/bash -c "scripts/publish_docs.sh"
+	@echo "Documentation published!"
