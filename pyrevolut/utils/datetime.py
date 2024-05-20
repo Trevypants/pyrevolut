@@ -24,11 +24,16 @@ class DateTime(_DateTime):
         """
         Return a Pydantic CoreSchema with the DateTime validation
 
-        Args:
-            source: The source type to be converted.
-            handler: The handler to get the CoreSchema.
+        Parameters
+        ----------
+        source: Type[Any]
+            The source type to be converted.
+        handler: GetCoreSchemaHandler
+            The handler to get the CoreSchema.
 
-        Returns:
+        Returns
+        -------
+        core_schema.CoreSchema
             A Pydantic CoreSchema with the DateTime validation.
         """
         return core_schema.no_info_wrap_validator_function(
@@ -42,11 +47,16 @@ class DateTime(_DateTime):
         """
         Validate the datetime object and return it.
 
-        Args:
-            value: The value to validate.
-            handler: The handler to get the CoreSchema.
+        Parameters
+        ----------
+        value: Any
+            The value to validate.
+        handler: core_schema.ValidatorFunctionWrapHandler
+            The handler to get the CoreSchema.
 
-        Returns:
+        Returns
+        -------
+        Any
             The validated value or raises a PydanticCustomError.
         """
         # if we are passed an existing instance, pass it straight through.

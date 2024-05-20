@@ -6,6 +6,69 @@ repo_name: "Trevypants/pyrevolut"
 repo_url: "https://github.com/Trevypants/pyrevolut"
 nav:
   - Home: index.md
-  - About: about.md
+  - Code Reference:
+    - HTTP Client:
+      - Base Client: code_reference/http_client/base.md
+      - Sync Client: code_reference/http_client/synchronous.md
+      - Async Client: code_reference/http_client/asynchronous.md
+    - API:
+      - Common: code_reference/api/common.md
+      - Accounts:
+        - Endpoint (Async): code_reference/api/accounts/asynchronous.md
+        - Endpoint (Sync): code_reference/api/accounts/synchronous.md
+        - Pydantic Models: code_reference/api/accounts/pydantic.md
+      - Cards:
+        - Endpoint (Async): code_reference/api/cards/asynchronous.md
+        - Endpoint (Sync): code_reference/api/cards/synchronous.md
+        - Pydantic Models: code_reference/api/cards/pydantic.md
+      - Counterparties:
+        - Endpoint (Async): code_reference/api/counterparties/asynchronous.md
+        - Endpoint (Sync): code_reference/api/counterparties/synchronous.md
+        - Pydantic Models: code_reference/api/counterparties/pydantic.md
+      - Foreign Exchange:
+        - Endpoint (Async): code_reference/api/foreign_exchange/asynchronous.md
+        - Endpoint (Sync): code_reference/api/foreign_exchange/synchronous.md
+        - Pydantic Models: code_reference/api/foreign_exchange/pydantic.md
+      - Payment Drafts:
+        - Endpoint (Async): code_reference/api/payment_drafts/asynchronous.md
+        - Endpoint (Sync): code_reference/api/payment_drafts/synchronous.md
+        - Pydantic Models: code_reference/api/payment_drafts/pydantic.md
+      - Payout Links:
+        - Endpoint (Async): code_reference/api/payout_links/asynchronous.md
+        - Endpoint (Sync): code_reference/api/payout_links/synchronous.md
+        - Pydantic Models: code_reference/api/payout_links/pydantic.md
+      - Simulations:
+        - Endpoint (Async): code_reference/api/simulations/asynchronous.md
+        - Endpoint (Sync): code_reference/api/simulations/synchronous.md
+        - Pydantic Models: code_reference/api/simulations/pydantic.md
+      - Team Members:
+        - Endpoint (Async): code_reference/api/team_members/asynchronous.md
+        - Endpoint (Sync): code_reference/api/team_members/synchronous.md
+        - Pydantic Models: code_reference/api/team_members/pydantic.md
+      - Transactions:
+        - Endpoint (Async): code_reference/api/transactions/asynchronous.md
+        - Endpoint (Sync): code_reference/api/transactions/synchronous.md
+        - Pydantic Models: code_reference/api/transactions/pydantic.md
+      - Transfers:
+        - Endpoint (Async): code_reference/api/transfers/asynchronous.md
+        - Endpoint (Sync): code_reference/api/transfers/synchronous.md
+        - Pydantic Models: code_reference/api/transfers/pydantic.md
+      - Webhooks:
+        - Endpoint (Async): code_reference/api/webhooks/asynchronous.md
+        - Endpoint (Sync): code_reference/api/webhooks/synchronous.md
+        - Pydantic Models: code_reference/api/webhooks/pydantic.md
+    - Exceptions: code_reference/exceptions/exceptions.md
 theme: 
   name: material
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
+            show_root_heading: True
+            docstring_section_style: table
+            show_root_full_path: False
+  - autorefs

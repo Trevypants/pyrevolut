@@ -43,7 +43,7 @@ class AsyncClient(BaseClient):
             return
 
         self.client = HTTPClient()
-        self.__load_resources()
+        self.load_endpoints()
 
     async def close(self):
         """Closes the client connection"""
@@ -238,8 +238,8 @@ class AsyncClient(BaseClient):
             error_response=None,
         )
 
-    def __load_resources(self):
-        """Loads all the resources from the resources directory"""
+    def load_endpoints(self):
+        """Loads all the endpoints from the api directory"""
         self.Accounts = EndpointAccountsAsync(client=self)
         self.Cards = EndpointCardsAsync(client=self)
         self.Counterparties = EndpointCounterpartiesAsync(client=self)
