@@ -5,7 +5,7 @@ import random
 
 from pyrevolut.client import Client
 from pyrevolut.api import EnumAccountState
-from pyrevolut.exceptions import PyRevolutAPIException
+from pyrevolut.exceptions import InternalRevolutError
 
 
 def test_sync_get_all_payment_drafts(sync_client: Client):
@@ -61,10 +61,7 @@ def test_sync_create_delete_payment_draft(sync_client: Client):
         recipient for recipient in recipients if recipient["country"] == "GB"
     )
 
-    with pytest.raises(
-        PyRevolutAPIException,
-        match="Oops! An error occurred while processing your request. It has been logged for further investigation.",
-    ):
+    try:
         # Create a payment draft
         response = sync_client.PaymentDrafts.create_payment_draft(
             account_id=gbp_account["id"],
@@ -82,6 +79,9 @@ def test_sync_create_delete_payment_draft(sync_client: Client):
         # Delete the payment draft
         sync_client.PaymentDrafts.delete_payment_draft(payment_draft_id=response["id"])
         time.sleep(random.randint(1, 3))
+    except InternalRevolutError:
+        # This error occurs randomly in the sandbox environment
+        pass
 
 
 @pytest.mark.asyncio
@@ -140,10 +140,7 @@ async def test_async_create_delete_payment_draft(async_client: Client):
         recipient for recipient in recipients if recipient["country"] == "GB"
     )
 
-    with pytest.raises(
-        PyRevolutAPIException,
-        match="Oops! An error occurred while processing your request. It has been logged for further investigation.",
-    ):
+    try:
         # Create a payment draft
         response = await async_client.PaymentDrafts.create_payment_draft(
             account_id=gbp_account["id"],
@@ -163,3 +160,6 @@ async def test_async_create_delete_payment_draft(async_client: Client):
             payment_draft_id=response["id"]
         )
         await asyncio.sleep(random.randint(1, 3))
+    except InternalRevolutError:
+        # This error occurs randomly in the sandbox environment
+        pass

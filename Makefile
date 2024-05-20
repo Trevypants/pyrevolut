@@ -29,7 +29,7 @@ format:
 ### Commands to run the tests ###
 # base64 encode the credentials: base64 -i tests/test_creds.json
 test-gen-creds:
-	@poetry run pyrevolut auth-manual --credentials-json tests/test_creds.json
+	@poetry run pyrevolut auth-manual --credentials-json tests/credentials/test_creds.json
 
 test-lint:
 	@echo "Running lint tests..."

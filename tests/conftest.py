@@ -1,6 +1,9 @@
+import os
+import glob
 import asyncio
 import time
 import random
+import itertools
 
 import pytest
 import pytest_asyncio
@@ -17,7 +20,9 @@ from pyrevolut.api import EnumTransactionState
 5. session: the fixture is destroyed at the end of the test session.
 """
 
-CREDENTIALS_LOC = "tests/test_creds.json"
+# All the JSON files in the credentials folder
+CREDENTIALS_LOC = glob.glob(os.path.join("tests/credentials", "*.json"))
+CREDENTIALS_LOC_ITER = itertools.cycle(CREDENTIALS_LOC)
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -30,8 +35,24 @@ def event_loop():
     loop.close()
 
 
-@pytest.fixture(scope="session")
-def base_sync_client():
+@pytest.fixture(scope="function")
+def random_creds_file():
+    """Context manager that selects a random credentials file
+
+    Yields
+    ------
+    str
+        The path to the credentials file
+    """
+    # Select a random credentials file
+    creds_loc = next(CREDENTIALS_LOC_ITER)
+
+    # Yield for test
+    yield creds_loc
+
+
+@pytest.fixture(scope="function")
+def base_sync_client(random_creds_file: str):
     """Context manager that initializes the sync client
 
     Yields
@@ -40,7 +61,7 @@ def base_sync_client():
     """
     # Initialize the client
     client = Client(
-        creds_loc=CREDENTIALS_LOC,
+        creds_loc=random_creds_file,
         sandbox=True,
         return_type="dict",
     )
@@ -49,8 +70,8 @@ def base_sync_client():
     yield client
 
 
-@pytest.fixture(scope="session")
-def base_async_client():
+@pytest.fixture(scope="function")
+def base_async_client(random_creds_file: str):
     """Context manager that initializes the async client
 
     Yields
@@ -59,7 +80,7 @@ def base_async_client():
     """
     # Initialize the client
     client = AsyncClient(
-        creds_loc=CREDENTIALS_LOC,
+        creds_loc=random_creds_file,
         sandbox=True,
         return_type="dict",
     )
@@ -68,7 +89,7 @@ def base_async_client():
     yield client
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def sync_client(base_sync_client: Client):
     """Context manager that initializes the sync client
 
@@ -106,7 +127,7 @@ def sync_client(base_sync_client: Client):
     base_sync_client.close()
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="function")
 async def async_client(base_async_client: AsyncClient):
     """Context manager that initializes the async client
 
