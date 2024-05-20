@@ -45,6 +45,7 @@ pytest-env = "1.*"
 
 [tool.poetry.group.docs.dependencies]
 mkdocs-material = "9.*"
+mkdocstrings = { extras = ["python"], version = "0.*" }
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

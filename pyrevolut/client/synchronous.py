@@ -42,7 +42,7 @@ class Client(BaseClient):
             return
 
         self.client = HTTPClient()
-        self.__load_resources()
+        self.load_endpoints()
 
     def close(self):
         """Closes the client connection"""
@@ -237,8 +237,8 @@ class Client(BaseClient):
             error_response=None,
         )
 
-    def __load_resources(self):
-        """Loads all the resources from the resources directory"""
+    def load_endpoints(self):
+        """Loads all the endpoints from the api directory"""
         self.Accounts = EndpointAccountsSync(client=self)
         self.Cards = EndpointCardsSync(client=self)
         self.Counterparties = EndpointCounterpartiesSync(client=self)

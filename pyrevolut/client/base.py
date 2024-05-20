@@ -101,7 +101,7 @@ class BaseClient:
             self.domain = "https://b2b.revolut.com/api"
 
         # Load the credentials
-        self.__load_credentials()
+        self.load_credentials()
 
     def process_response(
         self,
@@ -484,7 +484,7 @@ class BaseClient:
             )
 
         if self.credentials.access_token_expired:
-            self.__refresh_access_token()
+            self.refresh_access_token()
 
     def __process_path(self, path: str) -> str:
         """Process the path.
@@ -564,7 +564,7 @@ class BaseClient:
 
         return data
 
-    def __load_credentials(self):
+    def load_credentials(self):
         """Load the credentials from the credentials file.
 
         - If the credentials file does not exist, raise an error.
@@ -592,9 +592,9 @@ class BaseClient:
 
         # Check if the access token is expired
         if self.credentials.access_token_expired:
-            self.__refresh_access_token()
+            self.refresh_access_token()
 
-    def __refresh_access_token(self):
+    def refresh_access_token(self):
         """Refresh the access token using the refresh token.
         Will call the endpoint to refresh the access token.
         Then it will save the new access token to the credentials file.
