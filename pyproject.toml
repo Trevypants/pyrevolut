@@ -38,15 +38,10 @@ black = "24.*"
 pytest-sugar = "0.*"
 pytest-instafail = "0.*"
 pytest-profiling = "1.*"
-pytest-memray = "1.*"
 pytest-randomly = "3.*"
 pytest-clarity = "1.*"
-pytest-network = "0.*"
-pytest-resource-usage = "1.*"
 pytest-split = "0.*"
 pytest-env = "1.*"
-locust = "2.*"
-requests-toolbelt = "1.*"
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
