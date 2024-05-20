@@ -73,7 +73,7 @@ jobs:
         run: |
           if [[ "${{ runner.os }}" == "Windows" ]]; then
             echo "CREDENTIALS_JSON=${{ secrets.PYTEST_CREDENTIALS_WIN }}" >> $GITHUB_ENV
-          elif [[ "${{ runner.os }}" == "macOs" ]]; then
+          elif [[ "${{ runner.os }}" == "macOS" ]]; then
             echo "CREDENTIALS_JSON=${{ secrets.PYTEST_CREDENTIALS_MAC }}" >> $GITHUB_ENV
           else
             echo "CREDENTIALS_JSON=${{ secrets.PYTEST_CREDENTIALS_LINUX }}" >> $GITHUB_ENV

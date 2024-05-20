@@ -33,13 +33,13 @@ test-gen-creds:
 
 test-lint:
 	@echo "Running lint tests..."
-	@poetry run black pyrevolut tests
-	@poetry run ruff check pyrevolut/ tests/ --fix
+	@poetry run python -m black pyrevolut tests
+	@poetry run python -m ruff check pyrevolut/ tests/ --fix
 	@echo "Lint tests complete!"
 
 test-integration:
 	@echo "Running integration tests..."
-	@poetry run pytest -n 1 --dist=loadfile --cov-report term-missing --cov-report=xml:coverage.xml --cov=pyrevolut tests
+	@poetry run python -m pytest -n 1 --dist=loadfile --cov-report term-missing --cov-report=xml:coverage.xml --cov=pyrevolut tests
 	@echo "Integration tests complete!"
 
 test:
