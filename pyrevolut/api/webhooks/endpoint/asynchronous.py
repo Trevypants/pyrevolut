@@ -4,10 +4,7 @@ from datetime import datetime
 from pydantic_extra_types.pendulum_dt import Duration
 
 from pyrevolut.utils import DateTime
-from pyrevolut.api.common import (
-    BaseEndpointAsync,
-    EnumWebhookEvent,
-)
+from pyrevolut.api.common import EnumWebhookEvent
 
 from pyrevolut.api.webhooks.get import (
     RetrieveListOfWebhooks,
@@ -18,8 +15,10 @@ from pyrevolut.api.webhooks.post import CreateWebhook, RotateWebhookSecret
 from pyrevolut.api.webhooks.patch import UpdateWebhook
 from pyrevolut.api.webhooks.delete import DeleteWebhook
 
+from .base import BaseEndpointWebhooks
 
-class EndpointWebhooksAsync(BaseEndpointAsync):
+
+class EndpointWebhooksAsync(BaseEndpointWebhooks):
     """The async Webhooks API
 
     A webhook (also called a web callback) allows your system to receive
