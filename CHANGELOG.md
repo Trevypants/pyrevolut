@@ -1,3 +1,9 @@
+## v0.7.0 (2024-06-01)
+
+### Feat
+
+- added a webhooks function to receive webhook payload data
+
 ## v0.6.2 (2024-05-20)
 
 ### Fix
