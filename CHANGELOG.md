@@ -1,3 +1,9 @@
+## v0.7.1 (2024-06-02)
+
+### Fix
+
+- fixed ngrok auth token
+
 ## v0.7.0 (2024-06-01)
 
 ### Feat
