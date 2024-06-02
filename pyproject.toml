@@ -42,6 +42,10 @@ pytest-randomly = "3.*"
 pytest-clarity = "1.*"
 pytest-split = "0.*"
 pytest-env = "1.*"
+pyngrok = "7.*"
+litestar = "2.*"
+uvicorn = "0.*"
+python-dotenv = "1.*"
 
 [tool.poetry.group.docs.dependencies]
 mkdocs-material = "9.*"

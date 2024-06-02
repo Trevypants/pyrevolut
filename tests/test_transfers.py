@@ -10,7 +10,6 @@ from pyrevolut.api import (
     EnumAccountState,
     EnumTransactionState,
     EnumTransferReasonCode,
-    EnumSimulateTransferStateAction,
 )
 
 
@@ -198,7 +197,7 @@ def test_sync_create_transfer_to_another_account(sync_client: Client):
     # Complete the transfer via simulation
     response = sync_client.Simulations.simulate_transfer_state_update(
         transfer_id=response["id"],
-        action=EnumSimulateTransferStateAction.COMPLETE,
+        action="complete",
     )
     time.sleep(random.randint(1, 3))
     assert response["state"] == EnumTransactionState.COMPLETED
@@ -225,7 +224,7 @@ def test_sync_create_transfer_to_another_account(sync_client: Client):
     # Complete the transfer via simulation
     response = sync_client.Simulations.simulate_transfer_state_update(
         transfer_id=response["id"],
-        action=EnumSimulateTransferStateAction.COMPLETE,
+        action="complete",
     )
     time.sleep(random.randint(1, 3))
     assert response["state"] == EnumTransactionState.COMPLETED
@@ -418,7 +417,7 @@ async def test_async_create_transfer_to_another_account(async_client: Client):
     # Complete the transfer via simulation
     response = await async_client.Simulations.simulate_transfer_state_update(
         transfer_id=response["id"],
-        action=EnumSimulateTransferStateAction.COMPLETE,
+        action="complete",
     )
     await asyncio.sleep(random.randint(1, 3))
     assert response["state"] == EnumTransactionState.COMPLETED
@@ -445,7 +444,7 @@ async def test_async_create_transfer_to_another_account(async_client: Client):
     # Complete the transfer via simulation
     response = await async_client.Simulations.simulate_transfer_state_update(
         transfer_id=response["id"],
-        action=EnumSimulateTransferStateAction.COMPLETE,
+        action="complete",
     )
     await asyncio.sleep(random.randint(1, 3))
     assert response["state"] == EnumTransactionState.COMPLETED

@@ -4,14 +4,14 @@ import pytest
 import random
 
 from pyrevolut.client import Client
-from pyrevolut.exceptions import InvalidEnvironmentException
+from pyrevolut.exceptions import PyRevolutInvalidEnvironment
 
 
 def test_sync_get_team_members(sync_client: Client):
     """Test the sync `get_team_members` team members method"""
 
     with pytest.raises(
-        InvalidEnvironmentException, match="This feature is not available in Sandbox."
+        PyRevolutInvalidEnvironment, match="This feature is not available in Sandbox."
     ):
         # Get all team members (no params)
         team_members = sync_client.TeamMembers.get_team_members()
@@ -34,7 +34,7 @@ def test_sync_get_team_roles(sync_client: Client):
     """Test the sync `get_team_roles` team members method"""
 
     with pytest.raises(
-        InvalidEnvironmentException, match="This feature is not available in Sandbox."
+        PyRevolutInvalidEnvironment, match="This feature is not available in Sandbox."
     ):
         # Get all team roles (no params)
         team_roles = sync_client.TeamMembers.get_team_roles()
@@ -57,7 +57,7 @@ def test_sync_invite_team_member(sync_client: Client):
     """Test the sync `invite_team_member` team members method"""
 
     with pytest.raises(
-        InvalidEnvironmentException, match="This feature is not available in Sandbox."
+        PyRevolutInvalidEnvironment, match="This feature is not available in Sandbox."
     ):
         # Get all team roles
         team_roles = sync_client.TeamMembers.get_team_roles()
@@ -81,7 +81,7 @@ async def test_async_get_team_members(async_client: Client):
     """Test the async `get_team_members` team members method"""
 
     with pytest.raises(
-        InvalidEnvironmentException, match="This feature is not available in Sandbox."
+        PyRevolutInvalidEnvironment, match="This feature is not available in Sandbox."
     ):
         # Get all team members (no params)
         team_members = await async_client.TeamMembers.get_team_members()
@@ -105,7 +105,7 @@ async def test_async_get_team_roles(async_client: Client):
     """Test the async `get_team_roles` team members method"""
 
     with pytest.raises(
-        InvalidEnvironmentException, match="This feature is not available in Sandbox."
+        PyRevolutInvalidEnvironment, match="This feature is not available in Sandbox."
     ):
         # Get all team roles (no params)
         team_roles = await async_client.TeamMembers.get_team_roles()
@@ -129,7 +129,7 @@ async def test_async_invite_team_member(async_client: Client):
     """Test the async `invite_team_member` team members method"""
 
     with pytest.raises(
-        InvalidEnvironmentException, match="This feature is not available in Sandbox."
+        PyRevolutInvalidEnvironment, match="This feature is not available in Sandbox."
     ):
         # Get all team roles
         team_roles = await async_client.TeamMembers.get_team_roles()

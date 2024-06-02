@@ -1,7 +1,13 @@
-from .common import PyRevolutAPIException
+from .common import PyRevolutBaseException
 
 
-class BadRequestException(PyRevolutAPIException):
-    """Exception raised when the API returns a 400 Bad Request error."""
+class PyRevolutBadRequest(PyRevolutBaseException):
+    """Bad Request -- Your request is invalid."""
 
-    pass
+    def __init__(
+        self,
+        msg="Your request is invalid. Please check the request and try again.",
+        *args,
+        **kwargs,
+    ):
+        super().__init__(msg, *args, **kwargs)

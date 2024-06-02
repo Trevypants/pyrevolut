@@ -4,14 +4,14 @@ import pytest
 import random
 
 from pyrevolut.client import Client, AsyncClient
-from pyrevolut.exceptions import InvalidEnvironmentException
+from pyrevolut.exceptions import PyRevolutInvalidEnvironment
 
 
 def test_sync_get_all_cards(sync_client: Client):
     """Test the sync `get_all_cards` cards method"""
     # Get Cards (no params)
     with pytest.raises(
-        InvalidEnvironmentException, match="This feature is not available in Sandbox."
+        PyRevolutInvalidEnvironment, match="This feature is not available in Sandbox."
     ):
         cards_all = sync_client.Cards.get_all_cards()
         time.sleep(random.randint(1, 3))
@@ -21,7 +21,7 @@ def test_sync_get_all_cards(sync_client: Client):
 
     # Get Cards (with params)
     with pytest.raises(
-        InvalidEnvironmentException, match="This feature is not available in Sandbox."
+        PyRevolutInvalidEnvironment, match="This feature is not available in Sandbox."
     ):
         cards_all = sync_client.Cards.get_all_cards(
             created_before="2020-01-01",
@@ -35,7 +35,7 @@ def test_sync_get_all_cards(sync_client: Client):
 def test_sync_get_card(sync_client: Client):
     """Test the sync `get_card` cards method"""
     with pytest.raises(
-        InvalidEnvironmentException, match="This feature is not available in Sandbox."
+        PyRevolutInvalidEnvironment, match="This feature is not available in Sandbox."
     ):
         # Get all cards
         cards_all = sync_client.Cards.get_all_cards()
@@ -54,7 +54,7 @@ def test_sync_get_card(sync_client: Client):
 def test_get_card_sensitive_details(sync_client: Client):
     """Test the sync `get_card_sensitive_details` cards method"""
     with pytest.raises(
-        InvalidEnvironmentException, match="This feature is not available in Sandbox."
+        PyRevolutInvalidEnvironment, match="This feature is not available in Sandbox."
     ):
         # Get all cards
         cards_all = sync_client.Cards.get_all_cards()
@@ -100,7 +100,7 @@ async def test_async_get_all_cards(async_client: AsyncClient):
     """Test the async `get_all_cards` cards method"""
     # Get Cards (no params)
     with pytest.raises(
-        InvalidEnvironmentException, match="This feature is not available in Sandbox."
+        PyRevolutInvalidEnvironment, match="This feature is not available in Sandbox."
     ):
         cards_all = await async_client.Cards.get_all_cards()
         await asyncio.sleep(random.randint(1, 3))
@@ -110,7 +110,7 @@ async def test_async_get_all_cards(async_client: AsyncClient):
 
     # Get Cards (with params)
     with pytest.raises(
-        InvalidEnvironmentException, match="This feature is not available in Sandbox."
+        PyRevolutInvalidEnvironment, match="This feature is not available in Sandbox."
     ):
         cards_all = await async_client.Cards.get_all_cards(
             created_before="2020-01-01",
@@ -125,7 +125,7 @@ async def test_async_get_all_cards(async_client: AsyncClient):
 async def test_async_get_card(async_client: AsyncClient):
     """Test the async `get_card` cards method"""
     with pytest.raises(
-        InvalidEnvironmentException, match="This feature is not available in Sandbox."
+        PyRevolutInvalidEnvironment, match="This feature is not available in Sandbox."
     ):
         # Get all cards
         cards_all = await async_client.Cards.get_all_cards()
@@ -145,7 +145,7 @@ async def test_async_get_card(async_client: AsyncClient):
 async def test_async_get_card_sensitive_details(async_client: AsyncClient):
     """Test the async `get_card_sensitive_details` cards method"""
     with pytest.raises(
-        InvalidEnvironmentException, match="This feature is not available in Sandbox."
+        PyRevolutInvalidEnvironment, match="This feature is not available in Sandbox."
     ):
         # Get all cards
         cards_all = await async_client.Cards.get_all_cards()

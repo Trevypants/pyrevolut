@@ -86,6 +86,7 @@ jobs:
         if: always()
         run: |
           echo $CREDENTIALS_JSON | base64 -d > ./tests/credentials/test_creds.json
+          echo "NGROK_AUTH_TOKEN=${{ secrets.PYTEST_NGROK_AUTH_TOKEN }}" > ./tests/credentials/.env
           make test
 
       #----------------------------------------------

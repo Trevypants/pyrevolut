@@ -9,7 +9,6 @@ from pyrevolut.api import (
     EnumAccountState,
     EnumTransactionState,
     EnumTransferReasonCode,
-    EnumSimulateTransferStateAction,
 )
 
 
@@ -136,7 +135,7 @@ def test_sync_simulate_transfer_state_update(sync_client: Client):
     # Decline the transfer
     response = sync_client.Simulations.simulate_transfer_state_update(
         transfer_id=response["id"],
-        action=EnumSimulateTransferStateAction.DECLINE,
+        action="decline",
     )
     time.sleep(random.randint(1, 3))
     assert response["state"] == EnumTransactionState.DECLINED
@@ -271,7 +270,7 @@ async def test_async_simulate_transfer_state_update(async_client: Client):
     # Decline the transfer
     response = await async_client.Simulations.simulate_transfer_state_update(
         transfer_id=response["id"],
-        action=EnumSimulateTransferStateAction.DECLINE,
+        action="decline",
     )
     await asyncio.sleep(random.randint(1, 3))
     assert response["state"] == EnumTransactionState.DECLINED
