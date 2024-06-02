@@ -2,6 +2,7 @@ import time
 import asyncio
 import random
 from uuid import UUID, uuid4
+import platform
 
 import pytest
 import pendulum
@@ -308,6 +309,11 @@ def test_webhook_verify_payload_signature_invalid_timestamp(sync_client: Client)
         )
 
 
+@pytest.mark.asyncio
+@pytest.mark.skipif(
+    condition=platform.system() != "Darwin",
+    reason="Only one ngrok tunnel allowed at a time",
+)
 async def test_webhook_app(async_client: Client, litestar_client_url: str):
     """Test the webhook when receiving a webhook"""
     # Set the async client to return pydantic models
