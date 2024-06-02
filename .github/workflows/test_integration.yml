@@ -78,6 +78,7 @@ jobs:
           else
             echo "CREDENTIALS_JSON=${{ secrets.PYTEST_CREDENTIALS_LINUX }}" >> $GITHUB_ENV
           fi
+          echo "NGROK_AUTH_TOKEN=${{ secrets.PYTEST_NGROK_AUTH_TOKEN }}" >> $GITHUB_ENV
 
       #-----------------------------------------------
       #   ------------- run test suite ------------
@@ -86,7 +87,7 @@ jobs:
         if: always()
         run: |
           echo $CREDENTIALS_JSON | base64 -d > ./tests/credentials/test_creds.json
-          echo "NGROK_AUTH_TOKEN=${{ secrets.PYTEST_NGROK_AUTH_TOKEN }}" > ./tests/credentials/.env
+          echo "NGROK_AUTH_TOKEN=$NGROK_AUTH_TOKEN" > ./tests/credentials/.env
           make test
 
       #----------------------------------------------
