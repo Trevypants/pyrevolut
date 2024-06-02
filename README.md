@@ -184,6 +184,7 @@ The wrapper currently supports the following APIs:
   - [x] Delete a webhook
   - [x] Rotate a webhook signing secret
   - [x] Retrieve a list of failed webhook events
+  - [x] Verify a webhook signature
 
 ## **Contributing**
 

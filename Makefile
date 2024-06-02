@@ -48,6 +48,12 @@ test:
 	$(MAKE) test-integration
 	@echo "Tests complete!"
 
+### Commands to run the docs ###
+run-docs:
+	@echo "Building documentation..."
+	@poetry run mkdocs serve
+	@echo "Documentation built!"
+
 ### Commands to git commit ###
 stage:
 	@echo "Staging changes..."

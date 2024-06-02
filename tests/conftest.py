@@ -7,9 +7,28 @@ import itertools
 
 import pytest
 import pytest_asyncio
+from dotenv import load_dotenv
+import uvicorn
+
+from litestar import Litestar, status_codes
+from litestar.config.cors import CORSConfig
+from litestar.datastructures import State
+from pyngrok import ngrok
+from pyngrok.conf import PyngrokConfig
 
 from pyrevolut.client import Client, AsyncClient
 from pyrevolut.api import EnumTransactionState
+
+from tests.app import (
+    UvicornServer,
+    index,
+    webhook,
+    test_raw_payload,
+    set_signing_secret,
+    get_signing_secret,
+    get_webhook_payload,
+    internal_server_error_handler,
+)
 
 """ Pytest Fixture Scopes
 
@@ -163,3 +182,70 @@ async def async_client(base_async_client: AsyncClient):
 
     # Close the async client
     await base_async_client.close()
+
+
+@pytest_asyncio.fixture(scope="function")
+async def litestar_client_url(async_client: AsyncClient):
+    """Context manager that initializes the Litestar client
+
+    Parameters
+    ----------
+    async_client : AsyncClient
+        The async client to use for the endpoint
+
+    Yields
+    ------
+    str
+        The url of the Litestar client
+    """
+    # Create the Litestar app
+    app = Litestar(
+        route_handlers=[
+            index,
+            webhook,
+            set_signing_secret,
+            test_raw_payload,
+            get_signing_secret,
+            get_webhook_payload,
+        ],
+        cors_config=CORSConfig(allow_origins=["*"]),
+        state=State({"client": async_client}),
+        exception_handlers={
+            status_codes.HTTP_500_INTERNAL_SERVER_ERROR: internal_server_error_handler,
+        },
+    )
+
+    # Get the Environment variables
+    dotenv_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+        "tests/.env",
+    )
+
+    # Load .env file variables
+    load_dotenv(dotenv_path=dotenv_path)
+
+    # Initialize the ngrok tunnel
+    ngrok_config = PyngrokConfig(auth_token=os.getenv("NGROK_AUTH_TOKEN"))
+    ngrok_tunnel = ngrok.connect(
+        addr="8000",
+        pyngrok_config=ngrok_config,
+    )
+    public_url = ngrok_tunnel.public_url
+
+    # Start the Litestar app in a seaparate thread
+    uvicorn_config = uvicorn.Config(
+        app=app,
+        host="0.0.0.0",
+        port=8000,
+        log_level="error",
+    )
+    with UvicornServer(config=uvicorn_config).run_in_thread():
+        # Wait a few seconds for startup
+        await asyncio.sleep(3)
+
+        # Yield public URL for test
+        yield public_url
+
+    # Shutdown the ngrok tunnel
+    ngrok.disconnect(public_url=public_url)
+    ngrok.kill()

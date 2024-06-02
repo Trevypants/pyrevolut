@@ -1,7 +1,7 @@
 from uuid import UUID
 from datetime import datetime
 
-from pyrevolut.exceptions import InvalidEnvironmentException
+from pyrevolut.exceptions import PyRevolutInvalidEnvironment
 from pyrevolut.utils.datetime import DateTime
 from pyrevolut.api.common import BaseEndpointAsync
 from pyrevolut.api.team_members.get import RetrieveListOfTeamMembers, RetrieveTeamRoles
@@ -170,10 +170,10 @@ class EndpointTeamMembersAsync(BaseEndpointAsync):
 
         Raises
         ------
-        InvalidEnvironmentException
+        PyRevolutInvalidEnvironment
             If the sandbox is enabled.
         """
         if self.client.sandbox:
-            raise InvalidEnvironmentException(
+            raise PyRevolutInvalidEnvironment(
                 "This feature is not available in Sandbox."
             )

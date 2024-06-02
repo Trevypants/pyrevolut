@@ -1,10 +1,10 @@
 from uuid import UUID
+from typing import Literal
 
-from pyrevolut.exceptions import InvalidEnvironmentException
+from pyrevolut.exceptions import PyRevolutInvalidEnvironment
 from pyrevolut.api.common import (
     BaseEndpointSync,
     EnumTransactionState,
-    EnumSimulateTransferStateAction,
 )
 from pyrevolut.api.simulations.post import (
     SimulateAccountTopup,
@@ -92,7 +92,7 @@ class EndpointSimulationsSync(BaseEndpointSync):
     def simulate_transfer_state_update(
         self,
         transfer_id: UUID,
-        action: EnumSimulateTransferStateAction,
+        action: Literal["complete", "revert", "decline", "fail"],
         **kwargs,
     ) -> dict | SimulateTransferStateUpdate.Response:
         """
@@ -107,7 +107,7 @@ class EndpointSimulationsSync(BaseEndpointSync):
         ----------
         transfer_id : UUID
             The ID of the transfer whose state you want to update.
-        action : EnumSimulateTransferStateAction
+        action : Literal["complete", "revert", "decline", "fail"]
             The action you want to perform on the transfer. Possible values:
 
                 complete:
@@ -125,6 +125,7 @@ class EndpointSimulationsSync(BaseEndpointSync):
             The updated transfer information.
         """
         self.__check_sandbox()
+        assert action in ["complete", "revert", "decline", "fail"], "Invalid action"
         endpoint = SimulateTransferStateUpdate
         path = endpoint.ROUTE.format(transfer_id=transfer_id, action=action)
         body = endpoint.Body()
@@ -142,10 +143,10 @@ class EndpointSimulationsSync(BaseEndpointSync):
 
         Raises
         ------
-        InvalidEnvironmentException
+        PyRevolutInvalidEnvironment
             If the sandbox is enabled.
         """
         if not self.client.sandbox:
-            raise InvalidEnvironmentException(
+            raise PyRevolutInvalidEnvironment(
                 "This feature is only available in the Sandbox."
             )

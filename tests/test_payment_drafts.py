@@ -5,7 +5,7 @@ import random
 
 from pyrevolut.client import Client
 from pyrevolut.api import EnumAccountState
-from pyrevolut.exceptions import InternalRevolutError
+from pyrevolut.exceptions import PyRevolutInternalServerError
 
 
 def test_sync_get_all_payment_drafts(sync_client: Client):
@@ -79,7 +79,7 @@ def test_sync_create_delete_payment_draft(sync_client: Client):
         # Delete the payment draft
         sync_client.PaymentDrafts.delete_payment_draft(payment_draft_id=response["id"])
         time.sleep(random.randint(1, 3))
-    except InternalRevolutError:
+    except PyRevolutInternalServerError:
         # This error occurs randomly in the sandbox environment
         pass
 
@@ -160,6 +160,6 @@ async def test_async_create_delete_payment_draft(async_client: Client):
             payment_draft_id=response["id"]
         )
         await asyncio.sleep(random.randint(1, 3))
-    except InternalRevolutError:
+    except PyRevolutInternalServerError:
         # This error occurs randomly in the sandbox environment
         pass

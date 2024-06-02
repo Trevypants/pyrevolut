@@ -6,7 +6,7 @@ import random
 
 from pyrevolut.client import Client, AsyncClient
 from pyrevolut.api import EnumAccountState, EnumTransactionState
-from pyrevolut.exceptions import InternalRevolutError
+from pyrevolut.exceptions import PyRevolutInternalServerError
 
 
 def test_sync_get_exchange_rate(sync_client: Client):
@@ -125,7 +125,7 @@ def test_sync_exchange_money(sync_client: Client):
         assert gbp_balance3 < gbp_balance2
         assert eur_balance3 == eur_balance
         assert eur_balance3 > eur_balance2
-    except InternalRevolutError:
+    except PyRevolutInternalServerError:
         # This error occurs randomly in the sandbox environment
         pass
 
@@ -248,6 +248,6 @@ async def test_async_exchange_money(async_client: AsyncClient):
         assert gbp_balance3 < gbp_balance2
         assert eur_balance3 == eur_balance
         assert eur_balance3 > eur_balance2
-    except InternalRevolutError:
+    except PyRevolutInternalServerError:
         # This error occurs randomly in the sandbox environment
         pass

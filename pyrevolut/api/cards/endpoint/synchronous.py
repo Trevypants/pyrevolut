@@ -5,7 +5,7 @@ from datetime import datetime
 from pydantic import BaseModel
 
 from pyrevolut.utils import DateTime
-from pyrevolut.exceptions import InvalidEnvironmentException
+from pyrevolut.exceptions import PyRevolutInvalidEnvironment
 from pyrevolut.api.common import BaseEndpointSync, EnumMerchantCategory
 from pyrevolut.api.cards.get import (
     RetrieveListOfCards,
@@ -595,10 +595,10 @@ class EndpointCardsSync(BaseEndpointSync):
 
         Raises
         ------
-        InvalidEnvironmentException
+        PyRevolutInvalidEnvironment
             If the sandbox is enabled.
         """
         if self.client.sandbox:
-            raise InvalidEnvironmentException(
+            raise PyRevolutInvalidEnvironment(
                 "This feature is not available in Sandbox."
             )

@@ -5,9 +5,15 @@ import json
 from pydantic import BaseModel, Field
 import pendulum
 
-from httpx import AsyncClient
-from httpx import Client as SyncClient
-from httpx import Request, Response
+from httpx import (
+    AsyncClient,
+    Client as SyncClient,
+    Request,
+    Response,
+    HTTPError,
+    TimeoutException,
+    NetworkError,
+)
 
 from pyrevolut.utils.auth import (
     ModelCreds,
@@ -16,9 +22,19 @@ from pyrevolut.utils.auth import (
     load_creds,
 )
 from pyrevolut.exceptions import (
-    PyRevolutAPIException,
-    BadRequestException,
-    InternalRevolutError,
+    PyRevolutBaseException,
+    PyRevolutTimeoutError,
+    PyRevolutNetworkError,
+    PyRevolutBadRequest,
+    PyRevolutUnauthorized,
+    PyRevolutForbidden,
+    PyRevolutNotFound,
+    PyRevolutMethodNotAllowed,
+    PyRevolutNotAcceptable,
+    PyRevolutConflict,
+    PyRevolutTooManyRequests,
+    PyRevolutInternalServerError,
+    PyRevolutServerUnavailable,
 )
 
 
@@ -162,11 +178,34 @@ class BaseClient:
         # Check for error response
         if response.is_error:
             if error_response == "raise":
-                if response.status_code == 400:
-                    raise BadRequestException(response.text)
-                elif response.status_code // 100 == 5:
-                    raise InternalRevolutError(response.text)
-                raise PyRevolutAPIException(response.text)
+                try:
+                    response.raise_for_status()
+                except TimeoutException as exc:
+                    raise PyRevolutTimeoutError() from exc
+                except NetworkError as exc:
+                    raise PyRevolutNetworkError() from exc
+                except HTTPError as exc:
+                    if response.status_code == 400:
+                        raise PyRevolutBadRequest() from exc
+                    elif response.status_code == 401:
+                        raise PyRevolutUnauthorized() from exc
+                    elif response.status_code == 403:
+                        raise PyRevolutForbidden() from exc
+                    elif response.status_code == 404:
+                        raise PyRevolutNotFound() from exc
+                    elif response.status_code == 405:
+                        raise PyRevolutMethodNotAllowed() from exc
+                    elif response.status_code == 406:
+                        raise PyRevolutNotAcceptable() from exc
+                    elif response.status_code == 409:
+                        raise PyRevolutConflict() from exc
+                    elif response.status_code == 429:
+                        raise PyRevolutTooManyRequests() from exc
+                    elif response.status_code == 500:
+                        raise PyRevolutInternalServerError() from exc
+                    elif response.status_code == 503:
+                        raise PyRevolutServerUnavailable() from exc
+                    raise PyRevolutBaseException() from exc
             elif error_response == "raw":
                 return response.json()
             elif error_response == "dict":
