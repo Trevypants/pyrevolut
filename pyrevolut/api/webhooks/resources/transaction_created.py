@@ -96,7 +96,7 @@ class ResourceTransactionCreated(BaseModel):
     request_id: Annotated[
         str | None,
         Field(
-            description="The request ID that you provided previously.", max_length=40
+            description="The request ID that you provided previously.",
         ),
     ] = None
     reason_code: Annotated[
