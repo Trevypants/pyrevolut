@@ -4,6 +4,8 @@ import asyncio
 import time
 import random
 import itertools
+import json
+import base64
 
 import pytest
 import pytest_asyncio
@@ -42,6 +44,7 @@ from tests.app import (
 # All the JSON files in the credentials folder
 CREDENTIALS_LOC = glob.glob(os.path.join("tests/credentials", "*.json"))
 CREDENTIALS_LOC_ITER = itertools.cycle(CREDENTIALS_LOC)
+CREDENTIALS_CHOICE_ITER = itertools.cycle(["creds_loc", "creds", "creds_base64"])
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -55,23 +58,56 @@ def event_loop():
 
 
 @pytest.fixture(scope="function")
-def random_creds_file():
+def random_creds():
     """Context manager that selects a random credentials file
 
     Yields
     ------
-    str
-        The path to the credentials file
+    dict[str, str | dict]
+        A dictionary containing the credentials location, credentials, or base64 encoded credentials.
+        Will randomly choose between providing the creds_loc, creds, or creds_base64.
+        For example: {
+            "creds_loc": "tests/credentials/creds_1.json",
+            "creds": None,
+        }
+        or {
+            "creds_loc": None,
+            "creds": {
+                "client_id": "12345678-abcd-1234-abcd-1234567890ab",
+                "client_secret": "123"
+            }
+        }
+        or {
+            "creds_loc": None,
+            "creds": "eyJjbGllbnRfa"  # Base64 encoded credentials
+        }
     """
     # Select a random credentials file
     creds_loc = next(CREDENTIALS_LOC_ITER)
 
-    # Yield for test
-    yield creds_loc
+    # Select a random credentials loading choice
+    choice = next(CREDENTIALS_CHOICE_ITER)
+
+    # Load the credentials file
+    with open(creds_loc, "r") as file:
+        creds = json.load(file)
+
+    # Base64 encode the credentials dict
+    creds_base64 = base64.b64encode(json.dumps(creds).encode(encoding="utf-8")).decode(
+        encoding="utf-8"
+    )
+
+    # Randomly choose between providing the creds_loc, creds, or creds_base64
+    if choice == "creds_loc":
+        yield {"creds_loc": creds_loc, "creds": None}
+    elif choice == "creds":
+        yield {"creds_loc": creds_loc, "creds": creds}
+    else:
+        yield {"creds_loc": creds_loc, "creds": creds_base64}
 
 
 @pytest.fixture(scope="function")
-def base_sync_client(random_creds_file: str):
+def base_sync_client(random_creds: dict[str, str | dict]):
     """Context manager that initializes the sync client
 
     Yields
@@ -80,7 +116,8 @@ def base_sync_client(random_creds_file: str):
     """
     # Initialize the client
     client = Client(
-        creds_loc=random_creds_file,
+        creds_loc=random_creds["creds_loc"],
+        creds=random_creds["creds"],
         sandbox=True,
         return_type="dict",
     )
@@ -90,16 +127,18 @@ def base_sync_client(random_creds_file: str):
 
 
 @pytest.fixture(scope="function")
-def base_async_client(random_creds_file: str):
+def base_async_client(random_creds: dict[str, str | dict]):
     """Context manager that initializes the async client
 
     Yields
     ------
     None
     """
+
     # Initialize the client
     client = AsyncClient(
-        creds_loc=random_creds_file,
+        creds_loc=random_creds["creds_loc"],
+        creds=random_creds["creds"],
         sandbox=True,
         return_type="dict",
     )

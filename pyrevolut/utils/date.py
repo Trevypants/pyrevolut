@@ -33,7 +33,7 @@ class Date(_Date):
             A Pydantic CoreSchema with the Date validation.
         """
         return core_schema.no_info_wrap_validator_function(
-            cls._validate, core_schema.datetime_schema()
+            cls._validate, core_schema.date_schema()
         )
 
     @classmethod
@@ -120,7 +120,8 @@ def string_to_date(string: str) -> Date:
     ]
     for format in formats:
         try:
-            return pendulum.from_format(string=string, fmt=format, tz="UTC")
+            dt = pendulum.from_format(string=string, fmt=format, tz="UTC")
+            return pendulum.Date(year=dt.year, month=dt.month, day=dt.day)
         except Exception:
             pass
     raise PydanticCustomError(f"Error converting string to pendulum Date: {string}")

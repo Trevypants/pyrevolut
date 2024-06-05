@@ -24,17 +24,17 @@ from .base import BaseClient
 class Client(BaseClient):
     """The synchronous client for the Revolut API"""
 
-    Accounts: EndpointAccountsSync | None = None
-    Cards: EndpointCardsSync | None = None
-    Counterparties: EndpointCounterpartiesSync | None = None
-    ForeignExchange: EndpointForeignExchangeSync | None = None
-    PaymentDrafts: EndpointPaymentDraftsSync | None = None
-    PayoutLinks: EndpointPayoutLinksSync | None = None
-    Simulations: EndpointSimulationsSync | None = None
-    TeamMembers: EndpointTeamMembersSync | None = None
-    Transactions: EndpointTransactionsSync | None = None
-    Transfers: EndpointTransfersSync | None = None
-    Webhooks: EndpointWebhooksSync | None = None
+    Accounts: EndpointAccountsSync
+    Cards: EndpointCardsSync
+    Counterparties: EndpointCounterpartiesSync
+    ForeignExchange: EndpointForeignExchangeSync
+    PaymentDrafts: EndpointPaymentDraftsSync
+    PayoutLinks: EndpointPayoutLinksSync
+    Simulations: EndpointSimulationsSync
+    TeamMembers: EndpointTeamMembersSync
+    Transactions: EndpointTransactionsSync
+    Transfers: EndpointTransfersSync
+    Webhooks: EndpointWebhooksSync
 
     def open(self):
         """Opens the client connection"""
@@ -42,7 +42,6 @@ class Client(BaseClient):
             return
 
         self.client = HTTPClient()
-        self.load_endpoints()
 
     def close(self):
         """Closes the client connection"""

@@ -25,17 +25,17 @@ from .base import BaseClient
 class AsyncClient(BaseClient):
     """The asynchronous client for the Revolut API"""
 
-    Accounts: EndpointAccountsAsync | None = None
-    Cards: EndpointCardsAsync | None = None
-    Counterparties: EndpointCounterpartiesAsync | None = None
-    ForeignExchange: EndpointForeignExchangeAsync | None = None
-    PaymentDrafts: EndpointPaymentDraftsAsync | None = None
-    PayoutLinks: EndpointPayoutLinksAsync | None = None
-    Simulations: EndpointSimulationsAsync | None = None
-    TeamMembers: EndpointTeamMembersAsync | None = None
-    Transactions: EndpointTransactionsAsync | None = None
-    Transfers: EndpointTransfersAsync | None = None
-    Webhooks: EndpointWebhooksAsync | None = None
+    Accounts: EndpointAccountsAsync
+    Cards: EndpointCardsAsync
+    Counterparties: EndpointCounterpartiesAsync
+    ForeignExchange: EndpointForeignExchangeAsync
+    PaymentDrafts: EndpointPaymentDraftsAsync
+    PayoutLinks: EndpointPayoutLinksAsync
+    Simulations: EndpointSimulationsAsync
+    TeamMembers: EndpointTeamMembersAsync
+    Transactions: EndpointTransactionsAsync
+    Transfers: EndpointTransfersAsync
+    Webhooks: EndpointWebhooksAsync
 
     async def open(self):
         """Opens the client connection"""
@@ -43,7 +43,6 @@ class AsyncClient(BaseClient):
             return
 
         self.client = HTTPClient()
-        self.load_endpoints()
 
     async def close(self):
         """Closes the client connection"""
