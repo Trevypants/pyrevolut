@@ -1,3 +1,13 @@
+## v0.8.0 (2024-06-05)
+
+### Feat
+
+- added ability to provide creds as dict or base64 encoded string
+
+### Fix
+
+- allow request id response to have more than 40 characters
+
 ## v0.7.1 (2024-06-02)
 
 ### Fix
