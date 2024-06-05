@@ -59,11 +59,6 @@ class DateTime(_DateTime):
         Any
             The validated value or raises a PydanticCustomError.
         """
-        # if we are passed an existing instance, pass it straight through.
-        if isinstance(value, _DateTime):
-            return handler(value)
-
-        # otherwise, parse it.
         try:
             data = to_datetime(value)
         except Exception as exc:

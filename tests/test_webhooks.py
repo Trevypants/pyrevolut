@@ -348,9 +348,9 @@ async def test_webhook_app(async_client: Client, litestar_client_url: str):
     ### Create a transaction ###
 
     # Get all accounts
-    accounts: list[
-        RetrieveAllAccounts.Response
-    ] = await async_client.Accounts.get_all_accounts()
+    accounts: list[RetrieveAllAccounts.Response] = (
+        await async_client.Accounts.get_all_accounts()
+    )
     await asyncio.sleep(random.randint(1, 3))
 
     # Get EUR account
@@ -378,9 +378,9 @@ async def test_webhook_app(async_client: Client, litestar_client_url: str):
         assert response.state == EnumTransactionState.COMPLETED
 
     # Get all counterparties
-    counterparties: list[
-        RetrieveListOfCounterparties.Response
-    ] = await async_client.Counterparties.get_all_counterparties()
+    counterparties: list[RetrieveListOfCounterparties.Response] = (
+        await async_client.Counterparties.get_all_counterparties()
+    )
 
     # Get a EUR counterparty with an IBAN
     eur_counterparties: list[RetrieveListOfCounterparties.Response] = []

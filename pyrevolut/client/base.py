@@ -1,6 +1,7 @@
 from typing import Type, TypeVar, Literal, Annotated
 import logging
 import json
+import base64
 
 from pydantic import BaseModel, Field
 import pendulum
@@ -53,6 +54,7 @@ class BaseClient:
     """The base client for the Revolut API"""
 
     creds_loc: str
+    creds: str | dict | None = None
     credentials: ModelCreds
     domain: str
     sandbox: bool
@@ -63,6 +65,7 @@ class BaseClient:
     def __init__(
         self,
         creds_loc: str = "credentials/creds.json",
+        creds: str | dict | None = None,
         sandbox: bool = True,
         return_type: Literal["raw", "dict", "model"] = "dict",
         error_response: Literal["raw", "raise", "dict", "model"] = "raise",
@@ -72,7 +75,12 @@ class BaseClient:
         Parameters
         ----------
         creds_loc : str, optional
-            The location of the credentials file, by default "credentials/creds.json"
+            The location of the credentials file, by default "credentials/creds.json".
+            If the creds input is not provided, will load the credentials from this file.
+        creds : str | dict, optional
+            The credentials to use for the client, by default None. If not provided, will
+            load the credentials from the creds_loc file.
+            Can be a dictionary of the credentials or a base64 encoded string of the credentials dictionary.
         sandbox : bool, optional
             Whether to use the sandbox environment, by default True
         return_type : Literal["raw", "dict", "model"], optional
@@ -95,19 +103,21 @@ class BaseClient:
             If "model":
                 The client will return a Pydantic model of the error response
         """
-        self.creds_loc = creds_loc
-        self.sandbox = sandbox
         assert return_type in [
             "raw",
             "dict",
             "model",
         ], "return_type must be 'raw', 'dict', or 'model'"
-        self.return_type = return_type
         assert error_response in [
             "raise",
             "dict",
             "model",
         ], "error_response must be 'raise', 'dict', or 'model'"
+
+        self.creds_loc = creds_loc
+        self.creds = creds
+        self.sandbox = sandbox
+        self.return_type = return_type
         self.error_response = error_response
 
         # Set domain based on environment
@@ -118,6 +128,9 @@ class BaseClient:
 
         # Load the credentials
         self.load_credentials()
+
+        # Load the endpoints
+        self.load_endpoints()
 
     def process_response(
         self,
@@ -475,6 +488,10 @@ class BaseClient:
             **kwargs,
         }
 
+    def load_endpoints(self):
+        """Loads all the endpoints from the api directory"""
+        raise NotImplementedError("load_endpoints method must be implemented")
+
     @property
     def required_headers(self) -> dict[str, str]:
         """The headers to be attached to each request
@@ -514,7 +531,9 @@ class BaseClient:
             If the client is not open or if the long-term credentials have expired
         """
         if self.client is None:
-            raise ValueError("Client is not open")
+            raise RuntimeError(
+                "Client is not open. Use .open() or the contextmanager to open the client."
+            )
 
         if self.credentials.credentials_expired:
             raise ValueError(
@@ -604,8 +623,9 @@ class BaseClient:
         return data
 
     def load_credentials(self):
-        """Load the credentials from the credentials file.
+        """Load the credentials from the credentials inputs.
 
+        - If credentials are not provided, will load them from the credentials file.
         - If the credentials file does not exist, raise an error.
         - If the credentials file is invalid, raise an error.
         - If the credentials are expired, raise an error.
@@ -616,14 +636,28 @@ class BaseClient:
             "\n\nPlease reauthenticate using the `pyrevolut auth-manual` command."
         )
 
-        try:
-            self.credentials = load_creds(location=self.creds_loc)
-        except FileNotFoundError as exc:
-            raise ValueError(
-                f"Credentials file not found: {exc}. {solution_msg}"
-            ) from exc
-        except Exception as exc:
-            raise ValueError(f"Error loading credentials: {exc}.") from exc
+        if self.creds is not None:
+            if isinstance(self.creds, str):
+                _creds = json.loads(base64.b64decode(self.creds).decode("utf-8"))
+            else:
+                _creds = self.creds
+            try:
+                self.credentials = ModelCreds(**_creds)
+            except Exception as exc:
+                raise ValueError(
+                    f"Error loading credentials: {exc}. {solution_msg}"
+                ) from exc
+        else:
+            try:
+                self.credentials = load_creds(location=self.creds_loc)
+            except FileNotFoundError as exc:
+                raise ValueError(
+                    f"Credentials file not found: {exc}. {solution_msg}"
+                ) from exc
+            except Exception as exc:
+                raise ValueError(
+                    f"Error loading credentials: {exc}. {solution_msg}"
+                ) from exc
 
         # Check if the credentials are still valid
         if self.credentials.credentials_expired:
