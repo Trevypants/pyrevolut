@@ -1,4 +1,4 @@
-from typing import Type, TypeVar, Literal, Annotated
+from typing import Type, TypeVar, Literal, Annotated, Callable
 import logging
 import json
 import base64
@@ -19,8 +19,8 @@ from httpx import (
 from pyrevolut.utils.auth import (
     ModelCreds,
     refresh_access_token,
-    save_creds,
-    load_creds,
+    save_creds as save_creds_fn,
+    load_creds as load_creds_fn,
 )
 from pyrevolut.exceptions import (
     PyRevolutBaseException,
@@ -60,6 +60,8 @@ class BaseClient:
     sandbox: bool
     return_type: Literal["raw", "dict", "model"] = "dict"
     error_response: Literal["raw", "raise", "dict", "model"] = "raise"
+    custom_save_fn: Callable[[ModelCreds], None] | None = None
+    custom_load_fn: Callable[..., ModelCreds] | None = None
     client: SyncClient | AsyncClient | None = None
 
     def __init__(
@@ -69,6 +71,8 @@ class BaseClient:
         sandbox: bool = True,
         return_type: Literal["raw", "dict", "model"] = "dict",
         error_response: Literal["raw", "raise", "dict", "model"] = "raise",
+        custom_save_fn: Callable[[ModelCreds], None] | None = None,
+        custom_load_fn: Callable[..., ModelCreds] | None = None,
     ):
         """Create a new Revolut client
 
@@ -80,7 +84,7 @@ class BaseClient:
         creds : str | dict, optional
             The credentials to use for the client, by default None. If not provided, will
             load the credentials from the creds_loc file.
-            Can be a dictionary of the credentials or a base64 encoded string of the credentials dictionary.
+            Can be a dictionary of the credentials or a base64 encoded string of the credentials json.
         sandbox : bool, optional
             Whether to use the sandbox environment, by default True
         return_type : Literal["raw", "dict", "model"], optional
@@ -102,6 +106,10 @@ class BaseClient:
                 The client will return a dictionary representation of the error response
             If "model":
                 The client will return a Pydantic model of the error response
+        custom_save_fn : Callable[[ModelCreds], None], optional
+            A custom function to save the credentials, by default None
+        custom_load_fn : Callable[..., ModelCreds], optional
+            A custom function to load the credentials, by default None
         """
         assert return_type in [
             "raw",
@@ -113,12 +121,15 @@ class BaseClient:
             "dict",
             "model",
         ], "error_response must be 'raise', 'dict', or 'model'"
+        assert ".json" in creds_loc, "creds_loc must be a .json file"
 
         self.creds_loc = creds_loc
         self.creds = creds
         self.sandbox = sandbox
         self.return_type = return_type
         self.error_response = error_response
+        self.custom_save_fn = custom_save_fn
+        self.custom_load_fn = custom_load_fn
 
         # Set domain based on environment
         if self.sandbox:
@@ -625,17 +636,19 @@ class BaseClient:
     def load_credentials(self):
         """Load the credentials from the credentials inputs.
 
-        - If credentials are not provided, will load them from the credentials file.
-        - If the credentials file does not exist, raise an error.
-        - If the credentials file is invalid, raise an error.
-        - If the credentials are expired, raise an error.
-        - If the access token is expired, refresh it.
+        - If credentials are provided:
+            - If the credentials are a string, decode it and load the credentials.
+            - If the credentials are a dictionary, load the credentials.
+        - If credentials are not provided:
+            - If the custom load function is provided, use it.
+            - Otherwise load the credentials from the credentials file using the default loader / location. Expects a .json file.
 
         """
         solution_msg = (
             "\n\nPlease reauthenticate using the `pyrevolut auth-manual` command."
         )
 
+        # Load the credentials
         if self.creds is not None:
             if isinstance(self.creds, str):
                 _creds = json.loads(base64.b64decode(self.creds).decode("utf-8"))
@@ -648,16 +661,19 @@ class BaseClient:
                     f"Error loading credentials: {exc}. {solution_msg}"
                 ) from exc
         else:
-            try:
-                self.credentials = load_creds(location=self.creds_loc)
-            except FileNotFoundError as exc:
-                raise ValueError(
-                    f"Credentials file not found: {exc}. {solution_msg}"
-                ) from exc
-            except Exception as exc:
-                raise ValueError(
-                    f"Error loading credentials: {exc}. {solution_msg}"
-                ) from exc
+            if self.custom_load_fn is not None:
+                self.credentials = self.custom_load_fn()
+            else:
+                try:
+                    self.credentials = load_creds_fn(location=self.creds_loc)
+                except FileNotFoundError as exc:
+                    raise ValueError(
+                        f"Credentials file not found: {exc}. {solution_msg}"
+                    ) from exc
+                except Exception as exc:
+                    raise ValueError(
+                        f"Error loading credentials: {exc}. {solution_msg}"
+                    ) from exc
 
         # Check if the credentials are still valid
         if self.credentials.credentials_expired:
@@ -666,6 +682,13 @@ class BaseClient:
         # Check if the access token is expired
         if self.credentials.access_token_expired:
             self.refresh_access_token()
+
+    def save_credentials(self):
+        """Save the credentials to the credentials file."""
+        if self.custom_save_fn is not None:
+            self.custom_save_fn(self.credentials)
+        else:
+            save_creds_fn(creds=self.credentials, location=self.creds_loc, indent=4)
 
     def refresh_access_token(self):
         """Refresh the access token using the refresh token.
@@ -697,6 +720,8 @@ class BaseClient:
             self.credentials.tokens.access_token_expiration_dt = pendulum.now(
                 tz="UTC"
             ).add(seconds=resp.expires_in)
-            save_creds(creds=self.credentials, location=self.creds_loc, indent=4)
+
+            # Save the new credentials
+            self.save_credentials()
         except Exception as exc:
             raise ValueError(f"Error refreshing access token: {exc}.") from exc

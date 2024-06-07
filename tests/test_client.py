@@ -5,6 +5,7 @@ import random
 
 from pyrevolut.client import Client, AsyncClient
 from pyrevolut.api.accounts.get import RetrieveAllAccounts, RetrieveAnAccount
+from pyrevolut.utils.auth.creds import ModelCreds
 
 
 def test_sync_return_type(sync_client: Client):
@@ -96,3 +97,45 @@ async def test_async_return_type(async_client: AsyncClient):
 
     # Set return_type back to 'dict'
     async_client.return_type = "dict"
+
+
+def test_custom_save_and_load_functions():
+    # Create a temporary file for testing
+    fake_creds = {
+        "certificate": {
+            "public": "some-public-key",
+            "private": "some-private-key",
+            "expiration_dt": "2500-01-01T00:00:00Z",
+        },
+        "client_assert_jwt": {
+            "jwt": "some-jwt",
+            "expiration_dt": "2500-01-01T00:00:00Z",
+        },
+        "tokens": {
+            "access_token": "some-access-token",
+            "refresh_token": "some-refresh-token",
+            "token_type": "bearer",
+            "access_token_expiration_dt": "2500-01-01T00:00:00Z",
+            "refresh_token_expiration_dt": "2500-01-01T00:00:00Z",
+        },
+    }
+
+    # Define the custom save function
+    def custom_save_fn(model: ModelCreds):
+        return True
+
+    # Define the custom load function
+    def custom_load_fn():
+        return ModelCreds(**fake_creds)
+
+    # Create a new Client instance with the custom save and load functions
+    client = Client(custom_save_fn=custom_save_fn, custom_load_fn=custom_load_fn)
+
+    # Save the credentials
+    client.save_credentials()
+
+    # Load the credentials
+    client.load_credentials()
+
+    # Assert that the loaded credentials match the saved credentials
+    assert client.credentials == custom_load_fn()
