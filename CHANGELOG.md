@@ -1,3 +1,9 @@
+## v0.9.0 (2024-06-07)
+
+### Feat
+
+- added option to specify a custom save/load function for credentials
+
 ## v0.8.0 (2024-06-05)
 
 ### Feat
