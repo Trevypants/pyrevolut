@@ -1,3 +1,9 @@
+## v0.9.1 (2024-06-10)
+
+### Refactor
+
+- remove access token refresh on client init
+
 ## v0.9.0 (2024-06-07)
 
 ### Feat
