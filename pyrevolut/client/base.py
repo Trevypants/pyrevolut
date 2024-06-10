@@ -679,10 +679,6 @@ class BaseClient:
         if self.credentials.credentials_expired:
             raise ValueError(f"Credentials are expired. {solution_msg}")
 
-        # Check if the access token is expired
-        if self.credentials.access_token_expired:
-            self.refresh_access_token()
-
     def save_credentials(self):
         """Save the credentials to the credentials file."""
         if self.custom_save_fn is not None:
